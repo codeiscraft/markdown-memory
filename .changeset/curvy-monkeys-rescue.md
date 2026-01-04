@@ -1,5 +1,5 @@
 ---
-"markdown-memory": patch
+'markdown-memory': patch
 ---
 
-initial repo bootstrap with turborepo, linting and changeset
+initial repo bootstrap with turborepo, linting and changeset (#1)
