@@ -16,6 +16,7 @@
   "main": "index.js",
   "packageManager": "npm@11.6.2",
   "scripts": {
+    "v": "changeset version && npx -y synclockver",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "workspaces": [
