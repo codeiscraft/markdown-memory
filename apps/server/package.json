@@ -5,14 +5,23 @@
   "scripts": {
     "build": "tsc",
     "check-types": "tsc --noEmit",
-    "dev": "tsc --watch",
+    "dev": "nodemon --watch src --ext ts --exec ts-node src/startup.ts",
     "lint": "eslint"
   },
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/startup.js"
   },
-  "dependencies": {},
+  "type": "module",
+  "dependencies": {
+    "express": "5.2.1",
+    "morgan": "1.10.1"
+  },
   "devDependencies": {
-    "@mdm/typescript-config": "*"
+    "@mdm/typescript-config": "*",
+    "@types/express": "5.0.6",
+    "@types/morgan": "1.9.10",
+    "@types/node": "25.0.3",
+    "nodemon": "3.1.11",
+    "ts-node": "10.9.2"
   }
 }
