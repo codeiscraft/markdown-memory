@@ -1,0 +1,38 @@
+{
+  "name": "mdm",
+  "version": "0.0.0",
+  "description": "review, reflect and gain insight on your markdown notes",
+  "homepage": "https://github.com/codeiscraft/markdown-memory#readme",
+  "bugs": {
+    "url": "https://github.com/codeiscraft/markdown-memory/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeiscraft/markdown-memory.git"
+  },
+  "license": "MIT",
+  "author": "code is craft",
+  "type": "module",
+  "main": "index.js",
+  "packageManager": "npm@11.6.2",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@changesets/cli": "2.29.8",
+    "eslint": "9.39.2",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-perfectionist": "5.2.0",
+    "eslint-plugin-prettier": "5.5.4",
+    "eslint-plugin-react-hooks": "7.0.1",
+    "eslint-plugin-react-refresh": "0.4.26",
+    "tsx": "4.21.0",
+    "turbo": "2.7.2",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.51.0"
+  }
+}
