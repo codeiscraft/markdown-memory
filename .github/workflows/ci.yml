@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TURBO_SCM_BASE: main
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
     strategy:
       matrix:
