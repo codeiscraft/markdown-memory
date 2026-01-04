@@ -3,4 +3,4 @@
 '@mdm/notes': patch
 ---
 
-add additional information to README
+add additional information to README (#3)
