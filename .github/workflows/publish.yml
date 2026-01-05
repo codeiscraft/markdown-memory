@@ -6,10 +6,13 @@ on:
       - main
 
 jobs:
-  publish:
+  tag:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -17,7 +20,9 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
-      - name: Publish packages (no npm)
+      - name: tag packages
         run: npx changeset tag
+      - name: push tags
+        run: git push --follow-tags
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
