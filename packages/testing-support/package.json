@@ -1,19 +1,19 @@
 {
-  "name": "@mdm/notes",
+  "name": "@mdm/testing-support",
   "version": "0.0.0",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "check-types": "tsc --noEmit",
     "dev": "tsc --watch",
-    "lint": "eslint",
-    "test": "jest"
+    "lint": "eslint"
   },
+  "type": "module",
   "exports": {
-    ".": "./dist/index.js"
+    "./setupTests.ts": "./src/setupTests.ts",
+    "./baseConfig": "./jest.base.config.js"
   },
   "devDependencies": {
-    "@mdm/testing-support": "*",
     "@mdm/typescript-config": "*"
   }
 }

@@ -2,6 +2,7 @@ interface HelloWorld {
   name: string
 }
 
-const test: HelloWorld = { name: 'code is craft' }
-
-console.log(`hello world to ${test.name}`)
+export const doSomething = () => {
+  const test: HelloWorld = { name: 'code is craft' }
+  return `hello world to ${test.name}`
+}
