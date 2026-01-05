@@ -20,9 +20,11 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
-      - name: tag packages
-        run: npx changeset tag
-      - name: push tags
-        run: git push --follow-tags
+      - name: tag packages and push tags
+        run: |
+          npx changeset tag
+          git push origin main
+          git push origin --tags
+
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
