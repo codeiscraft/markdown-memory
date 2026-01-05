@@ -5,14 +5,25 @@
   "scripts": {
     "build": "tsc",
     "check-types": "tsc --noEmit",
-    "dev": "tsc --watch",
+    "dev:build": "esbuild src/start.ts --bundle --platform=node --format=cjs --outfile=dist/server.cjs --watch",
+    "dev:start": "nodemon dist/server.cjs",
+    "dev": "concurrently -k -n BUILD,SERVER -c yellow,cyan \"npm run dev:build\" \"npm run dev:start\"",
     "lint": "eslint"
   },
   "exports": {
     ".": "./dist/index.js"
   },
-  "dependencies": {},
+  "type": "module",
+  "dependencies": {
+    "express": "5.2.1",
+    "morgan": "1.10.1"
+  },
   "devDependencies": {
-    "@mdm/typescript-config": "*"
+    "@mdm/typescript-config": "*",
+    "@types/express": "5.0.6",
+    "@types/morgan": "1.9.10",
+    "@types/node": "25.0.3",
+    "concurrently": "9.2.1",
+    "nodemon": "3.1.11"
   }
 }
