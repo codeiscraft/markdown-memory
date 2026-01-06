@@ -1,0 +1,22 @@
+{
+  "name": "@mdm/cache",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "check-types": "tsc --noEmit",
+    "dev": "tsc --watch",
+    "lint": "eslint",
+    "test": "jest"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "dependencies": {
+    "redis": "5.10.0"
+  },
+  "devDependencies": {
+    "@mdm/testing-support": "*",
+    "@mdm/typescript-config": "*"
+  }
+}

@@ -5,7 +5,17 @@ services:
       - "8100:8100"
     build:
       dockerfile: ./apps/server/Dockerfile
+  mdm-valkey:
+    image: valkey/valkey:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - valkey-data:/data
+    environment:
+      - VALKEY_SAVE=60 1
+
 volumes:
   cache:
     driver: local
   assets:
+  valkey-data:
