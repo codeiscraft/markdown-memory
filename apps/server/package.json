@@ -3,17 +3,17 @@
   "version": "0.0.1",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "esbuild src/start.ts --bundle --platform=node --format=cjs --outfile=dist/start.cjs",
     "check-types": "tsc --noEmit",
-    "dev:build": "esbuild src/start.ts --bundle --platform=node --format=cjs --outfile=dist/server.cjs --watch",
-    "dev:start": "nodemon dist/server.cjs",
+    "dev:build": "esbuild src/start.ts --bundle --platform=node --format=cjs --outfile=dist/start.cjs --watch",
+    "dev:start": "nodemon dist/start.cjs",
     "dev": "concurrently -k -n BUILD,SERVER -c yellow,cyan \"npm run dev:build\" \"npm run dev:start\"",
     "lint": "eslint"
   },
   "exports": {
     ".": "./dist/index.js"
   },
-  "type": "module",
+  "type": "commonjs",
   "dependencies": {
     "express": "5.2.1",
     "morgan": "1.10.1"

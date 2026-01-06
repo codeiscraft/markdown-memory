@@ -14,7 +14,7 @@ export const startup = async () => {
   app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
   app.get('/', (_req: Request, res: Response) => {
-    res.json({ message: 'Hello from markdown memory!' })
+    res.json({ message: 'Hello from markdown memory 1!' })
   })
 
   app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {

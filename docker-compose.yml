@@ -1,0 +1,11 @@
+name: markdown-memory
+services:
+  mdm-server:
+    ports:
+      - "8100:8100"
+    build:
+      dockerfile: ./apps/server/Dockerfile
+volumes:
+  cache:
+    driver: local
+  assets:
