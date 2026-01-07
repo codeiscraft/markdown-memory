@@ -18,11 +18,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: tag packages and push tags
-        run: npx changeset tag
-      - name: tag debug
-        run: git tag
-      - name: push tags
-        run: git push --follow-tags
+        run: |
+          npx changeset tag
+          git tag
+          git push origin --tags
 
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
