@@ -17,7 +17,8 @@
   "packageManager": "npm@11.6.2",
   "scripts": {
     "v": "changeset version && npx -y synclockver",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:docker": "docker compose up --build"
   },
   "workspaces": [
     "apps/*",
@@ -27,6 +28,7 @@
     "@changesets/cli": "2.29.8",
     "@testing-library/jest-dom": "6.9.1",
     "@types/jest": "30.0.0",
+    "dotenv-cli": "11.0.0",
     "eslint": "9.39.2",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-perfectionist": "5.2.0",

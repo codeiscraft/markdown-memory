@@ -5,6 +5,8 @@ services:
       - "8100:8100"
     build:
       dockerfile: ./apps/server/Dockerfile
+    environment:
+      VALKEY_URL: redis://mdm-valkey:6379
   mdm-valkey:
     image: valkey/valkey:latest
     ports:

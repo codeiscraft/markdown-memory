@@ -19,7 +19,7 @@ const startError = (err: Error) => {
   process.exit(1)
 }
 
-const redisUrl = process.env.VALKEY_URL || 'redis://valkey:6379'
+const redisUrl = process.env.VALKEY_URL || 'redis://mdm-valkey:6379'
 const redisClient = createClient({ url: redisUrl })
 redisClient.connect().catch(console.error)
 

@@ -7,7 +7,7 @@
     "check-types": "tsc --noEmit",
     "dev:build": "esbuild src/start.ts --bundle --platform=node --format=cjs --outfile=dist/start.cjs --watch",
     "dev:start": "nodemon dist/start.cjs",
-    "dev": "VALKEY_URL=redis://127.0.0.1:6379 MDM_PORT=8200 concurrently -k -n BUILD,SERVER -c yellow,cyan \"npm run dev:build\" \"npm run dev:start\"",
+    "dev": "dotenv -e ../../.env concurrently -k -n BUILD,SERVER -c yellow,cyan \"npm run dev:build\" \"npm run dev:start\"",
     "lint": "eslint",
     "test": "jest"
   },
