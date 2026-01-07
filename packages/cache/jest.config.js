@@ -1,5 +1,4 @@
+/* eslint-disable no-undef */
 const baseConfig = require('@mdm/testing-support/baseConfig')
 
-module.exports = {
-  ...baseConfig,
-}
+module.exports = { ...baseConfig }

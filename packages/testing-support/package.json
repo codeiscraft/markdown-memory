@@ -7,7 +7,6 @@
     "check-types": "tsc --noEmit",
     "lint": "eslint"
   },
-  "type": "commonjs",
   "exports": {
     "./mocks": "./dist/mocks.js",
     "./setupTests.ts": "./src/setupTests.ts",
