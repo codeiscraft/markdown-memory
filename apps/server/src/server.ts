@@ -4,11 +4,10 @@ import express from 'express'
 import morgan from 'morgan'
 import { createClient } from 'redis'
 
-import { createCacheRoutes } from './routes/cache'
+import { createCacheRoutes } from './cache/route'
 
 const host = process.env.MDM_HOST || '0.0.0.0'
 const port = Number(process.env.MDM_PORT) || 8100
-console.log(`PORT is ${process.env.MDM_PORT}`)
 
 const startMessage = () => console.log(`markdown memory running on ${host}:${port}`)
 

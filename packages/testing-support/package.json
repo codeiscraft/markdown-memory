@@ -7,8 +7,8 @@
     "check-types": "tsc --noEmit",
     "lint": "eslint"
   },
-  "type": "module",
   "exports": {
+    "./mocks": "./dist/mocks.js",
     "./setupTests.ts": "./src/setupTests.ts",
     "./baseConfig": "./jest.base.config.js"
   },
