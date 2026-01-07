@@ -1,14 +1,14 @@
-import js from "@eslint/js";
-import perfectionist from "eslint-plugin-perfectionist";
-import pluginPrettier from "eslint-plugin-prettier/recommended";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
-import { defineConfig, globalIgnores } from "eslint/config";
-import globals from "globals";
-import tseslint from "typescript-eslint";
+import js from '@eslint/js'
+import perfectionist from 'eslint-plugin-perfectionist'
+import pluginPrettier from 'eslint-plugin-prettier/recommended'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import { defineConfig, globalIgnores } from 'eslint/config'
+import globals from 'globals'
+import tseslint from 'typescript-eslint'
 
 export default defineConfig([
-  perfectionist.configs["recommended-natural"],
+  perfectionist.configs['recommended-natural'],
   pluginPrettier,
   {
     extends: [
@@ -16,21 +16,21 @@ export default defineConfig([
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
     ],
-    files: ["**/*.{js,jsx}"],
+    files: ['**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
       parserOptions: {
         ecmaFeatures: { jsx: true },
-        ecmaVersion: "latest",
-        sourceType: "module",
+        ecmaVersion: 'latest',
+        sourceType: 'module',
       },
     },
     plugins: {
-      "react-hooks": reactHooks,
+      'react-hooks': reactHooks,
     },
     rules: {
-      "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
   {
@@ -39,29 +39,29 @@ export default defineConfig([
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
     ],
-    files: ["**/*.{ts,tsx}"],
+    files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
       parserOptions: {
         ecmaFeatures: { jsx: true },
-        ecmaVersion: "latest",
-        sourceType: "module",
+        ecmaVersion: 'latest',
+        sourceType: 'module',
       },
     },
     plugins: {
-      "react-hooks": reactHooks,
+      'react-hooks': reactHooks,
     },
     rules: {
-      "@typescript-eslint/no-unused-vars": [
-        "error",
-        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
-      "no-unused-vars": "off",
+      'no-unused-vars': 'off',
     },
   },
   {
-    files: ["**/*.test.{js,jsx,ts,tsx}"],
+    files: ['**/*.test.{js,jsx,ts,tsx}'],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -71,17 +71,17 @@ export default defineConfig([
   },
   {
     rules: {
-      "max-len": "off",
-      "no-unused-vars": "off",
-      "perfectionist/sort-imports": "error",
-      "perfectionist/sort-interfaces": ["error"],
-      "perfectionist/sort-objects": [
-        "error",
+      'max-len': 'off',
+      'no-unused-vars': 'off',
+      'perfectionist/sort-imports': 'error',
+      'perfectionist/sort-interfaces': ['error'],
+      'perfectionist/sort-objects': [
+        'error',
         {
-          type: "alphabetical",
+          type: 'alphabetical',
         },
       ],
     },
   },
-  globalIgnores(["**/dist/"]),
-]);
+  globalIgnores(['**/dist/']),
+])

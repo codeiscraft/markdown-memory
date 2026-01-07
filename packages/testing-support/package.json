@@ -5,11 +5,10 @@
   "scripts": {
     "build": "tsc",
     "check-types": "tsc --noEmit",
-    "dev": "tsc --watch",
     "lint": "eslint"
   },
-  "type": "module",
   "exports": {
+    "./mocks": "./dist/mocks.js",
     "./setupTests.ts": "./src/setupTests.ts",
     "./baseConfig": "./jest.base.config.js"
   },

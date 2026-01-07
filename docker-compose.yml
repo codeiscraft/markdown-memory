@@ -1,0 +1,23 @@
+name: markdown-memory
+services:
+  mdm-server:
+    ports:
+      - "8100:8100"
+    build:
+      dockerfile: ./apps/server/Dockerfile
+    environment:
+      VALKEY_URL: redis://mdm-valkey:6379
+  mdm-valkey:
+    image: valkey/valkey:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - valkey-data:/data
+    environment:
+      - VALKEY_SAVE=60 1
+
+volumes:
+  cache:
+    driver: local
+  assets:
+  valkey-data:
