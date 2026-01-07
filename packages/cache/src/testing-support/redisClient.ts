@@ -1,5 +1,7 @@
 import { RedisClient } from '../types'
 
 export const mockRedisClient = () => {
-  return {} as unknown as RedisClient
+  const get = jest.fn()
+  const ttl = jest.fn()
+  return { get, ttl } as unknown as RedisClient
 }

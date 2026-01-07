@@ -1,4 +1,4 @@
-import { logGet, logSet } from './logging'
+import { logError, logGet, logSet } from './logging'
 import { RedisClient, RedisSafeGetResult } from './types'
 
 export async function getHashSafely<T>(
@@ -11,7 +11,7 @@ export async function getHashSafely<T>(
     const value = (await redis.hgetall(key)) as T
     return value ? { key, ttlSeconds, value } : undefined
   } catch (e) {
-    console.error(e)
+    logError(e as Error)
     return undefined
   }
 }
@@ -26,7 +26,7 @@ export async function getKeySafely<T>(
     const value = (await redis.get(key)) as T
     return value ? { key, ttlSeconds, value } : undefined
   } catch (e) {
-    console.error(e)
+    logError(e as Error)
     return undefined
   }
 }
@@ -36,7 +36,7 @@ export async function getSetSafely<T>(redis: RedisClient, key: string): Promise<
     logGet(key, 'set')
     return redis.smembers(key) as Promise<T[]>
   } catch (e) {
-    console.error(e)
+    logError(e as Error)
     return []
   }
 }
@@ -56,7 +56,7 @@ export async function replaceSetValueSafely(
     }
     return true
   } catch (e) {
-    console.error(e)
+    logError(e as Error)
     return false
   }
 }
@@ -75,7 +75,7 @@ export async function setHashValueSafely(
     }
     return true
   } catch (e) {
-    console.error(e)
+    logError(e as Error)
     return false
   }
 }
@@ -95,7 +95,7 @@ export async function setKeyValueSafely(
     }
     return true
   } catch (e) {
-    console.error(e)
+    logError(e as Error)
     return false
   }
 }
