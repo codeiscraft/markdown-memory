@@ -1,0 +1,32 @@
+{
+  "name": "@mdm/web",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "vite build",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint",
+    "dev": "vite",
+    "preview": "vite build && vite preview"
+  },
+  "dependencies": {
+    "@mdm/components": "*",
+    "@tanstack/react-query": "5.90.12",
+    "@tanstack/react-query-devtools": "5.91.1",
+    "lucide-react": "0.556.0",
+    "next-themes": "0.4.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-router-dom": "7.10.1"
+  },
+  "devDependencies": {
+    "@mdm/typescript-config": "*",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.0",
+    "@testing-library/user-event": "14.6.1",
+    "@types/jest": "30.0.0",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "5.1.2",
+    "vite": "7.2.7"
+  }
+}

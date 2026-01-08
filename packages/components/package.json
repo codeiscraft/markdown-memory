@@ -1,0 +1,28 @@
+{
+  "name": "@mdm/components",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./theme": "./dist/ui/theme.js"
+  },
+  "dependencies": {
+    "react": "19.2.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.1",
+    "@mdm/testing-support": "*",
+    "@mdm/typescript-config": "*",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.0",
+    "@testing-library/user-event": "14.6.1",
+    "@types/jest": "30.0.0",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3"
+  }
+}
