@@ -1,0 +1,48 @@
+{
+  "name": "@mdm/sync",
+  "version": "0.0.0",
+  "main": "dist/electron/electron-main.js",
+  "scripts": {
+    "dev:vite": "vite",
+    "dev:electron:watch": "tsc ./src/electron-main.ts ./src/preload.ts --outDir dist/electron --watch",
+    "dev:electron:run": "ELECTRON_START_URL=http://localhost:5173 electron dist/electron/electron-main.js",
+    "dev": "concurrently \"npm run dev:vite\" \"npm run dev:electron:watch\" \"npm run dev:electron:run\"",
+    "build:electron": "tsc --skipLibCheck ./src/electron-main.ts ./src/preload.ts --outDir dist/electron",
+    "build:vite": "vite build",
+    "build": "concurrently \"npm run build:vite\" \"npm run build:electron\"",
+    "preview": "vite preview",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint",
+    "pack:dir": "npm run build && electron-builder --dir",
+    "pack": "npm run build && electron-builder"
+  },
+  "build": {
+    "appId": "com.mdm.sync",
+    "productName": "mdm-sync",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ]
+  },
+  "dependencies": {
+    "@mdm/components": "*",
+    "@tanstack/react-query": "5.90.16",
+    "@tanstack/react-query-devtools": "5.91.2",
+    "lucide-react": "0.562.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "5.1.2",
+    "concurrently": "9.2.1",
+    "electron": "39.2.7",
+    "electron-builder": "26.4.0",
+    "typescript": "5.9.3",
+    "vite": "7.3.1"
+  }
+}
