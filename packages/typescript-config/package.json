@@ -1,3 +1,5 @@
 {
-  "name": "@mdm/typescript-config"
+  "version": "0.0.0",
+  "name": "@mdm/typescript-config",
+  "private": true
 }
