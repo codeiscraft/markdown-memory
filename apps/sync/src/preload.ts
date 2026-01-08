@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
 
-import { SyncStatusData } from '../types'
+import { SyncStatusData } from './types'
 
 const onSyncStatus = (callback: (data: SyncStatusData) => void) => {
   const handler = (_event: IpcRendererEvent, data: SyncStatusData) => callback(data)

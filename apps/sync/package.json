@@ -1,19 +1,31 @@
 {
   "name": "@mdm/sync",
   "version": "0.0.0",
-  "private": true,
-  "main": "dist/index.js",
+  "main": "dist/electron/electron-main.js",
   "scripts": {
     "dev:vite": "vite",
-    "dev:electron:watch": "tsc ./src/electron/electron-main.ts ./src/electron/preload.ts --outDir dist --watch",
+    "dev:electron:watch": "tsc ./src/electron-main.ts ./src/preload.ts --outDir dist/electron --watch",
     "dev:electron:run": "ELECTRON_START_URL=http://localhost:5173 electron dist/electron/electron-main.js",
     "dev": "concurrently \"npm run dev:vite\" \"npm run dev:electron:watch\" \"npm run dev:electron:run\"",
-    "build:electron": "tsc ./src/electron/electron-main.ts ./src/electron/preload.ts --outDir dist",
+    "build:electron": "tsc --skipLibCheck ./src/electron-main.ts ./src/preload.ts --outDir dist/electron",
     "build:vite": "vite build",
     "build": "concurrently \"npm run build:vite\" \"npm run build:electron\"",
     "preview": "vite preview",
     "check-types": "tsc --noEmit",
-    "lint": "eslint"
+    "lint": "eslint",
+    "pack:dir": "npm run build && electron-builder --dir",
+    "pack": "npm run build && electron-builder"
+  },
+  "build": {
+    "appId": "com.mdm.sync",
+    "productName": "mdm-sync",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ]
   },
   "dependencies": {
     "@mdm/components": "*",
@@ -29,6 +41,7 @@
     "@vitejs/plugin-react": "5.1.2",
     "concurrently": "9.2.1",
     "electron": "39.2.7",
+    "electron-builder": "26.4.0",
     "typescript": "5.9.3",
     "vite": "7.3.1"
   }

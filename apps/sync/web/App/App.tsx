@@ -1,7 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/react'
 import { system } from '@mdm/components/theme'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
+import { Route, HashRouter as Router, Routes } from 'react-router-dom'
 
 import { Sync } from '../Sync/Sync'
 
