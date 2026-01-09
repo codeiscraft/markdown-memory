@@ -1,1 +1,1 @@
-export * from './CreateProfile/CreateProfile'
+export * from './NewProfileFlow/NewProfileFlow'
