@@ -13,7 +13,7 @@ export function useServerIdentity(serverRoot: string) {
   const queryKey = ['identity']
   return useQuery({
     enabled: !!serverRoot,
-    queryFn: async () => fetchTyped(url),
+    queryFn: async () => fetchTyped<ServerIdentity>(url),
     queryKey,
   })
 }

@@ -11,6 +11,7 @@
   "exports": {
     ".": "./dist/index.js"
   },
+  "type": "commonjs",
   "dependencies": {
     "@mdm/utils": "*",
     "@tanstack/react-query": "5.90.16",

@@ -1,7 +1,6 @@
 {
   "name": "@mdm/utils",
   "version": "0.0.0",
-  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "check-types": "tsc --noEmit",
@@ -9,9 +8,13 @@
     "lint": "eslint",
     "test": "jest"
   },
-  "type": "commonjs",
+  "type": "module",
+  "main": "./dist/index.js",
   "exports": {
-    ".": "./dist/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "dependencies": {},
   "devDependencies": {
