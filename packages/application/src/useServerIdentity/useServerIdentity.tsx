@@ -8,7 +8,7 @@ export interface ServerIdentity {
   version: string
 }
 
-export function useServerIdentity(serverRoot: string) {
+export function useServerIdentity(serverRoot?: string) {
   const url = `${serverRoot}/api/identity`
   const queryKey = ['identity']
   return useQuery({

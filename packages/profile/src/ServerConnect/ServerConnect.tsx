@@ -8,14 +8,13 @@ export interface ServerConnectProps {
 
 export function ServerConnect() {
   const [serverRoot, setServerRoot] = useState('')
-  const { data, isPending } = useServerIdentity(serverRoot)
-  console.log(isPending, data)
+
+  const isValid = serverRoot.length === 0 || /^https?:\/\/\S+$/.test(serverRoot)
+  useServerIdentity(isValid ? serverRoot : undefined)
 
   const update = (event: ChangeEvent<HTMLInputElement>) => {
     setServerRoot(event.target.value)
   }
-
-  const isValid = serverRoot.length === 0 || /^https?:\/\/\S+$/.test(serverRoot)
 
   return (
     <Stack>
