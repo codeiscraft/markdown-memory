@@ -10,7 +10,7 @@ export interface ServerIdentity {
 
 export function useServerIdentity(serverRoot?: string) {
   const url = `${serverRoot}/api/identity`
-  const queryKey = ['identity']
+  const queryKey = ['identity', serverRoot]
   return useQuery({
     enabled: !!serverRoot,
     queryFn: async () => fetchTyped<ServerIdentity>(url),

@@ -7,19 +7,19 @@ import { ServerConnect } from '../ServerConnect/ServerConnect'
 const steps = [
   {
     content: <ServerConnect />,
-    title: 'Connect to Server',
+    title: 'connect',
   },
   {
     content: <ProfileForm serverRoot="https://mdm.dgwlab.net/" />,
-    title: 'Basic Configuration',
+    title: 'profile',
   },
   {
     content: <ProfileForm serverRoot="https://mdm.dgwlab.net/" />,
-    title: 'Define Markdown Sets',
+    title: 'sets',
   },
   {
     content: <ProfileForm serverRoot="https://mdm.dgwlab.net/" />,
-    title: 'Sync',
+    title: 'sync',
   },
 ]
 
@@ -29,7 +29,7 @@ export function NewProfileFlow() {
   return (
     <Box maxW="container.md" mx="auto" px={{ base: 4, md: 6 }} py={6}>
       <Stack gap={6}>
-        <Heading>Profile Configuration</Heading>
+        <Heading>configuration</Heading>
         <Steps.Root count={steps.length} onStepChange={() => setIsStepValid(false)} size="sm">
           <Steps.List>
             {steps.map((step, index) => (
@@ -46,12 +46,14 @@ export function NewProfileFlow() {
             </Steps.Content>
           ))}
 
-          <ButtonGroup>
+          <ButtonGroup display="flex" w="full">
             <Steps.PrevTrigger asChild>
-              <Button>Prev</Button>
+              <Button flex="1">prev</Button>
             </Steps.PrevTrigger>
             <Steps.NextTrigger asChild>
-              <Button disabled={!isStepValid}>Next</Button>
+              <Button disabled={!isStepValid} flex="1">
+                next
+              </Button>
             </Steps.NextTrigger>
           </ButtonGroup>
         </Steps.Root>
