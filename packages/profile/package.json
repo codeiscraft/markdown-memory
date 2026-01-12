@@ -15,6 +15,7 @@
   "type": "module",
   "dependencies": {
     "@mdm/utils": "*",
+    "@mdm/server-status": "*",
     "@tanstack/react-query": "5.90.16",
     "react": "19.2.3"
   },

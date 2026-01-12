@@ -1,20 +1,6 @@
-import {
-  Em,
-  Field,
-  Group,
-  HoverCard,
-  IconButton,
-  Input,
-  Portal,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
-import { useServerIdentity } from '@mdm/application'
-import { Check, CircleQuestionMark } from 'lucide-react'
-import { ChangeEvent, useEffect, useState } from 'react'
-
-import { useGetServerRoot } from '../useGetServerRoot/useGetServerRoot'
-import { useSetServerRoot } from '../useSetServerRoot/useSetServerRoot'
+import { Field, Group, Input, Stack } from '@chakra-ui/react'
+import { ServerStatus, useGetServerRoot, useSetServerRoot } from '@mdm/server-status'
+import { ChangeEvent, useState } from 'react'
 
 export interface ServerConnectProps {
   setIsStepValid: (valid: boolean) => void
@@ -27,41 +13,26 @@ export function ServerConnect({ setIsStepValid }: ServerConnectProps) {
   const [serverRoot, setServerRoot] = useState(serverRootStored || '')
   const isValid = /^https?:\/\/\S+$/.test(serverRoot)
 
-  const {
-    data: identity,
-    isFetching,
-    isSuccess,
-  } = useServerIdentity(isValid ? serverRoot : undefined)
-  const serverValid = isValid && isSuccess
-
-  useEffect(() => {
-    if (serverValid) {
-      setServer(serverRoot)
+  const connectSuccess = (connected: boolean) => {
+    if (connected) {
       setIsStepValid(true)
     }
-  }, [setServer, serverRoot, serverValid, setIsStepValid])
+  }
 
-  const update = (event: ChangeEvent<HTMLInputElement>) => setServerRoot(event.target.value)
-
-  const icon = serverValid ? <Check /> : <CircleQuestionMark />
-  const color = serverValid ? 'green.500' : 'gray.500'
-  const serverDetails =
-    serverValid && identity ? (
-      <Stack>
-        <Em>{serverRoot}</Em>
-        <Text>
-          {identity.product} v{identity.version}
-        </Text>
-      </Stack>
-    ) : (
-      'please enter a valid markdown memory server address'
-    )
+  const update = (event: ChangeEvent<HTMLInputElement>) => {
+    setServerRoot(event.target.value)
+    if (isValid) {
+      setServer(event.target.value)
+    }
+    console.log('to invalid')
+    setIsStepValid(false)
+  }
 
   return (
     <Stack>
       <Field.Root invalid={!isValid} required>
         <Field.Label>server address</Field.Label>
-        <Group attached w="full">
+        <Stack direction="row" gap={1} width="100%">
           <Input
             flex={1}
             onChange={update}
@@ -69,22 +40,8 @@ export function ServerConnect({ setIsStepValid }: ServerConnectProps) {
             size="sm"
             value={serverRoot}
           />
-          <HoverCard.Root size="sm">
-            <HoverCard.Trigger asChild>
-              <IconButton color={color} loading={isFetching} size="sm" variant="outline">
-                {icon}
-              </IconButton>
-            </HoverCard.Trigger>
-            <Portal>
-              <HoverCard.Positioner>
-                <HoverCard.Content>
-                  <HoverCard.Arrow />
-                  {serverDetails}
-                </HoverCard.Content>
-              </HoverCard.Positioner>
-            </Portal>
-          </HoverCard.Root>
-        </Group>
+          <ServerStatus connectSuccess={connectSuccess} />
+        </Stack>
       </Field.Root>
     </Stack>
   )
