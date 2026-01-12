@@ -11,26 +11,38 @@ import {
 } from '@chakra-ui/react'
 import { useServerIdentity } from '@mdm/application'
 import { Check, CircleQuestionMark } from 'lucide-react'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
+
+import { useGetServerRoot } from '../useGetServerRoot/useGetServerRoot'
+import { useSetServerRoot } from '../useSetServerRoot/useSetServerRoot'
 
 export interface ServerConnectProps {
   setIsStepValid: (valid: boolean) => void
-  setServerRoot: (serverRoot: string) => void
 }
 
-export function ServerConnect() {
-  const [serverRoot, setServerRoot] = useState('')
+export function ServerConnect({ setIsStepValid }: ServerConnectProps) {
+  const { data: serverRootStored } = useGetServerRoot()
+  const { mutate: setServer } = useSetServerRoot()
 
+  const [serverRoot, setServerRoot] = useState(serverRootStored || '')
   const isValid = serverRoot.length === 0 || /^https?:\/\/\S+$/.test(serverRoot)
+
   const {
     data: identity,
     isFetching,
     isSuccess,
   } = useServerIdentity(isValid ? serverRoot : undefined)
+  const serverValid = isValid && isSuccess
+
+  useEffect(() => {
+    if (serverValid) {
+      setServer(serverRoot)
+      setIsStepValid(true)
+    }
+  }, [setServer, serverRoot, serverValid, setIsStepValid])
 
   const update = (event: ChangeEvent<HTMLInputElement>) => setServerRoot(event.target.value)
 
-  const serverValid = isValid && isSuccess
   const icon = serverValid ? <Check /> : <CircleQuestionMark />
   const color = serverValid ? 'green.500' : 'gray.500'
   const serverDetails =

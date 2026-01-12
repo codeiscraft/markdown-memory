@@ -4,9 +4,9 @@ import { useState } from 'react'
 import { ProfileForm } from '../ProfileForm/ProfileForm'
 import { ServerConnect } from '../ServerConnect/ServerConnect'
 
-const steps = [
+const loadSteps = (setIsStepValid: (valid: boolean) => void) => [
   {
-    content: <ServerConnect />,
+    content: <ServerConnect setIsStepValid={setIsStepValid} />,
     title: 'connect',
   },
   {
@@ -25,6 +25,7 @@ const steps = [
 
 export function NewProfileFlow() {
   const [isStepValid, setIsStepValid] = useState(false)
+  const steps = loadSteps(setIsStepValid)
 
   return (
     <Box maxW="container.md" mx="auto" px={{ base: 4, md: 6 }} py={6}>
