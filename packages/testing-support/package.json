@@ -13,7 +13,7 @@
     "./query": "./dist/query.js",
     "./redis": "./dist/redis.js",
     "./express": "./dist/express.js",
-    "./setupTests.ts": "./src/setupTests.ts",
+    "./setupTests.ts": "./dist/setupTests.js",
     "./baseConfig": "./jest.base.config.cjs"
   },
   "devDependencies": {

@@ -3,7 +3,7 @@ import { asMock } from '@mdm/testing-support/mocks'
 import { UseQueryResult } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
 
-import { ServerConnect } from '../types'
+import { ConnectDetails } from '../types'
 import { useGetServerRoot } from '../useGetServerRoot/useGetServerRoot'
 import { ServerIdentity, useServerIdentity } from '../useServerIdentity/useServerIdentity'
 import { ServerStatus } from './ServerStatus'
@@ -33,12 +33,12 @@ const mockGetServerRoot = ({
   data,
   isFetching,
   isSuccess,
-}: Partial<UseQueryResult<ServerConnect, Error>>) =>
+}: Partial<UseQueryResult<ConnectDetails, Error>>) =>
   ({
     data,
     isFetching,
     isSuccess,
-  }) as unknown as UseQueryResult<ServerConnect, Error>
+  }) as unknown as UseQueryResult<ConnectDetails, Error>
 
 const serverRoot = 'http://localhost:8200'
 

@@ -7,5 +7,6 @@
   "editor.codeActionsOnSave": {
     "source.addMissingImports": "always",
     "source.fixAll.eslint": "always"
-  }
+  },
+  "jest.configPath": "jest.config.cjs"
 }

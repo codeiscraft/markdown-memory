@@ -1,3 +1,3 @@
-export interface ServerConnect {
+export interface ConnectDetails {
   serverRoot: string
 }

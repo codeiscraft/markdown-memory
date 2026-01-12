@@ -10,7 +10,8 @@
     "test": "jest"
   },
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./mocks": "./src/mocks.cjs"
   },
   "type": "module",
   "dependencies": {

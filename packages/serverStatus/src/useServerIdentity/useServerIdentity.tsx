@@ -1,7 +1,7 @@
 import { fetchTyped } from '@mdm/utils'
 import { useQuery } from '@tanstack/react-query'
 
-import { ServerConnect } from '../types'
+import { ConnectDetails } from '../types'
 
 export interface ServerIdentity {
   apiVersion: string
@@ -10,7 +10,7 @@ export interface ServerIdentity {
   version: string
 }
 
-export function useServerIdentity(connect?: null | ServerConnect) {
+export function useServerIdentity(connect?: ConnectDetails | null) {
   const url = `${connect?.serverRoot}/api/identity`
   const queryKey = ['identity', connect?.serverRoot]
   return useQuery({

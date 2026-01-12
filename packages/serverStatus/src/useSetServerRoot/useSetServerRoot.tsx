@@ -2,15 +2,15 @@ import { fetchLocal } from '@mdm/utils'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { serverRootKey } from '../server'
-import { ServerConnect } from '../types'
+import { ConnectDetails } from '../types'
 
 export function useSetServerRoot() {
   const queryClient = useQueryClient()
   const queryKey = ['serverRoot']
 
   return useMutation({
-    mutationFn: async (connect: ServerConnect) =>
-      fetchLocal<ServerConnect>(serverRootKey, 'set', connect),
+    mutationFn: async (connect: ConnectDetails) =>
+      fetchLocal<ConnectDetails>(serverRootKey, 'set', connect),
     onSuccess: () => {
       queryClient.removeQueries({ queryKey })
     },

@@ -7,10 +7,10 @@ export interface ServerConnectProps {
 }
 
 export function ServerConnect({ setIsStepValid }: ServerConnectProps) {
-  const { data: serverConnect } = useGetServerRoot()
+  const { data: ConnectDetails } = useGetServerRoot()
   const { mutate: setServer } = useSetServerRoot()
 
-  const [serverRoot, setServerRoot] = useState(serverConnect?.serverRoot || '')
+  const [serverRoot, setServerRoot] = useState(ConnectDetails?.serverRoot || '')
   const isValid = /^https?:\/\/\S+$/.test(serverRoot)
 
   const connectSuccess = (connected: boolean) => {
@@ -24,7 +24,6 @@ export function ServerConnect({ setIsStepValid }: ServerConnectProps) {
     if (isValid) {
       setServer({ serverRoot: event.target.value })
     }
-    console.log('to invalid')
     setIsStepValid(false)
   }
 
