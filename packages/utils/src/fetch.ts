@@ -12,10 +12,10 @@ export const fetchLocal = async <T>(
   key: string,
   operation: 'get' | 'set',
   value?: T,
-): Promise<T> => {
+): Promise<null | T> => {
   if (operation === 'get') {
-    const item = localStorage.getItem(key) ?? ''
-    return JSON.parse(item) as T
+    const item = localStorage.getItem(key)
+    return item ? (JSON.parse(item) as T) : null
   }
   if (operation === 'set' && value !== undefined) {
     localStorage.setItem(key, JSON.stringify(value))

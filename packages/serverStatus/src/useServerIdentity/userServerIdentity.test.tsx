@@ -16,7 +16,10 @@ describe('useServerIdentity', () => {
   test('api/identity fetched and response returned', async () => {
     asMock(fetchTyped).mockResolvedValue(testIdentity)
 
-    const { result } = renderHook(() => useServerIdentity('http://server-root:8000'), { wrapper })
+    const { result } = renderHook(
+      () => useServerIdentity({ serverRoot: 'http://server-root:8000' }),
+      { wrapper },
+    )
 
     expect(result.current.isLoading).toBe(true)
     expect(fetchTyped).toHaveBeenCalledWith('http://server-root:8000/api/identity')

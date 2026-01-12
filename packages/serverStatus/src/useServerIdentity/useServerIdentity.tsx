@@ -1,6 +1,8 @@
 import { fetchTyped } from '@mdm/utils'
 import { useQuery } from '@tanstack/react-query'
 
+import { ServerConnect } from '../types'
+
 export interface ServerIdentity {
   apiVersion: string
   commit: string
@@ -8,11 +10,11 @@ export interface ServerIdentity {
   version: string
 }
 
-export function useServerIdentity(serverRoot?: string) {
-  const url = `${serverRoot}/api/identity`
-  const queryKey = ['identity', serverRoot]
+export function useServerIdentity(connect?: null | ServerConnect) {
+  const url = `${connect?.serverRoot}/api/identity`
+  const queryKey = ['identity', connect?.serverRoot]
   return useQuery({
-    enabled: !!serverRoot,
+    enabled: !!connect?.serverRoot,
     queryFn: async () => fetchTyped<ServerIdentity>(url),
     queryKey,
   })

@@ -10,11 +10,11 @@ export interface ServerStatusProps {
 }
 
 export function ServerStatus({ connectSuccess }: ServerStatusProps) {
-  const { data: serverRoot } = useGetServerRoot()
-  const result = useServerIdentity(serverRoot)
+  const { data: serverConnect } = useGetServerRoot()
+  const result = useServerIdentity(serverConnect)
   const { data: identity, isFetching, isSuccess } = result
 
-  const serverValid = Boolean(serverRoot) && isSuccess
+  const serverValid = Boolean(serverConnect?.serverRoot) && isSuccess
   connectSuccess(serverValid)
 
   const icon = getIcon(result)
@@ -33,7 +33,7 @@ export function ServerStatus({ connectSuccess }: ServerStatusProps) {
             <HoverCard.Arrow />
             {identity ? (
               <Stack>
-                <Strong>{serverRoot}</Strong>
+                <Strong>{serverConnect?.serverRoot}</Strong>
                 <Em>
                   {identity.product} v{identity.version}
                 </Em>

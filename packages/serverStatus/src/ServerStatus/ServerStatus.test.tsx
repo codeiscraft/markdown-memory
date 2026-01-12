@@ -3,6 +3,7 @@ import { asMock } from '@mdm/testing-support/mocks'
 import { UseQueryResult } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
 
+import { ServerConnect } from '../types'
 import { useGetServerRoot } from '../useGetServerRoot/useGetServerRoot'
 import { ServerIdentity, useServerIdentity } from '../useServerIdentity/useServerIdentity'
 import { ServerStatus } from './ServerStatus'
@@ -32,12 +33,14 @@ const mockGetServerRoot = ({
   data,
   isFetching,
   isSuccess,
-}: Partial<UseQueryResult<string, Error>>) =>
+}: Partial<UseQueryResult<ServerConnect, Error>>) =>
   ({
     data,
     isFetching,
     isSuccess,
-  }) as unknown as UseQueryResult<string, Error>
+  }) as unknown as UseQueryResult<ServerConnect, Error>
+
+const serverRoot = 'http://localhost:8200'
 
 describe('ServerStatus', () => {
   test('calls connectSuccess(false) when server root is missing', () => {
@@ -54,7 +57,7 @@ describe('ServerStatus', () => {
 
   test('calls connectSuccess(false) when server root exists but identity is not successful', () => {
     const connectSuccess = jest.fn()
-    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: 'https://example.test' }))
+    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: { serverRoot } }))
     asMock(useServerIdentity).mockReturnValue(
       mockServerIdentity({ data: undefined, isSuccess: false }),
     )
@@ -66,7 +69,7 @@ describe('ServerStatus', () => {
 
   test('calls connectSuccess(true) when server root exists and identity is successful', () => {
     const connectSuccess = jest.fn()
-    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: 'https://example.test' }))
+    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: { serverRoot } }))
     asMock(useServerIdentity).mockReturnValue(
       mockServerIdentity({
         data: {
@@ -86,7 +89,7 @@ describe('ServerStatus', () => {
   })
 
   test('shows a prompt when identity is missing', () => {
-    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: 'https://example.test' }))
+    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: { serverRoot } }))
     asMock(useServerIdentity).mockReturnValue(
       mockServerIdentity({
         data: undefined,
@@ -101,8 +104,7 @@ describe('ServerStatus', () => {
   })
 
   test('renders server root and identity when available', () => {
-    const serverRoot = 'https://example.test'
-    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: serverRoot }))
+    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: { serverRoot } }))
     asMock(useServerIdentity).mockReturnValue(
       mockServerIdentity({
         data: {
@@ -123,7 +125,7 @@ describe('ServerStatus', () => {
   })
 
   test('marks the icon button as loading while fetching', () => {
-    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: 'https://example.test' }))
+    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: { serverRoot } }))
     asMock(useServerIdentity).mockReturnValue(
       mockServerIdentity({
         data: undefined,

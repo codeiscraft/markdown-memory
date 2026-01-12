@@ -15,14 +15,15 @@ describe('useSetServerRoot', () => {
       <QueryClientProvider client={client}>{children}</QueryClientProvider>
     )
     client.setQueryData(['serverRoot'], 'cachedServerRoot')
+    const newData = { serverRoot: 'newServerRoot' }
 
     const { result } = renderHook(() => useSetServerRoot(), { wrapper })
 
-    await result.current.mutate('newServerRoot')
+    await result.current.mutate(newData)
 
     await waitFor(() => expect(result.current.isPending).toBeFalsy())
 
-    expect(asMock(fetchLocal)).toHaveBeenCalledWith('mdm.serverRoot', 'set', 'newServerRoot')
+    expect(asMock(fetchLocal)).toHaveBeenCalledWith('mdm.serverRoot', 'set', newData)
     expect(client.getQueryData(['serverRoot'])).toBeUndefined()
   })
 })
