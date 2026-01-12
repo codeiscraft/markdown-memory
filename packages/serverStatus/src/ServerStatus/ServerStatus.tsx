@@ -1,4 +1,5 @@
 import { Em, HoverCard, IconButton, Portal, Stack, Strong, Text } from '@chakra-ui/react'
+import { Icon } from '@mdm/components'
 
 import { useGetServerRoot } from '../useGetServerRoot/useGetServerRoot'
 import { useServerIdentity } from '../useServerIdentity/useServerIdentity'
@@ -24,7 +25,7 @@ export function ServerStatus({ connectSuccess }: ServerStatusProps) {
     <HoverCard.Root size="sm">
       <HoverCard.Trigger asChild>
         <IconButton color={color} loading={isFetching} size="sm" variant="outline">
-          {icon}
+          <Icon name={icon} />
         </IconButton>
       </HoverCard.Trigger>
       <Portal>
