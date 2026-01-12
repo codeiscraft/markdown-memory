@@ -1,24 +1,9 @@
 import { asMock } from '@mdm/testing-support/mocks'
+import { testQueryWrapper as wrapper } from '@mdm/testing-support/query'
 import { fetchTyped } from '@mdm/utils'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { renderHook, waitFor } from '@testing-library/react'
 
 import { useServerIdentity } from './useServerIdentity'
-
-jest.mock('@mdm/utils')
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 0,
-      retryDelay: 1,
-    },
-  },
-})
-
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-)
 
 const testIdentity = {
   apiVersion: '1',

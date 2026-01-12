@@ -15,7 +15,20 @@ describe('useGetServerRoot', () => {
 
     expect(result.current.isLoading).toBe(true)
 
+    expect(fetchLocal).toHaveBeenCalledWith('mdm.serverRoot', 'get')
     await waitFor(() => expect(result.current.isPending).toBeFalsy())
     expect(result.current.data).toEqual('serverRoot')
+  })
+
+  test('handles missing value', async () => {
+    asMock(fetchLocal).mockResolvedValue(null)
+
+    const { result } = renderHook(() => useGetServerRoot(), { wrapper })
+
+    expect(result.current.isLoading).toBe(true)
+
+    expect(fetchLocal).toHaveBeenCalledWith('mdm.serverRoot', 'get')
+    await waitFor(() => expect(result.current.isPending).toBeFalsy())
+    expect(result.current.data).toBeNull()
   })
 })

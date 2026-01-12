@@ -14,7 +14,8 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./mocks": "./src/mocks.cjs"
   },
   "dependencies": {},
   "devDependencies": {

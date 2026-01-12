@@ -1,14 +1,10 @@
+import { fetchLocal } from '@mdm/utils'
 import { useMutation } from '@tanstack/react-query'
 
 import { serverRootKey } from '../profile'
 
 export function useSetServerRoot() {
   return useMutation({
-    mutationFn: async (serverRoot: string) => {
-      if (serverRoot) {
-        localStorage.setItem(serverRootKey, serverRoot)
-      }
-      return serverRoot
-    },
+    mutationFn: async (serverRoot: string) => fetchLocal(serverRootKey, 'set', serverRoot),
   })
 }

@@ -6,7 +6,8 @@
     "build": "tsc",
     "check-types": "tsc --noEmit",
     "dev": "tsc --watch",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "jest"
   },
   "exports": {
     ".": "./dist/index.js"
