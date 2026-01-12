@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { useServerIdentity } from '@mdm/application'
 import { Check, CircleQuestionMark } from 'lucide-react'
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 import { useGetServerRoot } from '../useGetServerRoot/useGetServerRoot'
 import { useSetServerRoot } from '../useSetServerRoot/useSetServerRoot'
@@ -25,7 +25,7 @@ export function ServerConnect({ setIsStepValid }: ServerConnectProps) {
   const { mutate: setServer } = useSetServerRoot()
 
   const [serverRoot, setServerRoot] = useState(serverRootStored || '')
-  const isValid = serverRoot.length === 0 || /^https?:\/\/\S+$/.test(serverRoot)
+  const isValid = /^https?:\/\/\S+$/.test(serverRoot)
 
   const {
     data: identity,

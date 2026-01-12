@@ -1,5 +1,4 @@
 export const fetchTyped = async <T>(url: string, headers?: HeadersInit): Promise<T> => {
-  console.log(`fetchTyped url: ${url}, headers: ${JSON.stringify(headers)}`)
   const res = await fetch(url, { headers })
   if (!res.ok) {
     throw new Error(`failed to fetch: ${res.status} ${res.statusText}`)
@@ -7,4 +6,20 @@ export const fetchTyped = async <T>(url: string, headers?: HeadersInit): Promise
   const result = await res.json()
 
   return result as T
+}
+
+export const fetchLocal = async <T>(
+  key: string,
+  operation: 'get' | 'set',
+  value?: T,
+): Promise<T> => {
+  if (operation === 'get') {
+    const item = localStorage.getItem(key) ?? ''
+    return JSON.parse(item) as T
+  }
+  if (operation === 'set' && value !== undefined) {
+    localStorage.setItem(key, JSON.stringify(value))
+    return value
+  }
+  throw new Error('invalid operation')
 }

@@ -1,7 +1,6 @@
+import { mockRequest, mockResponse } from '@mdm/testing-support/express'
 import { asMock } from '@mdm/testing-support/mocks'
 
-import { mockRequest } from '../testing-support/request'
-import { mockResponse } from '../testing-support/response'
 import get from './get'
 import { commit, version } from './util'
 

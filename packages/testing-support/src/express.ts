@@ -1,4 +1,10 @@
-import { Response } from 'express'
+import { Request, Response } from 'express'
+
+export const mockRequest = (overrides?: Partial<Request>) => {
+  return {
+    ...overrides,
+  } as unknown as Request
+}
 
 export const mockResponse = () => {
   const json = jest.fn()

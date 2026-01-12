@@ -1,3 +1,4 @@
+import { fetchLocal } from '@mdm/utils'
 import { useQuery } from '@tanstack/react-query'
 
 import { serverRootKey } from '../profile'
@@ -5,12 +6,7 @@ import { serverRootKey } from '../profile'
 export function useGetServerRoot() {
   const queryKey = ['serverRoot']
   return useQuery({
-    initialData: () => {
-      return localStorage.getItem(serverRootKey)
-    },
-    queryFn: async () => {
-      return localStorage.getItem(serverRootKey)
-    },
+    queryFn: async () => fetchLocal<string>(serverRootKey, 'get'),
     queryKey,
   })
 }

@@ -1,7 +1,8 @@
+import { jest } from '@jest/globals'
 import { asMock } from '@mdm/testing-support/mocks'
+import { mockRedisClient } from '@mdm/testing-support/redis'
 
 import { logError } from '../logging'
-import { mockRedisClient } from '../testing-support'
 import { getKeySafely, setKeyValueSafely } from './key'
 
 jest.mock('../logging')
@@ -16,6 +17,7 @@ describe('getKeySafely', () => {
 
     expect(result).toEqual({ key: 'testKey', ttlSeconds: 60, value: 'testValue' })
   })
+
   test('return undefined for an unmatched key in redis', async () => {
     const redis = mockRedisClient()
     asMock(redis.ttl).mockResolvedValue(60)

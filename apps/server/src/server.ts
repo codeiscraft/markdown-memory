@@ -39,7 +39,6 @@ export const startup = async () => {
   app.use(createIdentityRoutes())
   app.use(errorResponse)
 
-
   const server = app.listen(port, host, startMessage)
   server.on('error', startError)
 }
