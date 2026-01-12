@@ -15,7 +15,6 @@ export function ServerStatus({ connectSuccess }: ServerStatusProps) {
   const { data: identity, isFetching, isSuccess } = result
 
   const serverValid = Boolean(serverRoot) && isSuccess
-
   connectSuccess(serverValid)
 
   const icon = getIcon(result)

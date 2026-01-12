@@ -5,6 +5,7 @@ module.exports = {
   coveragePathIgnorePatterns: ['/index\\.(ts|js)$', '/testing-support'],
   moduleNameMapper: {
     '^@mdm/cache$': require.resolve('@mdm/cache/mocks'),
+    '^@mdm/components$': require.resolve('@mdm/components/mocks'),
     '^@mdm/utils$': require.resolve('@mdm/utils/mocks'),
   },
   preset: 'ts-jest',
