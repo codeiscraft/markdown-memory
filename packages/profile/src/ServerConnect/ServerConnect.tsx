@@ -1,17 +1,16 @@
 import { Field, Input, Stack } from '@chakra-ui/react'
 import { ServerStatus, useGetServerRoot, useSetServerRoot } from '@mdm/server-status'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent } from 'react'
 
 export interface ServerConnectProps {
   setIsStepValid: (valid: boolean) => void
 }
 
 export function ServerConnect({ setIsStepValid }: ServerConnectProps) {
-  const { data: ConnectDetails } = useGetServerRoot()
+  const { data: connectDetails } = useGetServerRoot()
   const { mutate: setServer } = useSetServerRoot()
 
-  const [serverRoot, setServerRoot] = useState(ConnectDetails?.serverRoot || '')
-  const isValid = /^https?:\/\/\S+$/.test(serverRoot)
+  const isValid = /^https?:\/\/\S+$/.test(connectDetails?.serverRoot || '')
 
   const connectSuccess = (connected: boolean) => {
     if (connected) {
@@ -20,10 +19,7 @@ export function ServerConnect({ setIsStepValid }: ServerConnectProps) {
   }
 
   const update = (event: ChangeEvent<HTMLInputElement>) => {
-    setServerRoot(event.target.value)
-    if (isValid) {
-      setServer({ serverRoot: event.target.value })
-    }
+    setServer({ serverRoot: event.target.value })
     setIsStepValid(false)
   }
 
@@ -37,7 +33,7 @@ export function ServerConnect({ setIsStepValid }: ServerConnectProps) {
             onChange={update}
             placeholder="enter the address for your markdown memory server"
             size="sm"
-            value={serverRoot}
+            value={connectDetails?.serverRoot || ''}
           />
           <ServerStatus connectSuccess={connectSuccess} />
         </Stack>

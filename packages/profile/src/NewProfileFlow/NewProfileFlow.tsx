@@ -25,13 +25,21 @@ const loadSteps = (setIsStepValid: (valid: boolean) => void) => [
 
 export function NewProfileFlow() {
   const [isStepValid, setIsStepValid] = useState(false)
+  const [activeStep, setActiveStep] = useState(0)
   const steps = loadSteps(setIsStepValid)
 
   return (
     <Box maxW="container.md" mx="auto" px={{ base: 4, md: 6 }} py={6}>
       <Stack gap={6}>
         <Heading>configuration</Heading>
-        <Steps.Root count={steps.length} onStepChange={() => setIsStepValid(false)} size="sm">
+        <Steps.Root
+          count={steps.length}
+          onStepChange={({ step }) => {
+            setActiveStep(step)
+            setIsStepValid(false)
+          }}
+          size="sm"
+        >
           <Steps.List>
             {steps.map((step, index) => (
               <Steps.Item index={index} key={index} title={step.title}>
@@ -41,11 +49,7 @@ export function NewProfileFlow() {
               </Steps.Item>
             ))}
           </Steps.List>
-          {steps.map((step, index) => (
-            <Steps.Content index={index} key={index}>
-              {step.content}
-            </Steps.Content>
-          ))}
+          <Steps.Content index={activeStep}>{steps[activeStep].content}</Steps.Content>
 
           <ButtonGroup display="flex" w="full">
             <Steps.PrevTrigger asChild>

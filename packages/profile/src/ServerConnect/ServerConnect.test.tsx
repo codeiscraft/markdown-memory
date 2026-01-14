@@ -89,23 +89,6 @@ describe('ServerConnect', () => {
     expect(mutate).toHaveBeenCalledWith({ serverRoot: 'http://localhost:8301' })
   })
 
-  test('does not call mutate with an invalid url', () => {
-    const mutate = jest.fn()
-    mockGetServerRoot({ serverRoot: '' })
-    mockSetServerRoot(mutate)
-
-    renderServerConnect()
-
-    fireEvent.change(
-      screen.getByPlaceholderText('enter the address for your markdown memory server'),
-      {
-        target: { value: 'not-a-url' },
-      },
-    )
-
-    expect(mutate).not.toHaveBeenCalled()
-  })
-
   test('marks step valid when ServerStatus reports success', () => {
     const setIsStepValid = jest.fn()
     connectSuccessValue = true
