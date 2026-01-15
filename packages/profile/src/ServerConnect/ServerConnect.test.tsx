@@ -3,7 +3,7 @@ import type { ConnectDetails } from '@mdm/server-status'
 import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
 import { useGetServerRoot, useSetServerRoot } from '@mdm/server-status'
 import { asMock } from '@mdm/testing-support/mocks'
-import { UseMutationResult, UseQueryResult } from '@tanstack/react-query'
+import { DefinedUseQueryResult, UseMutationResult } from '@tanstack/react-query'
 import { fireEvent, render, screen } from '@testing-library/react'
 
 import { ServerConnect } from './ServerConnect'
@@ -21,10 +21,10 @@ jest.mock('@mdm/server-status', () => ({
   useSetServerRoot: jest.fn(),
 }))
 
-const renderServerConnect = (setIsStepValid = jest.fn()) =>
+const renderServerConnect = () =>
   render(
     <ChakraProvider value={defaultSystem}>
-      <ServerConnect setIsStepValid={setIsStepValid} />
+      <ServerConnect />
     </ChakraProvider>,
   )
 
@@ -33,7 +33,7 @@ const serverRoot = 'http://localhost:8200'
 const mockGetServerRoot = (data: ConnectDetails | undefined) =>
   asMock(useGetServerRoot).mockReturnValue({
     data,
-  } as unknown as UseQueryResult<ConnectDetails, Error>)
+  } as unknown as DefinedUseQueryResult<ConnectDetails, Error>)
 
 const mockSetServerRoot = (mutate = jest.fn()) => {
   asMock(useSetServerRoot).mockReturnValue({
@@ -55,24 +55,8 @@ describe('ServerConnect', () => {
     screen.findByDisplayValue(serverRoot)
   })
 
-  test('calls setIsStepValid(false) on change', () => {
-    const setIsStepValid = jest.fn()
-    mockGetServerRoot({ serverRoot })
-    mockSetServerRoot()
-
-    renderServerConnect(setIsStepValid)
-
-    fireEvent.change(
-      screen.getByPlaceholderText('enter the address for your markdown memory server'),
-      {
-        target: { value: 'http://localhost:8300' },
-      },
-    )
-
-    expect(setIsStepValid).toHaveBeenCalledWith(false)
-  })
-
   test('calls mutate with a valid url', () => {
+    jest.useFakeTimers()
     const mutate = jest.fn()
     mockGetServerRoot({ serverRoot })
     mockSetServerRoot(mutate)
@@ -85,18 +69,8 @@ describe('ServerConnect', () => {
         target: { value: 'http://localhost:8301' },
       },
     )
+    jest.runAllTimers()
 
     expect(mutate).toHaveBeenCalledWith({ serverRoot: 'http://localhost:8301' })
-  })
-
-  test('marks step valid when ServerStatus reports success', () => {
-    const setIsStepValid = jest.fn()
-    connectSuccessValue = true
-    mockGetServerRoot({ serverRoot })
-    mockSetServerRoot()
-
-    renderServerConnect(setIsStepValid)
-
-    expect(setIsStepValid).toHaveBeenCalledWith(true)
   })
 })

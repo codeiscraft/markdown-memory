@@ -7,6 +7,7 @@ import { ConnectDetails } from '../types'
 export function useGetServerRoot() {
   const queryKey = ['serverRoot']
   return useQuery({
+    initialData: () => fetchLocal<ConnectDetails>(serverRootKey, 'get'),
     queryFn: async () => fetchLocal<ConnectDetails>(serverRootKey, 'get'),
     queryKey,
   })

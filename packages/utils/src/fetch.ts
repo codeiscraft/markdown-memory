@@ -8,11 +8,7 @@ export const fetchTyped = async <T>(url: string, headers?: HeadersInit): Promise
   return result as T
 }
 
-export const fetchLocal = async <T>(
-  key: string,
-  operation: 'get' | 'set',
-  value?: T,
-): Promise<null | T> => {
+export const fetchLocal = <T>(key: string, operation: 'get' | 'set', value?: T): null | T => {
   if (operation === 'get') {
     const item = localStorage.getItem(key)
     return item ? (JSON.parse(item) as T) : null

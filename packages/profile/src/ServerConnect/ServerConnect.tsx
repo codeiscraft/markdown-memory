@@ -1,43 +1,37 @@
 import { Field, Input, Stack } from '@chakra-ui/react'
 import { ServerStatus, useGetServerRoot, useSetServerRoot } from '@mdm/server-status'
-import { ChangeEvent } from 'react'
+import { useEffect, useState } from 'react'
 
-export interface ServerConnectProps {
-  setIsStepValid: (valid: boolean) => void
-}
-
-export function ServerConnect({ setIsStepValid }: ServerConnectProps) {
+export function ServerConnect() {
   const { data: connectDetails } = useGetServerRoot()
   const { mutate: setServer } = useSetServerRoot()
+  const [serverRoot, setServerRoot] = useState(connectDetails?.serverRoot || '')
 
-  const isValid = /^https?:\/\/\S+$/.test(connectDetails?.serverRoot || '')
+  const isValid = /^https?:\/\/\S+$/.test(serverRoot)
 
-  const connectSuccess = (connected: boolean) => {
-    if (connected) {
-      setIsStepValid(true)
-    }
-  }
+  useEffect(() => {
+    if (!isValid) return
 
-  const update = (event: ChangeEvent<HTMLInputElement>) => {
-    setServer({ serverRoot: event.target.value })
-    setIsStepValid(false)
-  }
+    const timeoutId = setTimeout(() => {
+      setServer({ serverRoot })
+    }, 400)
+
+    return () => clearTimeout(timeoutId)
+  }, [isValid, serverRoot, setServer])
 
   return (
-    <Stack>
-      <Field.Root invalid={!isValid} required>
-        <Field.Label>server address</Field.Label>
-        <Stack direction="row" gap={1} width="100%">
-          <Input
-            flex={1}
-            onChange={update}
-            placeholder="enter the address for your markdown memory server"
-            size="sm"
-            value={connectDetails?.serverRoot || ''}
-          />
-          <ServerStatus connectSuccess={connectSuccess} />
-        </Stack>
-      </Field.Root>
-    </Stack>
+    <Field.Root invalid={serverRoot !== '' && !isValid} required>
+      <Field.Label>server address</Field.Label>
+      <Stack direction="row" gap={1} width="100%">
+        <Input
+          flex={1}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setServerRoot(e.target.value)}
+          placeholder="enter the address for your markdown memory server"
+          size="sm"
+          value={serverRoot}
+        />
+        <ServerStatus />
+      </Stack>
+    </Field.Root>
   )
 }

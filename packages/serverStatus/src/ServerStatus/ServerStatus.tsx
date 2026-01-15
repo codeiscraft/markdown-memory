@@ -2,23 +2,18 @@ import { Em, HoverCard, IconButton, Portal, Stack, Strong, Text } from '@chakra-
 import { Icon } from '@mdm/components'
 
 import { useGetServerRoot } from '../useGetServerRoot/useGetServerRoot'
-import { useServerIdentity } from '../useServerIdentity/useServerIdentity'
-import { getColor, getIcon } from './ServerStatus.util'
+//import { useServerIdentity } from '../useServerIdentity/useServerIdentity'
+//import { getColor, getIcon } from './ServerStatus.util'
 
-export interface ServerStatusProps {
-  connectSuccess: (connected: boolean) => void
-}
+export function ServerStatus() {
+  const { data: connectDetails } = useGetServerRoot()
+  // const result = useServerIdentity(connectDetails)
+  //const { data: identity, isFetching } = result
 
-export function ServerStatus({ connectSuccess }: ServerStatusProps) {
-  const { data: ConnectDetails } = useGetServerRoot()
-  const result = useServerIdentity(ConnectDetails)
-  const { data: identity, isFetching, isSuccess } = result
-
-  const serverValid = Boolean(ConnectDetails?.serverRoot) && isSuccess
-  connectSuccess(serverValid)
-
-  const icon = getIcon(result)
-  const color = getColor(result)
+  const identity = { product: 'Markdown Memory', version: '1.0.0' } // TODO remove mock
+  const isFetching = true
+  const icon = '' //getIcon(result)
+  const color = '' //  getColor(result)
 
   return (
     <HoverCard.Root size="sm">
@@ -33,7 +28,7 @@ export function ServerStatus({ connectSuccess }: ServerStatusProps) {
             <HoverCard.Arrow />
             {identity ? (
               <Stack>
-                <Strong>{ConnectDetails?.serverRoot}</Strong>
+                <Strong>{connectDetails?.serverRoot}</Strong>
                 <Em>
                   {identity.product} v{identity.version}
                 </Em>

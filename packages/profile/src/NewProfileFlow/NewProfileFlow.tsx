@@ -1,45 +1,39 @@
 import { Box, Button, ButtonGroup, Heading, Stack, Steps } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useGetServerRoot } from '@mdm/server-status'
 
 import { ProfileForm } from '../ProfileForm/ProfileForm'
 import { ServerConnect } from '../ServerConnect/ServerConnect'
 
-const loadSteps = (setIsStepValid: (valid: boolean) => void) => [
+const steps = [
   {
-    content: <ServerConnect setIsStepValid={setIsStepValid} />,
+    content: <ServerConnect />,
     title: 'connect',
   },
   {
-    content: <ProfileForm serverRoot="https://mdm.dgwlab.net/" />,
+    content: <ProfileForm />,
     title: 'profile',
   },
   {
-    content: <ProfileForm serverRoot="https://mdm.dgwlab.net/" />,
+    content: <ProfileForm />,
     title: 'sets',
   },
   {
-    content: <ProfileForm serverRoot="https://mdm.dgwlab.net/" />,
+    content: <ProfileForm />,
     title: 'sync',
   },
 ]
 
 export function NewProfileFlow() {
-  const [isStepValid, setIsStepValid] = useState(false)
-  const [activeStep, setActiveStep] = useState(0)
-  const steps = loadSteps(setIsStepValid)
+  const { data: connectDetails } = useGetServerRoot()
+
+  const isStepValid = Boolean(connectDetails?.serverRoot)
+  console.log('isStepValid', connectDetails)
 
   return (
     <Box maxW="container.md" mx="auto" px={{ base: 4, md: 6 }} py={6}>
       <Stack gap={6}>
         <Heading>configuration</Heading>
-        <Steps.Root
-          count={steps.length}
-          onStepChange={({ step }) => {
-            setActiveStep(step)
-            setIsStepValid(false)
-          }}
-          size="sm"
-        >
+        <Steps.Root count={steps.length} size="sm">
           <Steps.List>
             {steps.map((step, index) => (
               <Steps.Item index={index} key={index} title={step.title}>
@@ -49,8 +43,11 @@ export function NewProfileFlow() {
               </Steps.Item>
             ))}
           </Steps.List>
-          <Steps.Content index={activeStep}>{steps[activeStep].content}</Steps.Content>
-
+          {steps.map((step, index) => (
+            <Steps.Content index={index} key={index}>
+              {step.content}
+            </Steps.Content>
+          ))}
           <ButtonGroup display="flex" w="full">
             <Steps.PrevTrigger asChild>
               <Button flex="1">prev</Button>

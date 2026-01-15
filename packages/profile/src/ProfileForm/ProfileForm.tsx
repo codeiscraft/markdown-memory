@@ -1,11 +1,7 @@
 import { Field, Input, Stack, Strong, Text } from '@chakra-ui/react'
 import { ChangeEvent, useState } from 'react'
 
-export interface ProfileFormProps {
-  serverRoot: string
-}
-
-export function ProfileForm({ serverRoot }: ProfileFormProps) {
+export function ProfileForm() {
   const [name, setName] = useState('')
   const [slug, setSlug] = useState('')
 
@@ -30,10 +26,7 @@ export function ProfileForm({ serverRoot }: ProfileFormProps) {
           {slug && (
             <Stack direction="row">
               <Text>the url for this profile will be</Text>
-              <Strong>
-                {serverRoot}
-                {slug}
-              </Strong>
+              <Strong>{slug}</Strong>
             </Stack>
           )}
         </Field.HelperText>
