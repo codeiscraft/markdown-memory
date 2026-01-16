@@ -1,7 +1,7 @@
 import { Field, Input, SegmentGroup, Stack, Strong, Text } from '@chakra-ui/react'
 import { PasswordInput } from '@mdm/components'
 import { useGetConnectDetails } from '@mdm/server-status'
-import { generateEncryptionCacheItem, generateUserSalt, toSlug } from '@mdm/utils'
+import { generateEncryptionProfile, generateUserSalt, toSlug } from '@mdm/utils'
 import { ChangeEvent, useEffect, useState } from 'react'
 
 // TODO: move this into Bear Paackage
@@ -40,7 +40,7 @@ export function ProfileForm() {
   useEffect(() => {
     const deriveKey = async () => {
       if (passphrase && salt) {
-        const cache = await generateEncryptionCacheItem(passphrase, salt)
+        const cache = await generateEncryptionProfile(passphrase, salt)
         console.log(cache)
         // TODO: save to cache along with other details
       }
