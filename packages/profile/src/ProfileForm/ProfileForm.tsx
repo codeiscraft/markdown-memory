@@ -1,16 +1,16 @@
-import { Field, Input, SegmentGroup, Stack, Strong, Text } from '@chakra-ui/react'
+import { Field, Input, SegmentGroup, Stack, Stack, Strong, Text } from '@chakra-ui/react'
 import { PasswordInput } from '@mdm/components'
 import { useGetConnectDetails } from '@mdm/server-status'
 import { generateEncryptionProfile, generateUserSalt, toSlug } from '@mdm/utils'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 
 // TODO: move this into Bear Paackage
 const bearRoot = '~/Library/Group Containers/9K33E3U3T4.net.shinyfrog.bear/Application Data'
 
-const getDirLabel = (source: string) => {
+const getDirLabel = (source: null | string | undefined) => {
   if (source === 'bear') return 'bear data path'
   if (source === 'obsidian') return 'obsidian vault path'
-  return 'markdown file path'
+  return 'source file path'
 }
 
 const sources = ['bear', 'obsidian', 'file']
@@ -37,6 +37,8 @@ export function ProfileForm() {
   const updatePassphrase = (event: ChangeEvent<HTMLInputElement>) =>
     setPassphrase(event.target.value)
 
+  const handleSubmit = (event: FormEvent) => event.preventDefault()
+
   useEffect(() => {
     const deriveKey = async () => {
       if (passphrase && salt) {
@@ -51,7 +53,7 @@ export function ProfileForm() {
   const url = `${connectDetails?.serverRoot}/${slug}`
 
   return (
-    <Stack>
+    <Stack as="form" onSubmit={handleSubmit}>
       <Field.Root required>
         <Field.Label>name</Field.Label>
         <Input onChange={updateName} placeholder="provide a name for this profile" value={name} />
@@ -71,23 +73,19 @@ export function ProfileForm() {
           <SegmentGroup.Items items={sources} />
         </SegmentGroup.Root>
       </Field.Root>
-      {source && (
-        <>
-          <Field.Root required>
-            <Field.Label>{getDirLabel(source)}</Field.Label>
-            <Input onChange={(e) => setDirectory(e.target.value)} value={directory} />
-          </Field.Root>
-          <Field.Root required>
-            <Field.Label>passphrase</Field.Label>
-            <PasswordInput onChange={updatePassphrase} value={passphrase} />
-            <Field.HelperText>
-              <Stack direction="row">
-                <Text>use a passphrase that is easy to remember but hard to guess.</Text>
-              </Stack>
-            </Field.HelperText>
-          </Field.Root>
-        </>
-      )}
+      <Field.Root required>
+        <Field.Label>{getDirLabel(source)}</Field.Label>
+        <Input onChange={(e) => setDirectory(e.target.value)} value={directory} />
+      </Field.Root>
+      <Field.Root required>
+        <Field.Label>passphrase</Field.Label>
+        <PasswordInput onChange={updatePassphrase} value={passphrase} />
+        <Field.HelperText>
+          <Stack direction="row">
+            <Text>use a passphrase that is easy to remember but hard to guess.</Text>
+          </Stack>
+        </Field.HelperText>
+      </Field.Root>
     </Stack>
   )
 }
