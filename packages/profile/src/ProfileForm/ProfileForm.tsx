@@ -1,8 +1,8 @@
 import { Field, Input, SegmentGroup, Stack, Strong, Text } from '@chakra-ui/react'
 import { PasswordInput } from '@mdm/components'
 import { useGetConnectDetails } from '@mdm/server-status'
-import { toSlug } from '@mdm/utils'
-import { ChangeEvent, useState } from 'react'
+import { generateEncryptionCacheItem, generateUserSalt, toSlug } from '@mdm/utils'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 // TODO: move this into Bear Paackage
 const bearRoot = '~/Library/Group Containers/9K33E3U3T4.net.shinyfrog.bear/Application Data'
@@ -21,7 +21,7 @@ export function ProfileForm() {
   const [slug, setSlug] = useState('')
   const [directory, setDirectory] = useState('')
   const [passphrase, setPassphrase] = useState('')
-
+  const [salt] = useState(generateUserSalt())
   const { data: connectDetails } = useGetConnectDetails()
 
   if (source === 'bear' && directory === '') {
@@ -33,6 +33,21 @@ export function ProfileForm() {
     setName(value)
     setSlug(toSlug(value))
   }
+
+  const updatePassphrase = (event: ChangeEvent<HTMLInputElement>) =>
+    setPassphrase(event.target.value)
+
+  useEffect(() => {
+    const deriveKey = async () => {
+      if (passphrase && salt) {
+        const cache = await generateEncryptionCacheItem(passphrase, salt)
+        console.log(cache)
+        // TODO: save to cache along with other details
+      }
+    }
+    deriveKey()
+  }, [passphrase, salt])
+
   const url = `${connectDetails?.serverRoot}/${slug}`
 
   return (
@@ -64,10 +79,7 @@ export function ProfileForm() {
           </Field.Root>
           <Field.Root required>
             <Field.Label>passphrase</Field.Label>
-            <PasswordInput
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassphrase(e.target.value)}
-              value={passphrase}
-            />
+            <PasswordInput onChange={updatePassphrase} value={passphrase} />
             <Field.HelperText>
               <Stack direction="row">
                 <Text>use a passphrase that is easy to remember but hard to guess.</Text>
