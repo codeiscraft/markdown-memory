@@ -2,18 +2,16 @@ import { Em, HoverCard, IconButton, Portal, Stack, Strong, Text } from '@chakra-
 import { Icon } from '@mdm/components'
 
 import { useGetServerRoot } from '../useGetServerRoot/useGetServerRoot'
-//import { useServerIdentity } from '../useServerIdentity/useServerIdentity'
-//import { getColor, getIcon } from './ServerStatus.util'
+import { useServerIdentity } from '../useServerIdentity/useServerIdentity'
+import { getColor, getIcon } from './ServerStatus.util'
 
 export function ServerStatus() {
   const { data: connectDetails } = useGetServerRoot()
-  // const result = useServerIdentity(connectDetails)
-  //const { data: identity, isFetching } = result
+  const result = useServerIdentity(connectDetails)
+  const { data: identity, isFetching } = result
 
-  const identity = { product: 'Markdown Memory', version: '1.0.0' } // TODO remove mock
-  const isFetching = true
-  const icon = '' //getIcon(result)
-  const color = '' //  getColor(result)
+  const icon = getIcon(result)
+  const color = getColor(result)
 
   return (
     <HoverCard.Root size="sm">

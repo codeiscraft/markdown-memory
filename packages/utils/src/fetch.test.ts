@@ -34,39 +34,38 @@ describe('fetchTyped', () => {
 })
 
 describe('fetchLocal', () => {
-  test('returns parsed result if match is found', async () => {
+  test('returns parsed result if match is found', () => {
     setupLocalStorageMock()
     asMock(localStorage.getItem).mockReturnValueOnce(JSON.stringify({ key: 'value' }))
 
-    const result = await fetchLocal('key', 'get')
+    const result = fetchLocal('key', 'get')
 
     expect(localStorage.getItem).toHaveBeenCalledWith('key')
     expect(result).toEqual({ key: 'value' })
   })
 
-  test('returns null if item undefined', async () => {
+  test('returns null if item undefined', () => {
     setupLocalStorageMock()
     asMock(localStorage.getItem).mockReturnValueOnce(null)
 
-    const result = await fetchLocal('key', 'get')
+    const result = fetchLocal('key', 'get')
 
     expect(localStorage.getItem).toHaveBeenCalledWith('key')
     expect(result).toBeNull()
   })
 
-  test('sets key with stringified value', async () => {
+  test('sets key with stringified value', () => {
     setupLocalStorageMock()
 
-    await fetchLocal('key', 'set', { key: 'value' })
+    fetchLocal('key', 'set', { key: 'value' })
 
     expect(localStorage.setItem).toHaveBeenCalledWith('key', JSON.stringify({ key: 'value' }))
   })
 
-  test('throws errors if invalid operation', async () => {
+  test('throws errors if invalid operation', () => {
     setupLocalStorageMock()
 
-    await expect(
-      fetchLocal('key', 'foo' as unknown as 'get' | 'set', { key: 'value' }),
-    ).rejects.toThrow('invalid operation')
+    const operation = 'delete' as 'get' | 'set'
+    expect(() => fetchLocal('key', operation, { key: 'value' })).toThrow('invalid operation')
   })
 })

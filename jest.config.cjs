@@ -1,4 +1,5 @@
 module.exports = {
+  collectCoverage: true,
   projects: [
     '<rootDir>/packages/cache/jest.config.cjs',
     '<rootDir>/packages/components/jest.config.js',

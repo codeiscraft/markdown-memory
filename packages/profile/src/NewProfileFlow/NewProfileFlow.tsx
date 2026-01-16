@@ -27,7 +27,6 @@ export function NewProfileFlow() {
   const { data: connectDetails } = useGetServerRoot()
 
   const isStepValid = Boolean(connectDetails?.serverRoot)
-  console.log('isStepValid', connectDetails)
 
   return (
     <Box maxW="container.md" mx="auto" px={{ base: 4, md: 6 }} py={6}>

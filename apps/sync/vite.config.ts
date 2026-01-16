@@ -5,6 +5,7 @@ const port = 5173
 export default defineConfig({
   base: './',
   build: {
+    emptyOutDir: true,
     outDir: '../dist/renderer',
   },
   plugins: [react()],

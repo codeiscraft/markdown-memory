@@ -1,6 +1,6 @@
 import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
 import { asMock } from '@mdm/testing-support/mocks'
-import { UseQueryResult } from '@tanstack/react-query'
+import { DefinedUseQueryResult, UseQueryResult } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
 
 import { ConnectDetails } from '../types'
@@ -11,10 +11,10 @@ import { ServerStatus } from './ServerStatus'
 jest.mock('../useGetServerRoot/useGetServerRoot')
 jest.mock('../useServerIdentity/useServerIdentity')
 
-const renderServerStatus = (connectSuccess = jest.fn()) =>
+const renderServerStatus = () =>
   render(
     <ChakraProvider value={defaultSystem}>
-      <ServerStatus connectSuccess={connectSuccess} />
+      <ServerStatus />
     </ChakraProvider>,
   )
 
@@ -22,7 +22,7 @@ const mockServerIdentity = ({
   data,
   isFetching,
   isSuccess,
-}: Partial<UseQueryResult<ServerIdentity, unknown>>) =>
+}: Partial<DefinedUseQueryResult<ServerIdentity, unknown>>) =>
   ({
     data,
     isFetching,
@@ -33,61 +33,16 @@ const mockGetServerRoot = ({
   data,
   isFetching,
   isSuccess,
-}: Partial<UseQueryResult<ConnectDetails, Error>>) =>
+}: Partial<DefinedUseQueryResult<ConnectDetails, Error>>) =>
   ({
     data,
     isFetching,
     isSuccess,
-  }) as unknown as UseQueryResult<ConnectDetails, Error>
+  }) as unknown as DefinedUseQueryResult<ConnectDetails, Error>
 
 const serverRoot = 'http://localhost:8200'
 
 describe('ServerStatus', () => {
-  test('calls connectSuccess(false) when server root is missing', () => {
-    const connectSuccess = jest.fn()
-    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: undefined }))
-    asMock(useServerIdentity).mockReturnValue(
-      mockServerIdentity({ data: undefined, isSuccess: false }),
-    )
-
-    renderServerStatus(connectSuccess)
-
-    expect(connectSuccess).toHaveBeenCalledWith(false)
-  })
-
-  test('calls connectSuccess(false) when server root exists but identity is not successful', () => {
-    const connectSuccess = jest.fn()
-    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: { serverRoot } }))
-    asMock(useServerIdentity).mockReturnValue(
-      mockServerIdentity({ data: undefined, isSuccess: false }),
-    )
-
-    renderServerStatus(connectSuccess)
-
-    expect(connectSuccess).toHaveBeenCalledWith(false)
-  })
-
-  test('calls connectSuccess(true) when server root exists and identity is successful', () => {
-    const connectSuccess = jest.fn()
-    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: { serverRoot } }))
-    asMock(useServerIdentity).mockReturnValue(
-      mockServerIdentity({
-        data: {
-          apiVersion: '1',
-          commit: 'abc123',
-          product: 'Markdown Memory',
-          version: '1.2.3',
-        },
-        isFetching: false,
-        isSuccess: true,
-      }),
-    )
-
-    renderServerStatus(connectSuccess)
-
-    expect(connectSuccess).toHaveBeenCalledWith(true)
-  })
-
   test('shows a prompt when identity is missing', () => {
     asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: { serverRoot } }))
     asMock(useServerIdentity).mockReturnValue(

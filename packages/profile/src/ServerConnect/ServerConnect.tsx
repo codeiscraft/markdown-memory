@@ -6,7 +6,6 @@ export function ServerConnect() {
   const { data: connectDetails } = useGetServerRoot()
   const { mutate: setServer } = useSetServerRoot()
   const [serverRoot, setServerRoot] = useState(connectDetails?.serverRoot || '')
-
   const isValid = /^https?:\/\/\S+$/.test(serverRoot)
 
   useEffect(() => {
