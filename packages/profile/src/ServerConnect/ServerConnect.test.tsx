@@ -2,7 +2,7 @@ import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
 import { ConnectDetails, useGetConnectDetails, useSetConnectDetails } from '@mdm/server-status'
 import { asMock } from '@mdm/testing-support/mocks'
 import { mockGetDefinedQuery, mockMutationResult } from '@mdm/testing-support/query'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 
 import { ServerConnect } from './ServerConnect'
 
@@ -29,12 +29,13 @@ const renderServerConnect = () =>
 const serverRoot = 'http://localhost:8200'
 
 describe('ServerConnect', () => {
-  beforeEach(() => {
-    jest.useFakeTimers()
-  })
+  beforeEach(() => jest.useFakeTimers())
+  afterEach(() => jest.useRealTimers())
 
   test('prefills the input when server root is available', async () => {
-    asMock(useGetConnectDetails).mockReturnValue(mockGetDefinedQuery<ConnectDetails>())
+    asMock(useGetConnectDetails).mockReturnValue(
+      mockGetDefinedQuery<ConnectDetails>({ data: { serverRoot } }),
+    )
     asMock(useSetConnectDetails).mockReturnValue(mockMutationResult())
 
     renderServerConnect()
@@ -42,7 +43,7 @@ describe('ServerConnect', () => {
     screen.findByDisplayValue(serverRoot)
   })
 
-  test('calls mutate with a valid url', async () => {
+  test('calls mutate with a valid url', () => {
     const mutate = jest.fn()
     asMock(useGetConnectDetails).mockReturnValue(
       mockGetDefinedQuery<ConnectDetails>({ data: { serverRoot } }),
@@ -50,7 +51,6 @@ describe('ServerConnect', () => {
     asMock(useSetConnectDetails).mockReturnValue(mockMutationResult({ mutate }))
 
     renderServerConnect()
-
     fireEvent.change(
       screen.getByPlaceholderText('enter the address for your markdown memory server'),
       {
@@ -58,8 +58,7 @@ describe('ServerConnect', () => {
       },
     )
     jest.runAllTimers()
-    await waitFor(() => {
-      expect(mutate).toHaveBeenCalledWith({ serverRoot: 'http://localhost:8301' })
-    })
+
+    expect(mutate).toHaveBeenCalledWith({ serverRoot: 'http://localhost:8301' })
   })
 })
