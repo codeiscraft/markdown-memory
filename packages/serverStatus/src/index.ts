@@ -1,5 +1,5 @@
 export * from './ServerStatus/ServerStatus'
 export * from './types'
-export * from './useGetServerRoot/useGetServerRoot'
+export * from './useGetConnectDetails/useGetConnectDetails'
 export * from './useServerIdentity/useServerIdentity'
-export * from './useSetServerRoot/useSetServerRoot'
+export * from './useSetConnectDetails/useSetConnectDetails'

@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom'
 import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
-import { ConnectDetails, useGetServerRoot } from '@mdm/server-status'
+import { ConnectDetails, useGetConnectDetails } from '@mdm/server-status'
 import { asMock } from '@mdm/testing-support/mocks'
 import { DefinedUseQueryResult } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
@@ -17,7 +17,7 @@ jest.mock('../ProfileForm/ProfileForm', () => ({
 const renderNewProfileFlow = (ui?: ReactNode) =>
   render(<ChakraProvider value={defaultSystem}>{ui ?? <NewProfileFlow />}</ChakraProvider>)
 
-const mockGetServerRoot = ({
+const mockGetConnectDetails = ({
   data,
   isFetching,
   isSuccess,
@@ -32,7 +32,7 @@ const serverRoot = 'http://localhost:8200'
 
 describe('NewProfileFlow', () => {
   test('renders the step titles', () => {
-    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: { serverRoot } }))
+    asMock(useGetConnectDetails).mockReturnValue(mockGetConnectDetails({ data: { serverRoot } }))
 
     renderNewProfileFlow()
 
@@ -43,7 +43,9 @@ describe('NewProfileFlow', () => {
   })
 
   test('disables next by default', () => {
-    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: { serverRoot: '' } }))
+    asMock(useGetConnectDetails).mockReturnValue(
+      mockGetConnectDetails({ data: { serverRoot: '' } }),
+    )
 
     renderNewProfileFlow()
 

@@ -1,19 +1,17 @@
 import { Field, Input, Stack } from '@chakra-ui/react'
-import { ServerStatus, useGetServerRoot, useSetServerRoot } from '@mdm/server-status'
+import { ServerStatus, useGetConnectDetails, useSetConnectDetails } from '@mdm/server-status'
 import { useEffect, useState } from 'react'
 
 export function ServerConnect() {
-  const { data: connectDetails } = useGetServerRoot()
-  const { mutate: setServer } = useSetServerRoot()
+  const { data: connectDetails } = useGetConnectDetails()
+  const { mutate: setServer } = useSetConnectDetails()
   const [serverRoot, setServerRoot] = useState(connectDetails?.serverRoot || '')
   const isValid = /^https?:\/\/\S+$/.test(serverRoot)
 
   useEffect(() => {
     if (!isValid) return
 
-    const timeoutId = setTimeout(() => {
-      setServer({ serverRoot })
-    }, 400)
+    const timeoutId = setTimeout(() => setServer({ serverRoot }), 400)
 
     return () => clearTimeout(timeoutId)
   }, [isValid, serverRoot, setServer])

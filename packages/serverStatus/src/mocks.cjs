@@ -1,5 +1,5 @@
 module.exports = {
   ServerStatus: jest.fn(),
-  useGetServerRoot: jest.fn(),
-  useSetServerRoot: jest.fn(),
+  useGetConnectDetails: jest.fn(),
+  useSetConnectDetails: jest.fn(),
 }

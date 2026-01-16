@@ -1,7 +1,7 @@
 import type { ConnectDetails } from '@mdm/server-status'
 
 import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
-import { useGetServerRoot, useSetServerRoot } from '@mdm/server-status'
+import { useGetConnectDetails, useSetConnectDetails } from '@mdm/server-status'
 import { asMock } from '@mdm/testing-support/mocks'
 import { DefinedUseQueryResult, UseMutationResult } from '@tanstack/react-query'
 import { fireEvent, render, screen } from '@testing-library/react'
@@ -17,8 +17,8 @@ jest.mock('@mdm/server-status', () => ({
     }
     return null
   },
-  useGetServerRoot: jest.fn(),
-  useSetServerRoot: jest.fn(),
+  useGetConnectDetails: jest.fn(),
+  useSetConnectDetails: jest.fn(),
 }))
 
 const renderServerConnect = () =>
@@ -30,13 +30,13 @@ const renderServerConnect = () =>
 
 const serverRoot = 'http://localhost:8200'
 
-const mockGetServerRoot = (data: ConnectDetails | undefined) =>
-  asMock(useGetServerRoot).mockReturnValue({
+const mockGetConnectDetails = (data: ConnectDetails | undefined) =>
+  asMock(useGetConnectDetails).mockReturnValue({
     data,
   } as unknown as DefinedUseQueryResult<ConnectDetails, Error>)
 
-const mockSetServerRoot = (mutate = jest.fn()) => {
-  asMock(useSetServerRoot).mockReturnValue({
+const mockSetConnectDetails = (mutate = jest.fn()) => {
+  asMock(useSetConnectDetails).mockReturnValue({
     mutate,
   } as unknown as UseMutationResult<ConnectDetails | null, Error, ConnectDetails, unknown>)
 }
@@ -47,8 +47,8 @@ describe('ServerConnect', () => {
   })
 
   test('prefills the input when server root is available', async () => {
-    mockGetServerRoot({ serverRoot })
-    mockSetServerRoot()
+    mockGetConnectDetails({ serverRoot })
+    mockSetConnectDetails()
 
     renderServerConnect()
 
@@ -58,8 +58,8 @@ describe('ServerConnect', () => {
   test('calls mutate with a valid url', () => {
     jest.useFakeTimers()
     const mutate = jest.fn()
-    mockGetServerRoot({ serverRoot })
-    mockSetServerRoot(mutate)
+    mockGetConnectDetails({ serverRoot })
+    mockSetConnectDetails(mutate)
 
     renderServerConnect()
 

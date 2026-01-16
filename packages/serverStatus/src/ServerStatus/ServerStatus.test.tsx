@@ -1,14 +1,16 @@
 import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
 import { asMock } from '@mdm/testing-support/mocks'
-import { DefinedUseQueryResult, UseQueryResult } from '@tanstack/react-query'
+import { DefinedUseQueryResult, UseMutationResult, UseQueryResult } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
 
 import { ConnectDetails } from '../types'
-import { useGetServerRoot } from '../useGetServerRoot/useGetServerRoot'
+import { useGetConnectDetails } from '../useGetConnectDetails/useGetConnectDetails'
 import { ServerIdentity, useServerIdentity } from '../useServerIdentity/useServerIdentity'
+import { useSetConnectDetails } from '../useSetConnectDetails/useSetConnectDetails'
 import { ServerStatus } from './ServerStatus'
 
-jest.mock('../useGetServerRoot/useGetServerRoot')
+jest.mock('../useSetConnectDetails/useSetConnectDetails')
+jest.mock('../useGetConnectDetails/useGetConnectDetails')
 jest.mock('../useServerIdentity/useServerIdentity')
 
 const renderServerStatus = () =>
@@ -40,11 +42,22 @@ const mockGetServerRoot = ({
     isSuccess,
   }) as unknown as DefinedUseQueryResult<ConnectDetails, Error>
 
+const mockSetConnectDetails = (
+  overrides?: Partial<UseMutationResult<ConnectDetails | null, Error>>,
+) =>
+  ({
+    isPending: false,
+    isSuccess: false,
+    mutate: jest.fn(),
+    ...overrides,
+  }) as unknown as UseMutationResult<ConnectDetails | null, Error, ConnectDetails>
+
 const serverRoot = 'http://localhost:8200'
 
 describe('ServerStatus', () => {
   test('shows a prompt when identity is missing', () => {
-    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: { serverRoot } }))
+    asMock(useGetConnectDetails).mockReturnValue(mockGetServerRoot({ data: { serverRoot } }))
+    asMock(useSetConnectDetails).mockReturnValue(mockSetConnectDetails())
     asMock(useServerIdentity).mockReturnValue(
       mockServerIdentity({
         data: undefined,
@@ -59,7 +72,7 @@ describe('ServerStatus', () => {
   })
 
   test('renders server root and identity when available', () => {
-    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: { serverRoot } }))
+    asMock(useGetConnectDetails).mockReturnValue(mockGetServerRoot({ data: { serverRoot } }))
     asMock(useServerIdentity).mockReturnValue(
       mockServerIdentity({
         data: {
@@ -80,7 +93,7 @@ describe('ServerStatus', () => {
   })
 
   test('marks the icon button as loading while fetching', () => {
-    asMock(useGetServerRoot).mockReturnValue(mockGetServerRoot({ data: { serverRoot } }))
+    asMock(useGetConnectDetails).mockReturnValue(mockGetServerRoot({ data: { serverRoot } }))
     asMock(useServerIdentity).mockReturnValue(
       mockServerIdentity({
         data: undefined,

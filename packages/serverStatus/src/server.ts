@@ -1,1 +1,1 @@
-export const serverRootKey = 'mdm.serverRoot'
+export const connectDetailsKey = 'mdm.connectDetails'
