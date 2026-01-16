@@ -33,7 +33,6 @@ export function NewProfileFlow() {
     }
     return true
   }
-  console.log('connectDetails', connectDetails, isValid())
 
   return (
     <Box maxW="container.md" mx="auto" px={{ base: 4, md: 6 }} py={6}>

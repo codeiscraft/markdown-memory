@@ -1,14 +1,12 @@
-import type { ConnectDetails } from '@mdm/server-status'
-
 import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
-import { useGetConnectDetails, useSetConnectDetails } from '@mdm/server-status'
+import { ConnectDetails, useGetConnectDetails, useSetConnectDetails } from '@mdm/server-status'
 import { asMock } from '@mdm/testing-support/mocks'
-import { DefinedUseQueryResult, UseMutationResult } from '@tanstack/react-query'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { mockGetDefinedQuery, mockMutationResult } from '@mdm/testing-support/query'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 
 import { ServerConnect } from './ServerConnect'
 
-let connectSuccessValue: boolean | null = null
+const connectSuccessValue: boolean | null = null
 
 jest.mock('@mdm/server-status', () => ({
   ServerStatus: ({ connectSuccess }: { connectSuccess: (connected: boolean) => void }) => {
@@ -30,36 +28,26 @@ const renderServerConnect = () =>
 
 const serverRoot = 'http://localhost:8200'
 
-const mockGetConnectDetails = (data: ConnectDetails | undefined) =>
-  asMock(useGetConnectDetails).mockReturnValue({
-    data,
-  } as unknown as DefinedUseQueryResult<ConnectDetails, Error>)
-
-const mockSetConnectDetails = (mutate = jest.fn()) => {
-  asMock(useSetConnectDetails).mockReturnValue({
-    mutate,
-  } as unknown as UseMutationResult<ConnectDetails | null, Error, ConnectDetails, unknown>)
-}
-
 describe('ServerConnect', () => {
   beforeEach(() => {
-    connectSuccessValue = null
+    jest.useFakeTimers()
   })
 
   test('prefills the input when server root is available', async () => {
-    mockGetConnectDetails({ serverRoot })
-    mockSetConnectDetails()
+    asMock(useGetConnectDetails).mockReturnValue(mockGetDefinedQuery<ConnectDetails>())
+    asMock(useSetConnectDetails).mockReturnValue(mockMutationResult())
 
     renderServerConnect()
 
     screen.findByDisplayValue(serverRoot)
   })
 
-  test('calls mutate with a valid url', () => {
-    jest.useFakeTimers()
+  test('calls mutate with a valid url', async () => {
     const mutate = jest.fn()
-    mockGetConnectDetails({ serverRoot })
-    mockSetConnectDetails(mutate)
+    asMock(useGetConnectDetails).mockReturnValue(
+      mockGetDefinedQuery<ConnectDetails>({ data: { serverRoot } }),
+    )
+    asMock(useSetConnectDetails).mockReturnValue(mockMutationResult({ mutate }))
 
     renderServerConnect()
 
@@ -70,7 +58,8 @@ describe('ServerConnect', () => {
       },
     )
     jest.runAllTimers()
-
-    expect(mutate).toHaveBeenCalledWith({ serverRoot: 'http://localhost:8301' })
+    await waitFor(() => {
+      expect(mutate).toHaveBeenCalledWith({ serverRoot: 'http://localhost:8301' })
+    })
   })
 })
