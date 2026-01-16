@@ -1,4 +1,4 @@
-import { Field, Input, SegmentGroup, Stack, Stack, Strong, Text } from '@chakra-ui/react'
+import { Field, Input, SegmentGroup, Stack, Strong, Text } from '@chakra-ui/react'
 import { PasswordInput } from '@mdm/components'
 import { useGetConnectDetails } from '@mdm/server-status'
 import { generateEncryptionProfile, generateUserSalt, toSlug } from '@mdm/utils'
