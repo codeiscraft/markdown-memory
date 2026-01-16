@@ -5,11 +5,13 @@
   "scripts": {
     "build": "tsc",
     "check-types": "tsc --noEmit",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "jest"
   },
   "exports": {
     ".": "./dist/index.js",
-    "./theme": "./dist/ui/theme.js"
+    "./theme": "./dist/ui/theme.js",
+    "./mocks": "./src/mocks.cjs"
   },
   "dependencies": {
     "react": "19.2.3"

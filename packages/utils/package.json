@@ -1,0 +1,25 @@
+{
+  "name": "@mdm/utils",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "tsc",
+    "check-types": "tsc --noEmit",
+    "dev": "tsc --watch",
+    "lint": "eslint",
+    "test": "jest"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./mocks": "./src/mocks.cjs"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@mdm/testing-support": "*",
+    "@mdm/typescript-config": "*"
+  }
+}

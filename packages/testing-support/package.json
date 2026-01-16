@@ -7,12 +7,18 @@
     "check-types": "tsc --noEmit",
     "lint": "eslint"
   },
+  "type": "commonjs",
   "exports": {
     "./mocks": "./dist/mocks.js",
-    "./setupTests.ts": "./src/setupTests.ts",
-    "./baseConfig": "./jest.base.config.js"
+    "./query": "./dist/query.js",
+    "./redis": "./dist/redis.js",
+    "./express": "./dist/express.js",
+    "./setupTests.ts": "./dist/setupTests.js",
+    "./baseConfig": "./jest.base.config.cjs"
   },
   "devDependencies": {
-    "@mdm/typescript-config": "*"
+    "express": "5.2.1",
+    "@mdm/typescript-config": "*",
+    "@tanstack/react-query": "5.90.16"
   }
 }

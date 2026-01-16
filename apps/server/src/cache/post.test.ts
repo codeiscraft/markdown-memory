@@ -1,12 +1,9 @@
 import { setKeyValueSafely } from '@mdm/cache'
-import { mockRedisClient } from '@mdm/cache/testing-support'
+import { mockRequest, mockResponse } from '@mdm/testing-support/express'
 import { asMock } from '@mdm/testing-support/mocks'
+import { mockRedisClient } from '@mdm/testing-support/redis'
 
-import { mockRequest } from '../testing-support/request'
-import { mockResponse } from '../testing-support/response'
 import post from './post'
-
-jest.mock('@mdm/cache')
 
 describe('POST /cache', () => {
   test('status 400 if body is not formatted correct', async () => {

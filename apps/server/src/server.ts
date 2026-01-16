@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import { createClient } from 'redis'
 
 import { createCacheRoutes } from './cache/route'
+import { createIdentityRoutes } from './identity/route'
 
 const host = process.env.MDM_HOST || '0.0.0.0'
 const port = Number(process.env.MDM_PORT) || 8100
@@ -26,9 +27,16 @@ redisClient.connect().catch(console.error)
 export const startup = async () => {
   const app = express()
 
+  app.use((_, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    next()
+  })
   app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
   app.use(express.json())
   app.use(createCacheRoutes(redisClient))
+  app.use(createIdentityRoutes())
   app.use(errorResponse)
 
   const server = app.listen(port, host, startMessage)

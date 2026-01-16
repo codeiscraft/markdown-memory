@@ -9,10 +9,10 @@
     "lint": "eslint",
     "test": "jest"
   },
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     ".": "./dist/index.js",
-    "./testing-support": "./dist/testing-support/index.js"
+    "./mocks": "./src/mocks.cjs"
   },
   "dependencies": {
     "redis": "5.10.0"
