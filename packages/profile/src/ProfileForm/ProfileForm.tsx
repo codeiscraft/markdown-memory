@@ -80,10 +80,11 @@ export function ProfileForm() {
       </Field.Root>
       <Field.Root required>
         <Field.Label>passphrase</Field.Label>
-        <PasswordInput onChange={updatePassphrase} value={passphrase} />
-        <Field.HelperText>
-          <Text>use a passphrase that is easy to remember but hard to guess.</Text>
-        </Field.HelperText>
+        <PasswordInput
+          onChange={updatePassphrase}
+          placeholder="use a passphrase that is easy to remember but hard to guess."
+          value={passphrase}
+        />
       </Field.Root>
     </Stack>
   )

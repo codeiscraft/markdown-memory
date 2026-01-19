@@ -5,7 +5,7 @@ const icon = '../renderer/apple-touch-icon.png'
 
 function createWindow() {
   const win = new BrowserWindow({
-    height: 450,
+    height: 600,
     icon: path.join(__dirname, icon),
     webPreferences: {
       contextIsolation: true,
