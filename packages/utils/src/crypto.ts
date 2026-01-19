@@ -37,22 +37,6 @@ export async function deriveMasterKey(
   )
 }
 
-export async function encryptVerificationString(masterKey: CryptoKey, version = v) {
-  const iv = crypto.getRandomValues(new Uint8Array(12))
-  const encoder = new TextEncoder()
-
-  const ciphertext = await crypto.subtle.encrypt(
-    { iv, name: ENCRYPT_ALG },
-    masterKey,
-    encoder.encode(`${VERIFICATION_PLAINTEXT}:v${version}`),
-  )
-
-  return {
-    ciphertext: Array.from(new Uint8Array(ciphertext)),
-    iv: Array.from(iv),
-  }
-}
-
 export async function generateEncryptionProfile(
   passphrase: string,
   salt: Uint8Array,
@@ -95,5 +79,21 @@ export async function validatePassphrase(passphrase: string, encryptionProfile: 
     return text === `${VERIFICATION_PLAINTEXT}:v${encryptionProfile.v}`
   } catch {
     return false
+  }
+}
+
+async function encryptVerificationString(masterKey: CryptoKey, version = v) {
+  const iv = crypto.getRandomValues(new Uint8Array(12))
+  const encoder = new TextEncoder()
+
+  const ciphertext = await crypto.subtle.encrypt(
+    { iv, name: ENCRYPT_ALG },
+    masterKey,
+    encoder.encode(`${VERIFICATION_PLAINTEXT}:v${version}`),
+  )
+
+  return {
+    ciphertext: Array.from(new Uint8Array(ciphertext)),
+    iv: Array.from(iv),
   }
 }
