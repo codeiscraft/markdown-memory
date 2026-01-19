@@ -1,5 +1,6 @@
 export interface ElectronAPI {
   onSyncStatus: (callback: SyncStatusCallback) => SyncStatusUnsubcribeFunction
+  verifyDirectoryExists: (path: string) => Promise<boolean>
 }
 export interface ElectronWindow extends Window {
   electronAPI: ElectronAPI

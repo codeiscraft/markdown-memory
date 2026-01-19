@@ -5,18 +5,25 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Route, HashRouter as Router, Routes } from 'react-router-dom'
 
+import { getElectronApi } from '../../src/electron'
 import { Sync } from '../Sync/Sync'
 
 const queryClient = new QueryClient()
 
 function App() {
+  const verifyDirectoryExists = (directoryPath: string) =>
+    getElectronApi().verifyDirectoryExists(directoryPath)
+
   return (
     <ChakraProvider value={system}>
       <QueryClientProvider client={queryClient}>
         <Router>
           <Routes>
             <Route element={<Sync />} path="/" />
-            <Route element={<NewProfileFlow />} path="/new" />
+            <Route
+              element={<NewProfileFlow verifyDirectoryExists={verifyDirectoryExists} />}
+              path="/new"
+            />
           </Routes>
         </Router>
         <ReactQueryDevtools initialIsOpen={false} />

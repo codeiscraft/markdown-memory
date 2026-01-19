@@ -15,11 +15,16 @@ const getDirLabel = (source: null | string | undefined) => {
 
 const sources = ['file', 'bear', 'obsidian']
 
-export function ProfileForm() {
+type ProfileFormProps = {
+  verifyDirectoryExists?: (path: string) => Promise<boolean>
+}
+
+export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
   const [source, setSource] = useState<null | string>()
   const [name, setName] = useState('')
   const [slug, setSlug] = useState('')
   const [directory, setDirectory] = useState('')
+  const [directoryExists, setDirectoryExists] = useState<boolean | null>(null)
   const [passphrase, setPassphrase] = useState('')
   const [salt] = useState(generateUserSalt())
   const { data: connectDetails } = useGetConnectDetails()
@@ -40,6 +45,20 @@ export function ProfileForm() {
 
   const updatePassphrase = (event: ChangeEvent<HTMLInputElement>) =>
     setPassphrase(event.target.value)
+
+  const verifyDirectory = async () => {
+    if (!verifyDirectoryExists || directory === '') {
+      setDirectoryExists(null)
+      return
+    }
+
+    try {
+      const exists = await verifyDirectoryExists(directory)
+      setDirectoryExists(exists)
+    } catch {
+      setDirectoryExists(false)
+    }
+  }
 
   const handleSubmit = (event: FormEvent) => event.preventDefault()
 
@@ -74,9 +93,16 @@ export function ProfileForm() {
           <SegmentGroup.Items items={sources} />
         </SegmentGroup.Root>
       </Field.Root>
-      <Field.Root required>
+      <Field.Root invalid={directoryExists === false} required>
         <Field.Label>{getDirLabel(source)}</Field.Label>
-        <Input onChange={(e) => setDirectory(e.target.value)} value={directory} />
+        <Input
+          onBlur={verifyDirectory}
+          onChange={(e) => setDirectory(e.target.value)}
+          value={directory}
+        />
+        {directoryExists === false && (
+          <Field.HelperText>directory not found on this machine.</Field.HelperText>
+        )}
       </Field.Root>
       <Field.Root required>
         <Field.Label>passphrase</Field.Label>

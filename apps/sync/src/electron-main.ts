@@ -1,4 +1,6 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
+import { stat } from 'node:fs/promises'
+import { homedir } from 'node:os'
 import * as path from 'path'
 
 const icon = '../renderer/apple-touch-icon.png'
@@ -33,8 +35,21 @@ if (process.platform === 'darwin') {
 
 app.whenReady().then(() => {
   createWindow()
+})
 
-  console.log('READY')
+ipcMain.handle('directory-exists', async (_event, directoryPath: string) => {
+  try {
+    const resolvedPath = directoryPath.startsWith('~/')
+      ? path.join(homedir(), directoryPath.slice(2))
+      : directoryPath
+    const stats = await stat(resolvedPath)
+    // TODO: consider checking permissions here as well
+    // TODO: bear: display size of sqlite db file, location of attachments folder
+    // TODO: obsidian: display number of files in vault, size on disk
+    return stats.isDirectory()
+  } catch {
+    return false
+  }
 })
 
 app.on('window-all-closed', () => {
