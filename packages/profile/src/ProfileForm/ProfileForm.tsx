@@ -13,7 +13,7 @@ const getDirLabel = (source: null | string | undefined) => {
   return 'source file path'
 }
 
-const sources = ['bear', 'obsidian', 'file']
+const sources = ['file', 'bear', 'obsidian']
 
 export function ProfileForm() {
   const [source, setSource] = useState<null | string>()
@@ -24,8 +24,11 @@ export function ProfileForm() {
   const [salt] = useState(generateUserSalt())
   const { data: connectDetails } = useGetConnectDetails()
 
-  if (source === 'bear' && directory === '') {
-    setDirectory(bearRoot)
+  const updateSource = (nextSource: null | string) => {
+    setSource(nextSource)
+    if (nextSource === 'bear' && directory === '') {
+      setDirectory(bearRoot)
+    }
   }
 
   const updateName = (event: ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +36,7 @@ export function ProfileForm() {
     setName(value)
     setSlug(toSlug(value))
   }
+  const url = `${connectDetails?.serverRoot}/${slug}`
 
   const updatePassphrase = (event: ChangeEvent<HTMLInputElement>) =>
     setPassphrase(event.target.value)
@@ -42,15 +46,12 @@ export function ProfileForm() {
   useEffect(() => {
     const deriveKey = async () => {
       if (passphrase && salt) {
-        const cache = await generateEncryptionProfile(passphrase, salt)
-        console.log(cache)
+        await generateEncryptionProfile(passphrase, salt)
         // TODO: save to cache along with other details
       }
     }
     deriveKey()
   }, [passphrase, salt])
-
-  const url = `${connectDetails?.serverRoot}/${slug}`
 
   return (
     <Stack as="form" onSubmit={handleSubmit}>
@@ -68,7 +69,7 @@ export function ProfileForm() {
       </Field.Root>
       <Field.Root required>
         <Field.Label>markdown source</Field.Label>
-        <SegmentGroup.Root onValueChange={(e) => setSource(e.value)} value={source}>
+        <SegmentGroup.Root onValueChange={(e) => updateSource(e.value)} value={source}>
           <SegmentGroup.Indicator />
           <SegmentGroup.Items items={sources} />
         </SegmentGroup.Root>
@@ -81,9 +82,7 @@ export function ProfileForm() {
         <Field.Label>passphrase</Field.Label>
         <PasswordInput onChange={updatePassphrase} value={passphrase} />
         <Field.HelperText>
-          <Stack direction="row">
-            <Text>use a passphrase that is easy to remember but hard to guess.</Text>
-          </Stack>
+          <Text>use a passphrase that is easy to remember but hard to guess.</Text>
         </Field.HelperText>
       </Field.Root>
     </Stack>

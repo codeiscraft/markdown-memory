@@ -1,11 +1,11 @@
+import { base64ToBytes, bytesToBase64, toArrayBuffer } from './crypto.helpers'
 import { EncryptionProfile } from './crypto.types'
 
 const kdf = 'PBKDF2-SHA256'
 const v = 1
 const VERIFICATION_PLAINTEXT = 'markdown-memory:passphrase-check'
 const PBKDF2_ITERATIONS = 250_000
-
-const verificationAlg = 'AES-GCM'
+const ENCRYPT_ALG = 'AES-GCM'
 
 export async function deriveMasterKey(
   passphrase: string,
@@ -31,7 +31,7 @@ export async function deriveMasterKey(
       salt,
     },
     baseKey,
-    { length: 256, name: verificationAlg },
+    { length: 256, name: ENCRYPT_ALG },
     false,
     ['encrypt', 'decrypt'],
   )
@@ -42,7 +42,7 @@ export async function encryptVerificationString(masterKey: CryptoKey, version = 
   const encoder = new TextEncoder()
 
   const ciphertext = await crypto.subtle.encrypt(
-    { iv, name: verificationAlg },
+    { iv, name: ENCRYPT_ALG },
     masterKey,
     encoder.encode(`${VERIFICATION_PLAINTEXT}:v${version}`),
   )
@@ -70,19 +70,14 @@ export async function generateEncryptionProfile(
     salt_b64,
     v,
     verification: {
-      alg: verificationAlg,
+      alg: ENCRYPT_ALG,
       ciphertext_b64,
       iv_b64,
     },
   }
 }
 
-export function generateUserSalt() {
-  return crypto.getRandomValues(new Uint8Array(16))
-}
-
 export async function validatePassphrase(passphrase: string, encryptionProfile: EncryptionProfile) {
-  // Switch behavior based on profile version
   if (encryptionProfile.v !== 1) {
     throw new Error(`Unsupported encryption profile v${encryptionProfile.v}`)
   }
@@ -101,13 +96,4 @@ export async function validatePassphrase(passphrase: string, encryptionProfile: 
   } catch {
     return false
   }
-}
-
-const base64ToBytes = (b64: string) => new Uint8Array([...atob(b64)].map((c) => c.charCodeAt(0)))
-const bytesToBase64 = (bytes: Uint8Array) => btoa(String.fromCharCode(...bytes))
-
-function toArrayBuffer(bytes: Uint8Array): ArrayBuffer {
-  const copy = new Uint8Array(bytes.byteLength)
-  copy.set(bytes)
-  return copy.buffer
 }
