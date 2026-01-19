@@ -19,6 +19,6 @@
   "devDependencies": {
     "express": "5.2.1",
     "@mdm/typescript-config": "*",
-    "@tanstack/react-query": "5.90.16"
+    "@tanstack/react-query": "5.90.19"
   }
 }
