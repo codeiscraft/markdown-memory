@@ -9,7 +9,7 @@
     "dev:start": "nodemon dist/start.cjs",
     "dev": "dotenv -e ../../.env concurrently -k -n BUILD,SERVER -c yellow,cyan \"npm run dev:build\" \"npm run dev:start\"",
     "lint": "eslint",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "exports": {
     ".": "./dist/index.js"

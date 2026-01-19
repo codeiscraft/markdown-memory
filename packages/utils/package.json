@@ -6,7 +6,7 @@
     "check-types": "tsc --noEmit",
     "dev": "tsc --watch",
     "lint": "eslint",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "type": "module",
   "main": "./dist/index.js",

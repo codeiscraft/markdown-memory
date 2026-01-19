@@ -6,7 +6,7 @@
     "build": "tsc",
     "check-types": "tsc --noEmit",
     "lint": "eslint",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "exports": {
     ".": "./dist/index.js",
