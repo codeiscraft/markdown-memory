@@ -1,6 +1,3 @@
-import type { SourceDirectoryDetails, Sources } from '@mdm/profile'
-import type { BearSourceDetails } from '@mdm/sync-bear/types'
-
 import { validateBearSourcePath } from '@mdm/sync-bear/backend'
 import { IpcMainInvokeEvent } from 'electron'
 import { constants } from 'node:fs'
@@ -8,15 +5,14 @@ import { access, stat } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import * as path from 'node:path'
 
+import type { BearSourceDetails, SourceDirectoryDetails, Sources } from './types'
+
 export async function validateSourcePath(
   _event: IpcMainInvokeEvent,
   sourceType: Sources,
   directoryPath: string,
 ): Promise<BearSourceDetails | SourceDirectoryDetails> {
   try {
-    console.log(
-      `validateSourcePath: validating sourceType=${sourceType}, directoryPath=${directoryPath}`,
-    )
     const resolvedPath = directoryPath.startsWith('~/')
       ? path.join(homedir(), directoryPath.slice(2))
       : directoryPath
@@ -24,7 +20,9 @@ export async function validateSourcePath(
     await access(resolvedPath, constants.R_OK)
     const isDirectory = stats.isDirectory()
 
-    console.log(`validateSourcePath: checked path ${resolvedPath}, isDirectory: ${isDirectory}`)
+    console.log(
+      `Validated path for source type ${sourceType}: ${resolvedPath} (isDirectory: ${isDirectory})`,
+    )
     if (sourceType === 'bear') {
       return validateBearSourcePath(resolvedPath)
     }
@@ -34,11 +32,9 @@ export async function validateSourcePath(
       directoryPath,
       isValid: isDirectory,
     }
-  } catch (e) {
-    console.log('ERROR!', e)
-    return {
-      directoryPath,
-      isValid: false,
-    }
+  } catch {}
+  return {
+    directoryPath,
+    isValid: false,
   }
 }

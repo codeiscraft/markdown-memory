@@ -1,10 +1,8 @@
 {
-  "extends": "@mdm/typescript-config/commonjs.json",
+  "extends": "@mdm/typescript-config/base.json",
   "compilerOptions": {
     "outDir": "dist/electron",
-    "rootDir": "src",
-    "module": "node16",
-    "moduleResolution": "node16"
+    "rootDir": "src"
   },
   "files": ["src/electron-main.ts", "src/preload.ts"]
 }
