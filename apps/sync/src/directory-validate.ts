@@ -1,6 +1,7 @@
-import type { SourceDirectoryDetails } from '@mdm/profile'
+import type { SourceDirectoryDetails, Sources } from '@mdm/profile'
+import type { BearSourceDetails } from '@mdm/sync-bear/types'
 
-import { BearSourceDetails } from '@mdm/sync-bear'
+import { validateBearSourcePath } from '@mdm/sync-bear/backend'
 import { IpcMainInvokeEvent } from 'electron'
 import { constants } from 'node:fs'
 import { access, stat } from 'node:fs/promises'
@@ -9,9 +10,13 @@ import * as path from 'node:path'
 
 export async function validateSourcePath(
   _event: IpcMainInvokeEvent,
+  sourceType: Sources,
   directoryPath: string,
 ): Promise<BearSourceDetails | SourceDirectoryDetails> {
   try {
+    console.log(
+      `validateSourcePath: validating sourceType=${sourceType}, directoryPath=${directoryPath}`,
+    )
     const resolvedPath = directoryPath.startsWith('~/')
       ? path.join(homedir(), directoryPath.slice(2))
       : directoryPath
@@ -19,12 +24,18 @@ export async function validateSourcePath(
     await access(resolvedPath, constants.R_OK)
     const isDirectory = stats.isDirectory()
 
+    console.log(`validateSourcePath: checked path ${resolvedPath}, isDirectory: ${isDirectory}`)
+    if (sourceType === 'bear') {
+      return validateBearSourcePath(resolvedPath)
+    }
+
     // TODO: obsidian: display number of files in vault, size on disk
     return {
       directoryPath,
       isValid: isDirectory,
     }
-  } catch {
+  } catch (e) {
+    console.log('ERROR!', e)
     return {
       directoryPath,
       isValid: false,

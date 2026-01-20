@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "exports": {
-    ".": "./dist/index.js"
+    "./types": "./dist/types.js",
+    "./constants": "./dist/constants.js",
+    "./backend": "./dist/backend.js"
   },
   "type": "module",
   "dependencies": {},

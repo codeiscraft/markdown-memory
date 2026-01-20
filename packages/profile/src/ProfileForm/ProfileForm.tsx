@@ -1,11 +1,11 @@
 import { Field, Input, SegmentGroup, Stack, Strong, Text } from '@chakra-ui/react'
 import { PasswordInput } from '@mdm/components'
 import { useGetConnectDetails } from '@mdm/server-status'
-import { BEAR_ROOT } from '@mdm/sync-bear'
+import { BEAR_ROOT } from '@mdm/sync-bear/constants'
 import { generateEncryptionProfile, generateUserSalt, toSlug } from '@mdm/utils'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 
-import { SourceDirectoryDetails } from '../types'
+import { SourceDirectoryDetails, Sources } from '../types'
 
 // TODO: move this into Bear Paackage
 
@@ -18,11 +18,11 @@ const getDirLabel = (source: null | string | undefined) => {
 const sources = ['file', 'bear', 'obsidian']
 
 type ProfileFormProps = {
-  verifyDirectoryExists?: (path: string) => Promise<SourceDirectoryDetails>
+  verifyDirectoryExists: (source: Sources, path: string) => Promise<SourceDirectoryDetails>
 }
 
 export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
-  const [source, setSource] = useState<null | string>()
+  const [source, setSource] = useState<null | Sources>()
   const [name, setName] = useState('')
   const [slug, setSlug] = useState('')
   const [directory, setDirectory] = useState('')
@@ -31,7 +31,7 @@ export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
   const [salt] = useState(generateUserSalt())
   const { data: connectDetails } = useGetConnectDetails()
 
-  const updateSource = (nextSource: null | string) => {
+  const updateSource = (nextSource: null | Sources) => {
     setSource(nextSource)
     if (nextSource === 'bear' && directory === '') {
       setDirectory(BEAR_ROOT)
@@ -49,13 +49,14 @@ export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
     setPassphrase(event.target.value)
 
   const verifyDirectory = async () => {
-    if (!verifyDirectoryExists || directory === '') {
+    console.log('verifying directory', { directory, source })
+    if (!verifyDirectoryExists || !directory || !source) {
       setDirectoryDetails(null)
       return
     }
 
     try {
-      const details = await verifyDirectoryExists(directory)
+      const details = await verifyDirectoryExists(source, directory)
       console.log('verified directory details', details)
       setDirectoryDetails(details)
     } catch {
@@ -94,7 +95,7 @@ export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
       </Field.Root>
       <Field.Root required>
         <Field.Label>markdown source</Field.Label>
-        <SegmentGroup.Root onValueChange={(e) => updateSource(e.value)} value={source}>
+        <SegmentGroup.Root onValueChange={(e) => updateSource(e.value as Sources)} value={source}>
           <SegmentGroup.Indicator />
           <SegmentGroup.Items items={sources} />
         </SegmentGroup.Root>

@@ -1,8 +1,8 @@
-import { SourceDirectoryDetails } from '@mdm/profile'
+import { SourceDirectoryDetails, Sources } from '@mdm/profile'
 
 export interface ElectronAPI {
   onSyncStatus: (callback: SyncStatusCallback) => SyncStatusUnsubcribeFunction
-  verifyDirectoryExists: (path: string) => Promise<SourceDirectoryDetails>
+  verifyDirectoryExists: (source: Sources, path: string) => Promise<SourceDirectoryDetails>
 }
 export interface ElectronWindow extends Window {
   electronAPI: ElectronAPI
