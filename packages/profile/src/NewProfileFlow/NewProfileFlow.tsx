@@ -4,9 +4,10 @@ import { useState } from 'react'
 
 import { ProfileForm } from '../ProfileForm/ProfileForm'
 import { ServerConnect } from '../ServerConnect/ServerConnect'
+import { SourceDirectoryDetails } from '../types'
 
-type NewProfileFlowProps = {
-  verifyDirectoryExists?: (path: string) => Promise<boolean>
+interface NewProfileFlowProps {
+  verifyDirectoryExists?: (path: string) => Promise<SourceDirectoryDetails>
 }
 
 export function NewProfileFlow({ verifyDirectoryExists }: NewProfileFlowProps) {
@@ -27,14 +28,6 @@ export function NewProfileFlow({ verifyDirectoryExists }: NewProfileFlowProps) {
     {
       content: <ProfileForm verifyDirectoryExists={verifyDirectoryExists} />,
       title: 'profile',
-    },
-    {
-      content: <ProfileForm verifyDirectoryExists={verifyDirectoryExists} />,
-      title: 'sets',
-    },
-    {
-      content: <ProfileForm verifyDirectoryExists={verifyDirectoryExists} />,
-      title: 'sync',
     },
   ]
 

@@ -1,0 +1,20 @@
+{
+  "name": "@mdm/sync-bear",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "check-types": "tsc --noEmit",
+    "dev": "tsc --watch",
+    "lint": "eslint"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "type": "module",
+  "dependencies": {},
+  "devDependencies": {
+    "@mdm/testing-support": "*",
+    "@mdm/typescript-config": "*"
+  }
+}

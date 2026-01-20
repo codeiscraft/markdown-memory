@@ -1,11 +1,13 @@
 import { Field, Input, SegmentGroup, Stack, Strong, Text } from '@chakra-ui/react'
 import { PasswordInput } from '@mdm/components'
 import { useGetConnectDetails } from '@mdm/server-status'
+import { BEAR_ROOT } from '@mdm/sync-bear'
 import { generateEncryptionProfile, generateUserSalt, toSlug } from '@mdm/utils'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 
+import { SourceDirectoryDetails } from '../types'
+
 // TODO: move this into Bear Paackage
-const bearRoot = '~/Library/Group Containers/9K33E3U3T4.net.shinyfrog.bear/Application Data'
 
 const getDirLabel = (source: null | string | undefined) => {
   if (source === 'bear') return 'bear data path'
@@ -16,7 +18,7 @@ const getDirLabel = (source: null | string | undefined) => {
 const sources = ['file', 'bear', 'obsidian']
 
 type ProfileFormProps = {
-  verifyDirectoryExists?: (path: string) => Promise<boolean>
+  verifyDirectoryExists?: (path: string) => Promise<SourceDirectoryDetails>
 }
 
 export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
@@ -24,7 +26,7 @@ export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
   const [name, setName] = useState('')
   const [slug, setSlug] = useState('')
   const [directory, setDirectory] = useState('')
-  const [directoryExists, setDirectoryExists] = useState<boolean | null>(null)
+  const [directoryDetails, setDirectoryDetails] = useState<null | SourceDirectoryDetails>(null)
   const [passphrase, setPassphrase] = useState('')
   const [salt] = useState(generateUserSalt())
   const { data: connectDetails } = useGetConnectDetails()
@@ -32,7 +34,7 @@ export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
   const updateSource = (nextSource: null | string) => {
     setSource(nextSource)
     if (nextSource === 'bear' && directory === '') {
-      setDirectory(bearRoot)
+      setDirectory(BEAR_ROOT)
     }
   }
 
@@ -48,15 +50,19 @@ export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
 
   const verifyDirectory = async () => {
     if (!verifyDirectoryExists || directory === '') {
-      setDirectoryExists(null)
+      setDirectoryDetails(null)
       return
     }
 
     try {
-      const exists = await verifyDirectoryExists(directory)
-      setDirectoryExists(exists)
+      const details = await verifyDirectoryExists(directory)
+      console.log('verified directory details', details)
+      setDirectoryDetails(details)
     } catch {
-      setDirectoryExists(false)
+      setDirectoryDetails({
+        directoryPath: directory,
+        isValid: false,
+      })
     }
   }
 
@@ -93,14 +99,14 @@ export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
           <SegmentGroup.Items items={sources} />
         </SegmentGroup.Root>
       </Field.Root>
-      <Field.Root invalid={directoryExists === false} required>
+      <Field.Root invalid={directoryDetails?.isValid === false} required>
         <Field.Label>{getDirLabel(source)}</Field.Label>
         <Input
           onBlur={verifyDirectory}
           onChange={(e) => setDirectory(e.target.value)}
           value={directory}
         />
-        {directoryExists === false && (
+        {directoryDetails?.isValid === false && (
           <Field.HelperText>directory not found on this machine.</Field.HelperText>
         )}
       </Field.Root>
