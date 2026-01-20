@@ -1,6 +1,5 @@
+import { Sources } from '@mdm/profile/types'
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
-
-import type { Sources } from './types'
 
 import { SyncStatusData } from './types'
 

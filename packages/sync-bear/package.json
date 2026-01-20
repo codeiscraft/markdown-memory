@@ -11,7 +11,8 @@
   "exports": {
     "./types": "./dist/types.js",
     "./constants": "./dist/constants.js",
-    "./backend": "./dist/backend.js"
+    "./backend": "./dist/backend.js",
+    "./mocks": "./src/mocks.cjs"
   },
   "type": "module",
   "dependencies": {},

@@ -1,22 +1,4 @@
-export interface AssetsFolderDetails {
-  assetCount: number
-  assetsPath: string
-}
-
-export interface BearSourceDetails {
-  database?: DatabaseDetails | null
-  files?: AssetsFolderDetails | null
-  images?: AssetsFolderDetails | null
-  isValid: boolean
-  sourcePath: string
-}
-
-export interface DatabaseDetails {
-  exists: boolean
-  lastModified?: Date | null
-  path: string
-  sizeMb?: null | string
-}
+import { SourceDirectoryDetails, Sources } from '@mdm/profile/types'
 
 export interface ElectronAPI {
   onSyncStatus: (callback: SyncStatusCallback) => SyncStatusUnsubcribeFunction
@@ -26,12 +8,6 @@ export interface ElectronAPI {
 export interface ElectronWindow extends Window {
   electronAPI: ElectronAPI
 }
-
-export interface SourceDirectoryDetails {
-  directoryPath: string
-  isValid: boolean
-}
-export type Sources = 'bear' | 'file' | 'obsidian'
 
 export type SyncState = 'error' | 'idle' | 'setsLoading' | 'setsReady' | 'syncComplete'
 export type SyncStatusCallback = (data: SyncStatusData) => void

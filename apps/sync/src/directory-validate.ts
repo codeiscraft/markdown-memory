@@ -1,11 +1,12 @@
+import type { BearSourceDetails } from '@mdm/sync-bear/types'
+
+import { SourceDirectoryDetails, Sources } from '@mdm/profile/types'
 import { validateBearSourcePath } from '@mdm/sync-bear/backend'
 import { IpcMainInvokeEvent } from 'electron'
 import { constants } from 'node:fs'
 import { access, stat } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import * as path from 'node:path'
-
-import type { BearSourceDetails, SourceDirectoryDetails, Sources } from './types'
 
 export async function validateSourcePath(
   _event: IpcMainInvokeEvent,
