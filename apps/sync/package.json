@@ -33,6 +33,7 @@
     "@mdm/components": "*",
     "@mdm/profile": "*",
     "@mdm/sync-bear": "*",
+    "@mdm/testing-support": "*",
     "@mdm/utils": "*",
     "@tanstack/react-query": "5.90.19",
     "@tanstack/react-query-devtools": "5.91.2",

@@ -1,4 +1,4 @@
-import { Sources } from '@mdm/profile/types'
+import { Source } from '@mdm/profile/types'
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
 
 import { SyncStatusData } from './types'
@@ -8,7 +8,7 @@ const onSyncStatus = (callback: (data: SyncStatusData) => void) => {
   // ipcRenderer.on('sync-status', handler)
   return () => ipcRenderer.removeListener('sync-status', handler)
 }
-const verifyDirectoryExists = (source: Sources, path: string) =>
+const verifyDirectoryExists = (source: Source, path: string) =>
   ipcRenderer.invoke('directory-exists', source, path)
 //const triggerSync = (sets: NoteSet[]) => ipcRenderer.send('trigger-sync', sets)
 
