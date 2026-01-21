@@ -1,6 +1,7 @@
 export interface AssetsFolderDetails {
   assetCount: number
   assetsPath: string
+  isValid: boolean
 }
 
 export interface BearSourceDetails {
@@ -10,8 +11,8 @@ export interface BearSourceDetails {
 }
 
 export interface DatabaseDetails {
-  exists: boolean
   file: string
+  isValid: boolean
   lastModified?: Date | null
   path: string
   sizeMb?: null | string

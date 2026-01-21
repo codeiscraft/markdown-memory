@@ -1,64 +1,31 @@
-import { stat } from 'node:fs/promises'
-import { readdir } from 'node:fs/promises'
-import * as path from 'node:path'
+import { directoryFileCount, fileStats, joinPath } from '@mdm/utils/fs'
 
 import { BEAR_DATABASE_FILE, BEAR_FILES_FOLDER, BEAR_IMAGES_FOLDER } from './constants.js'
 import { AssetsFolderDetails, BearSourceDetails, DatabaseDetails } from './types'
 
-async function countFilesRecursive(root: string): Promise<number> {
-  let count = 0
-  const entries = await readdir(root, { withFileTypes: true })
-
-  for (const entry of entries) {
-    const fullPath = path.join(root, entry.name)
-    if (entry.isDirectory()) {
-      count += await countFilesRecursive(fullPath)
-    } else if (entry.isFile()) {
-      count += 1
-    }
-  }
-
-  return count
-}
-
 const gatherDatabaseDetails = async (sourcePath: string): Promise<DatabaseDetails | null> => {
-  const databasePath = path.join(sourcePath, BEAR_DATABASE_FILE)
-  try {
-    const databaseStats = await stat(databasePath)
-    if (databaseStats.isFile()) {
-      const lastModified = databaseStats.mtimeMs ? new Date(databaseStats.mtimeMs) : null
-      const sizeMb = databaseStats.size ? (databaseStats.size / (1024 * 1024)).toFixed(2) : null
-
-      return {
-        exists: true,
-        file: BEAR_DATABASE_FILE,
-        lastModified,
-        path: databasePath,
-        sizeMb,
-      }
-    }
-  } catch {}
-  return { exists: false, file: BEAR_DATABASE_FILE, path: databasePath }
+  const databasePath = joinPath(sourcePath, BEAR_DATABASE_FILE)
+  const { isValid, lastModified, sizeMb } = await fileStats(databasePath)
+  return {
+    file: BEAR_DATABASE_FILE,
+    isValid,
+    lastModified,
+    path: databasePath,
+    sizeMb,
+  }
 }
 
 const gatherAssetsDetails = async (
   sourcePath: string,
   assetsPath: string,
 ): Promise<AssetsFolderDetails | null> => {
-  const fullAssetsPath = path.join(sourcePath, assetsPath)
-  try {
-    const assetsStats = await stat(fullAssetsPath)
-    if (assetsStats.isDirectory()) {
-      const assetCount = await countFilesRecursive(fullAssetsPath)
-      return {
-        assetCount,
-        assetsPath,
-      }
-    }
-  } catch {}
+  const fullAssetsPath = joinPath(sourcePath, assetsPath)
+  const { assetCount, isValid } = await directoryFileCount(fullAssetsPath)
+
   return {
-    assetCount: 0,
+    assetCount,
     assetsPath,
+    isValid,
   }
 }
 

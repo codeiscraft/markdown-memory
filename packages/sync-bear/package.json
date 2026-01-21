@@ -6,7 +6,8 @@
     "build": "tsc",
     "check-types": "tsc --noEmit",
     "dev": "tsc --watch",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "jest --coverage"
   },
   "exports": {
     "./types": "./dist/types.js",
@@ -17,7 +18,8 @@
   },
   "type": "module",
   "dependencies": {
-    "@mdm/components": "*"
+    "@mdm/components": "*",
+    "@mdm/utils/fs": "*"
   },
   "devDependencies": {
     "@mdm/testing-support": "*",

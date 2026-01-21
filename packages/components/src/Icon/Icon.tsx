@@ -14,7 +14,6 @@ export function Icon(props: ChakraIconProps & IconProps) {
 
   const testId = `Icon${name}`
   const MappedIcon = IconMap[name]
-  console.log('MappedIcon', MappedIcon)
   return MappedIcon ? (
     <ChakraIcon {...props}>
       <MappedIcon data-testid={testId} />
