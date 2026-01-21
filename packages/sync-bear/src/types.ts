@@ -7,12 +7,11 @@ export interface BearSourceDetails {
   database?: DatabaseDetails | null
   files?: AssetsFolderDetails | null
   images?: AssetsFolderDetails | null
-  isValid: boolean
-  sourcePath: string
 }
 
 export interface DatabaseDetails {
   exists: boolean
+  file: string
   lastModified?: Date | null
   path: string
   sizeMb?: null | string

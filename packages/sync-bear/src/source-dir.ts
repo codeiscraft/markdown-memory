@@ -2,7 +2,7 @@ import { stat } from 'node:fs/promises'
 import { readdir } from 'node:fs/promises'
 import * as path from 'node:path'
 
-import { BEAR_DATABASE_FILE, BEAR_FILES_FOLDER, BEAR_IMAGES_FOLDER } from './constants'
+import { BEAR_DATABASE_FILE, BEAR_FILES_FOLDER, BEAR_IMAGES_FOLDER } from './constants.js'
 import { AssetsFolderDetails, BearSourceDetails, DatabaseDetails } from './types'
 
 async function countFilesRecursive(root: string): Promise<number> {
@@ -31,6 +31,7 @@ const gatherDatabaseDetails = async (sourcePath: string): Promise<DatabaseDetail
 
       return {
         exists: true,
+        file: BEAR_DATABASE_FILE,
         lastModified,
         path: databasePath,
         sizeMb,
@@ -66,13 +67,11 @@ export async function validateBearSourcePath(resolvedPath: string): Promise<Bear
   const images = await gatherAssetsDetails(resolvedPath, BEAR_IMAGES_FOLDER)
   const files = await gatherAssetsDetails(resolvedPath, BEAR_FILES_FOLDER)
 
-  const sourceDetails = {
+  const bearSource = {
     database,
     files,
     images,
-    isValid: true,
-    sourcePath: resolvedPath,
   }
-  console.info(`Bear source details: ${JSON.stringify(sourceDetails)}`)
-  return sourceDetails
+  console.info(`Bear source details: ${JSON.stringify(bearSource)}`)
+  return bearSource
 }

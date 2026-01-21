@@ -33,9 +33,7 @@ if (process.platform === 'darwin') {
   app?.dock?.setIcon(path.join(__dirname, icon))
 }
 
-app.whenReady().then(() => {
-  createWindow()
-})
+app.whenReady().then(() => createWindow())
 
 ipcMain.handle('directory-exists', validateSourcePath)
 

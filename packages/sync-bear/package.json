@@ -11,11 +11,14 @@
   "exports": {
     "./types": "./dist/types.js",
     "./constants": "./dist/constants.js",
+    "./components": "./dist/components.js",
     "./backend": "./dist/backend.js",
     "./mocks": "./src/mocks.cjs"
   },
   "type": "module",
-  "dependencies": {},
+  "dependencies": {
+    "@mdm/components": "*"
+  },
   "devDependencies": {
     "@mdm/testing-support": "*",
     "@mdm/typescript-config": "*"

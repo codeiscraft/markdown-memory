@@ -5,9 +5,9 @@ import { BEAR_ROOT } from '@mdm/sync-bear/constants'
 import { generateEncryptionProfile, generateUserSalt, toSlug } from '@mdm/utils'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 
-import { SourceDirectoryDetails, Sources } from '../types'
-
-// TODO: move this into Bear Paackage
+import { sources } from '../sources'
+import { Source, SourceDirectoryDetails } from '../types'
+import { SourceDetails } from './ProfileForm.components'
 
 const getDirLabel = (source: null | string | undefined) => {
   if (source === 'bear') return 'bear data path'
@@ -15,14 +15,12 @@ const getDirLabel = (source: null | string | undefined) => {
   return 'source file path'
 }
 
-const sources = ['file', 'bear', 'obsidian']
-
 type ProfileFormProps = {
-  verifyDirectoryExists: (source: Sources, path: string) => Promise<SourceDirectoryDetails>
+  verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
 }
 
 export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
-  const [source, setSource] = useState<null | Sources>()
+  const [source, setSource] = useState<null | Source>()
   const [name, setName] = useState('')
   const [slug, setSlug] = useState('')
   const [directory, setDirectory] = useState('')
@@ -31,7 +29,7 @@ export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
   const [salt] = useState(generateUserSalt())
   const { data: connectDetails } = useGetConnectDetails()
 
-  const updateSource = (nextSource: null | Sources) => {
+  const updateSource = (nextSource: null | Source) => {
     setSource(nextSource)
     if (nextSource === 'bear' && directory === '') {
       setDirectory(BEAR_ROOT)
@@ -57,12 +55,11 @@ export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
 
     try {
       const details = await verifyDirectoryExists(source, directory)
-      console.log('verified directory details', details)
       setDirectoryDetails(details)
     } catch {
       setDirectoryDetails({
-        directoryPath: directory,
         isValid: false,
+        sourcePath: directory,
       })
     }
   }
@@ -95,7 +92,7 @@ export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
       </Field.Root>
       <Field.Root required>
         <Field.Label>markdown source</Field.Label>
-        <SegmentGroup.Root onValueChange={(e) => updateSource(e.value as Sources)} value={source}>
+        <SegmentGroup.Root onValueChange={(e) => updateSource(e.value as Source)} value={source}>
           <SegmentGroup.Indicator />
           <SegmentGroup.Items items={sources} />
         </SegmentGroup.Root>
@@ -107,8 +104,8 @@ export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
           onChange={(e) => setDirectory(e.target.value)}
           value={directory}
         />
-        {directoryDetails?.isValid === false && (
-          <Field.HelperText>directory not found on this machine.</Field.HelperText>
+        {source && directoryDetails && (
+          <SourceDetails source={source} sourceDetails={directoryDetails} />
         )}
       </Field.Root>
       <Field.Root required>
