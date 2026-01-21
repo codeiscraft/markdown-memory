@@ -38,7 +38,7 @@ const gatherDatabaseDetails = async (sourcePath: string): Promise<DatabaseDetail
       }
     }
   } catch {}
-  return { exists: false, path: databasePath }
+  return { exists: false, file: BEAR_DATABASE_FILE, path: databasePath }
 }
 
 const gatherAssetsDetails = async (

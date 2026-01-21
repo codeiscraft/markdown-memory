@@ -28,7 +28,7 @@ export function BearSourceDir({ bearDetails }: BearSourceDirProps) {
       </Stack>
       <Stack alignItems="center" direction="row" gap={2}>
         <Icon color="green.600" name="Image" size="sm" />
-        <Strong textStyle="xs">image path</Strong>
+        <Strong textStyle="xs">image path:</Strong>
         <Em textStyle="xs">/{images?.assetsPath}</Em>
         <Text textStyle="xs">
           <Strong>image count:</Strong> {images?.assetCount}
@@ -36,7 +36,7 @@ export function BearSourceDir({ bearDetails }: BearSourceDirProps) {
       </Stack>
       <Stack alignItems="center" direction="row" gap={2}>
         <Icon color="green.600" name="File" size="sm" />
-        <Strong textStyle="xs">files path</Strong>
+        <Strong textStyle="xs">files path:</Strong>
         <Em textStyle="xs">/{files?.assetsPath}</Em>
         <Text textStyle="xs">
           <Strong>file count:</Strong> {files?.assetCount}
