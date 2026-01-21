@@ -19,7 +19,7 @@
   "type": "module",
   "dependencies": {
     "@mdm/components": "*",
-    "@mdm/utils/fs": "*"
+    "@mdm/utils": "*"
   },
   "devDependencies": {
     "@mdm/testing-support": "*",
