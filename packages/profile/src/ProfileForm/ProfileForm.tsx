@@ -1,11 +1,13 @@
 import { Field, Input, SegmentGroup, Stack, Strong, Text } from '@chakra-ui/react'
 import { PasswordInput } from '@mdm/components'
 import { useGetConnectDetails } from '@mdm/server-status'
+import { BEAR_ROOT } from '@mdm/sync-bear/constants'
 import { generateEncryptionProfile, generateUserSalt, toSlug } from '@mdm/utils'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 
-// TODO: move this into Bear Paackage
-const bearRoot = '~/Library/Group Containers/9K33E3U3T4.net.shinyfrog.bear/Application Data'
+import { sources } from '../sources'
+import { Source, SourceDirectoryDetails } from '../types'
+import { SourceDetails } from './ProfileForm.components'
 
 const getDirLabel = (source: null | string | undefined) => {
   if (source === 'bear') return 'bear data path'
@@ -13,21 +15,24 @@ const getDirLabel = (source: null | string | undefined) => {
   return 'source file path'
 }
 
-const sources = ['file', 'bear', 'obsidian']
+type ProfileFormProps = {
+  verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
+}
 
-export function ProfileForm() {
-  const [source, setSource] = useState<null | string>()
+export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
+  const [source, setSource] = useState<null | Source>()
   const [name, setName] = useState('')
   const [slug, setSlug] = useState('')
   const [directory, setDirectory] = useState('')
+  const [directoryDetails, setDirectoryDetails] = useState<null | SourceDirectoryDetails>(null)
   const [passphrase, setPassphrase] = useState('')
   const [salt] = useState(generateUserSalt())
   const { data: connectDetails } = useGetConnectDetails()
 
-  const updateSource = (nextSource: null | string) => {
+  const updateSource = (nextSource: null | Source) => {
     setSource(nextSource)
     if (nextSource === 'bear' && directory === '') {
-      setDirectory(bearRoot)
+      setDirectory(BEAR_ROOT)
     }
   }
 
@@ -40,6 +45,24 @@ export function ProfileForm() {
 
   const updatePassphrase = (event: ChangeEvent<HTMLInputElement>) =>
     setPassphrase(event.target.value)
+
+  const verifyDirectory = async () => {
+    console.log('verifying directory', { directory, source })
+    if (!verifyDirectoryExists || !directory || !source) {
+      setDirectoryDetails(null)
+      return
+    }
+
+    try {
+      const details = await verifyDirectoryExists(source, directory)
+      setDirectoryDetails(details)
+    } catch {
+      setDirectoryDetails({
+        isValid: false,
+        sourcePath: directory,
+      })
+    }
+  }
 
   const handleSubmit = (event: FormEvent) => event.preventDefault()
 
@@ -69,21 +92,29 @@ export function ProfileForm() {
       </Field.Root>
       <Field.Root required>
         <Field.Label>markdown source</Field.Label>
-        <SegmentGroup.Root onValueChange={(e) => updateSource(e.value)} value={source}>
+        <SegmentGroup.Root onValueChange={(e) => updateSource(e.value as Source)} value={source}>
           <SegmentGroup.Indicator />
           <SegmentGroup.Items items={sources} />
         </SegmentGroup.Root>
       </Field.Root>
-      <Field.Root required>
+      <Field.Root invalid={directoryDetails?.isValid === false} required>
         <Field.Label>{getDirLabel(source)}</Field.Label>
-        <Input onChange={(e) => setDirectory(e.target.value)} value={directory} />
+        <Input
+          onBlur={verifyDirectory}
+          onChange={(e) => setDirectory(e.target.value)}
+          value={directory}
+        />
+        {source && directoryDetails && (
+          <SourceDetails source={source} sourceDetails={directoryDetails} />
+        )}
       </Field.Root>
       <Field.Root required>
         <Field.Label>passphrase</Field.Label>
-        <PasswordInput onChange={updatePassphrase} value={passphrase} />
-        <Field.HelperText>
-          <Text>use a passphrase that is easy to remember but hard to guess.</Text>
-        </Field.HelperText>
+        <PasswordInput
+          onChange={updatePassphrase}
+          placeholder="use a passphrase that is easy to remember but hard to guess."
+          value={passphrase}
+        />
       </Field.Root>
     </Stack>
   )

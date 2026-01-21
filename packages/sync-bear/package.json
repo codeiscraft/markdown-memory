@@ -1,0 +1,28 @@
+{
+  "name": "@mdm/sync-bear",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "check-types": "tsc --noEmit",
+    "dev": "tsc --watch",
+    "lint": "eslint",
+    "test": "jest --coverage"
+  },
+  "exports": {
+    "./types": "./dist/types.js",
+    "./constants": "./dist/constants.js",
+    "./components": "./dist/components.js",
+    "./backend": "./dist/backend.js",
+    "./mocks": "./src/mocks.cjs"
+  },
+  "type": "module",
+  "dependencies": {
+    "@mdm/components": "*",
+    "@mdm/utils": "*"
+  },
+  "devDependencies": {
+    "@mdm/testing-support": "*",
+    "@mdm/typescript-config": "*"
+  }
+}

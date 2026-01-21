@@ -16,7 +16,11 @@ const serverRoot = 'http://test-mdm'
 const connectDetails = { data: { serverRoot } }
 
 const renderProfileForm = (ui?: ReactNode) =>
-  render(<ChakraProvider value={defaultSystem}>{ui ?? <ProfileForm />}</ChakraProvider>)
+  render(
+    <ChakraProvider value={defaultSystem}>
+      {ui ?? <ProfileForm verifyDirectoryExists={jest.fn()} />}
+    </ChakraProvider>,
+  )
 
 describe('ProfileForm', () => {
   beforeEach(() => {

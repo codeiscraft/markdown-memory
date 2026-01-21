@@ -2,7 +2,4 @@ const baseConfig = require('@mdm/testing-support/baseConfig')
 
 module.exports = {
   ...baseConfig,
-  coveragePathIgnorePatterns: [
-    'src/fs.ts', // wrapper around fs module, hard to test
-  ],
 }

@@ -3,18 +3,19 @@
   "version": "0.0.0",
   "main": "dist/electron/electron-main.js",
   "scripts": {
+    "dev": "concurrently \"npm run dev:vite\" \"npm run dev:electron:watch\" \"npm run dev:electron:run\"",
     "dev:vite": "vite",
-    "dev:electron:watch": "tsc ./src/electron-main.ts ./src/preload.ts --outDir dist/electron --watch",
     "dev:electron:run": "ELECTRON_START_URL=http://localhost:5173 electron dist/electron/electron-main.js",
-    "dev": "vite",
-    "build:electron": "tsc --skipLibCheck ./src/electron-main.ts ./src/preload.ts --outDir dist/electron",
+    "dev:electron:watch": "tsc -p ./tsconfig.electron.json --watch",
+    "build:electron": "tsc -p ./tsconfig.electron.json",
     "build:vite": "vite build",
     "build": "concurrently \"npm run build:vite\" \"npm run build:electron\"",
     "preview": "vite preview",
     "check-types": "tsc --noEmit",
     "lint": "eslint",
     "pack:dir": "npm run build && electron-builder --dir",
-    "pack": "npm run build && electron-builder"
+    "pack": "npm run build && electron-builder",
+    "test": "jest --coverage"
   },
   "build": {
     "appId": "com.mdm.sync",
@@ -31,6 +32,8 @@
     "@mdm/application": "*",
     "@mdm/components": "*",
     "@mdm/profile": "*",
+    "@mdm/sync-bear": "*",
+    "@mdm/testing-support": "*",
     "@mdm/utils": "*",
     "@tanstack/react-query": "5.90.19",
     "@tanstack/react-query-devtools": "5.91.2",

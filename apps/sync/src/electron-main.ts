@@ -1,11 +1,13 @@
-import { app, BrowserWindow } from 'electron'
-import * as path from 'path'
+import { app, BrowserWindow, ipcMain } from 'electron'
+import * as path from 'node:path'
+
+import { validateSourcePath } from './directory-validate'
 
 const icon = '../renderer/apple-touch-icon.png'
 
 function createWindow() {
   const win = new BrowserWindow({
-    height: 450,
+    height: 600,
     icon: path.join(__dirname, icon),
     webPreferences: {
       contextIsolation: true,
@@ -31,11 +33,9 @@ if (process.platform === 'darwin') {
   app?.dock?.setIcon(path.join(__dirname, icon))
 }
 
-app.whenReady().then(() => {
-  createWindow()
+app.whenReady().then(() => createWindow())
 
-  console.log('READY')
-})
+ipcMain.handle('directory-exists', validateSourcePath)
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

@@ -4,27 +4,13 @@ import { useState } from 'react'
 
 import { ProfileForm } from '../ProfileForm/ProfileForm'
 import { ServerConnect } from '../ServerConnect/ServerConnect'
+import { Source, SourceDirectoryDetails } from '../types'
 
-const steps = [
-  {
-    content: <ServerConnect />,
-    title: 'connect',
-  },
-  {
-    content: <ProfileForm />,
-    title: 'profile',
-  },
-  {
-    content: <ProfileForm />,
-    title: 'sets',
-  },
-  {
-    content: <ProfileForm />,
-    title: 'sync',
-  },
-]
+interface NewProfileFlowProps {
+  verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
+}
 
-export function NewProfileFlow() {
+export function NewProfileFlow({ verifyDirectoryExists }: NewProfileFlowProps) {
   const [step, setStep] = useState(0)
   const { data: connectDetails } = useGetConnectDetails()
   const isValid = () => {
@@ -33,6 +19,17 @@ export function NewProfileFlow() {
     }
     return true
   }
+
+  const steps = [
+    {
+      content: <ServerConnect />,
+      title: 'connect',
+    },
+    {
+      content: <ProfileForm verifyDirectoryExists={verifyDirectoryExists} />,
+      title: 'profile',
+    },
+  ]
 
   return (
     <Box maxW="container.md" mx="auto" px={{ base: 4, md: 6 }} py={6}>

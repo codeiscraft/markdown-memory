@@ -15,7 +15,11 @@ jest.mock('../ProfileForm/ProfileForm', () => ({
 }))
 
 const renderNewProfileFlow = (ui?: ReactNode) =>
-  render(<ChakraProvider value={defaultSystem}>{ui ?? <NewProfileFlow />}</ChakraProvider>)
+  render(
+    <ChakraProvider value={defaultSystem}>
+      {ui ?? <NewProfileFlow verifyDirectoryExists={jest.fn()} />}
+    </ChakraProvider>,
+  )
 
 const serverRoot = 'http://localhost:8200'
 
@@ -27,8 +31,6 @@ describe('NewProfileFlow', () => {
 
     expect(screen.getByText('connect'))
     expect(screen.getByText('profile'))
-    expect(screen.getByText('sets'))
-    expect(screen.getByText('sync'))
   })
 
   test('disables next by default', () => {

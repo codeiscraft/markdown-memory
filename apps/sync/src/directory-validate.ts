@@ -1,0 +1,22 @@
+import { Source, SourceDirectoryDetails } from '@mdm/profile/types'
+import { validateBearSourcePath } from '@mdm/sync-bear/backend'
+import { isDirectoryWithReadAccess, resolveHomeDir } from '@mdm/utils/fs'
+import { IpcMainInvokeEvent } from 'electron'
+
+export async function validateSourcePath(
+  _event: IpcMainInvokeEvent,
+  sourceType: Source,
+  sourcePath: string,
+): Promise<SourceDirectoryDetails> {
+  const resolvedPath = resolveHomeDir(sourcePath)
+  const isValid = await isDirectoryWithReadAccess(resolvedPath)
+
+  const bearDetails =
+    isValid && sourceType === ('bear' as Source) ? await validateBearSourcePath(resolvedPath) : null
+
+  return {
+    bearDetails,
+    isValid,
+    sourcePath,
+  }
+}

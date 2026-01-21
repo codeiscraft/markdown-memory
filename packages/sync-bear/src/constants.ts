@@ -1,0 +1,5 @@
+export const BEAR_ROOT = '~/Library/Group Containers/9K33E3U3T4.net.shinyfrog.bear/Application Data'
+export const BEAR_SOURCE_LABEL = 'bear data path'
+export const BEAR_DATABASE_FILE = 'database.sqlite'
+export const BEAR_IMAGES_FOLDER = 'Local Files/Note Images'
+export const BEAR_FILES_FOLDER = 'Local Files/Note Files'

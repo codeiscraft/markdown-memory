@@ -2,6 +2,7 @@
   "name": "@mdm/profile",
   "version": "0.0.0",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "check-types": "tsc --noEmit",
@@ -10,11 +11,16 @@
     "test": "jest --coverage"
   },
   "exports": {
-    ".": "./dist/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./types": "./dist/types.js"
   },
   "type": "module",
   "dependencies": {
     "@mdm/utils": "*",
+    "@mdm/sync-bear": "*",
     "@mdm/server-status": "*",
     "@tanstack/react-query": "5.90.19",
     "react": "19.2.3"

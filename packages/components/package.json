@@ -5,6 +5,7 @@
   "scripts": {
     "build": "tsc",
     "check-types": "tsc --noEmit",
+    "dev": "tsc --watch",
     "lint": "eslint",
     "test": "jest --coverage"
   },
