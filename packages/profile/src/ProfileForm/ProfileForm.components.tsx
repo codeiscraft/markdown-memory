@@ -8,6 +8,7 @@ export interface SourceDetailsProps {
 }
 
 export function SourceDetails({ source, sourceDetails }: SourceDetailsProps) {
+  // TODO: add handling if isValid is false
   if (source === 'bear' && sourceDetails.bearDetails) {
     return <BearSourceDir bearDetails={sourceDetails.bearDetails} />
   }
