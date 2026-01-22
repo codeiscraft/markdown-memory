@@ -1,29 +1,26 @@
 import { Field, Input, SegmentGroup, Stack } from '@chakra-ui/react'
-import { PasswordInput } from '@mdm/components'
-import { BEAR_ROOT } from '@mdm/sync-bear/constants'
-import { generateEncryptionProfile, generateUserSalt } from '@mdm/utils'
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { BEAR_ROOT, BEAR_SOURCE_LABEL } from '@mdm/sync-bear/constants'
+import { FormEvent, useState } from 'react'
 
 import { sources } from '../sources'
 import { Source, SourceDirectoryDetails } from '../types'
-import { SourceDetails } from './ProfileForm.components'
+import { SourceDetails } from './SourceDetails'
+
+export interface SourceFormProps {
+  profileName: string
+  verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
+}
 
 const getDirLabel = (source: null | string | undefined) => {
-  if (source === 'bear') return 'bear data path'
+  if (source === 'bear') return BEAR_SOURCE_LABEL
   if (source === 'obsidian') return 'obsidian vault path'
   return 'source file path'
 }
 
-type ProfileFormProps = {
-  verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
-}
-
-export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
+export function SourceForm({ verifyDirectoryExists }: SourceFormProps) {
   const [source, setSource] = useState<null | Source>()
   const [directory, setDirectory] = useState('')
   const [directoryDetails, setDirectoryDetails] = useState<null | SourceDirectoryDetails>(null)
-  const [passphrase, setPassphrase] = useState('')
-  const [salt] = useState(generateUserSalt())
 
   const updateSource = (nextSource: null | Source) => {
     setSource(nextSource)
@@ -32,11 +29,7 @@ export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
     }
   }
 
-  const updatePassphrase = (event: ChangeEvent<HTMLInputElement>) =>
-    setPassphrase(event.target.value)
-
   const verifyDirectory = async () => {
-    console.log('verifying directory', { directory, source })
     if (!verifyDirectoryExists || !directory || !source) {
       setDirectoryDetails(null)
       return
@@ -54,16 +47,6 @@ export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
   }
 
   const handleSubmit = (event: FormEvent) => event.preventDefault()
-
-  useEffect(() => {
-    const deriveKey = async () => {
-      if (passphrase && salt) {
-        await generateEncryptionProfile(passphrase, salt)
-        // TODO: save to cache along with other details
-      }
-    }
-    deriveKey()
-  }, [passphrase, salt])
 
   return (
     <Stack as="form" onSubmit={handleSubmit}>
@@ -84,14 +67,6 @@ export function ProfileForm({ verifyDirectoryExists }: ProfileFormProps) {
         {source && directoryDetails && (
           <SourceDetails source={source} sourceDetails={directoryDetails} />
         )}
-      </Field.Root>
-      <Field.Root required>
-        <Field.Label>passphrase</Field.Label>
-        <PasswordInput
-          onChange={updatePassphrase}
-          placeholder="use a passphrase that is easy to remember but hard to guess."
-          value={passphrase}
-        />
       </Field.Root>
     </Stack>
   )

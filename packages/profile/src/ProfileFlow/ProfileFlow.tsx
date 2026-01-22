@@ -5,13 +5,14 @@ import { useState } from 'react'
 
 import { NameForm } from '../NameForm/NameForm'
 import { ServerConnect } from '../ServerConnect/ServerConnect'
+import { SourceForm } from '../SourceForm/SourceForm'
 import { Source, SourceDirectoryDetails } from '../types'
 
 interface ProfileFlowProps {
   verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
 }
 
-export function ProfileFlow(_props: ProfileFlowProps) {
+export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
   const [name, setName] = useState('')
   const [step, setStep] = useState(0)
   const { data: connectDetails } = useGetConnectDetails(name)
@@ -36,6 +37,10 @@ export function ProfileFlow(_props: ProfileFlowProps) {
     {
       content: <ServerConnect profileName={slug} />,
       title: 'server connect',
+    },
+    {
+      content: <SourceForm profileName={slug} verifyDirectoryExists={verifyDirectoryExists} />,
+      title: 'markdown source',
     },
   ]
 

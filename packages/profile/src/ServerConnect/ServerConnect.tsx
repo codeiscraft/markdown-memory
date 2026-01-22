@@ -23,10 +23,11 @@ export function ServerConnect({ profileName }: ServerConnectProps) {
   }, [isValid, serverRoot, setServer, profileName])
 
   return (
-    <Field.Root invalid={serverRoot !== '' && !isValid} required>
+    <Field.Root invalid={serverRoot !== undefined && !isValid} required>
       <Field.Label>server address</Field.Label>
       <Stack direction="row" gap={1} width="100%">
         <Input
+          autoFocus
           flex={1}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setServerRoot(e.target.value)}
           placeholder="enter the address for your markdown memory server"

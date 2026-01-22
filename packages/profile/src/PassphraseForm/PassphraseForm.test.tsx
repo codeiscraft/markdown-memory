@@ -44,17 +44,6 @@ describe('ProfileForm', () => {
   //   })
   // })
 
-  // test('updates the field label for directory based on source selection', async () => {
-  //   renderProfileForm()
-
-  //   const user = userEvent.setup()
-  //   await user.click(screen.getByRole('radio', { name: /bear/i }))
-
-  //   waitFor(() => {
-  //     expect(screen.getByLabelText('bear data path')).toBeInTheDocument()
-  //   })
-  // })
-
   // test('generates crypto once passphrase is entered', async () => {
   //   renderProfileForm()
 
