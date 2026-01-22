@@ -1,31 +1,43 @@
 import { Box, Button, ButtonGroup, Heading, Stack, Steps } from '@chakra-ui/react'
 import { useGetConnectDetails } from '@mdm/server-status'
+import { toSlug } from '@mdm/utils'
 import { useState } from 'react'
 
 import { NameForm } from '../NameForm/NameForm'
+import { ServerConnect } from '../ServerConnect/ServerConnect'
 import { Source, SourceDirectoryDetails } from '../types'
-//import { Source, SourceDirectoryDetails } from '../types'
 
 interface ProfileFlowProps {
   verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
 }
 
-const steps = [
-  {
-    content: <NameForm />,
-    title: 'profile name',
-  },
-]
-
 export function ProfileFlow(_props: ProfileFlowProps) {
+  const [name, setName] = useState('')
   const [step, setStep] = useState(0)
-  const { data: connectDetails } = useGetConnectDetails()
+  const { data: connectDetails } = useGetConnectDetails(name)
+
+  const slug = toSlug(name)
+
   const isValid = () => {
     if (step === 0) {
+      return name && name.length > 0
+    }
+    if (step === 1) {
       return Boolean(connectDetails?.serverRoot && connectDetails.lastConnected)
     }
     return true
   }
+
+  const steps = [
+    {
+      content: <NameForm setName={setName} />,
+      title: 'profile name',
+    },
+    {
+      content: <ServerConnect profileName={slug} />,
+      title: 'server connect',
+    },
+  ]
 
   return (
     <Box maxW="container.md" mx="auto" px={{ base: 4, md: 6 }} py={6}>

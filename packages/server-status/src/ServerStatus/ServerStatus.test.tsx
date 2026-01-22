@@ -12,10 +12,11 @@ jest.mock('../useSetConnectDetails/useSetConnectDetails')
 jest.mock('../useGetConnectDetails/useGetConnectDetails')
 jest.mock('../useServerIdentity/useServerIdentity')
 
+const profileName = 'test-profile'
 const renderServerStatus = () =>
   render(
     <ChakraProvider value={defaultSystem}>
-      <ServerStatus />
+      <ServerStatus profileName={profileName} />
     </ChakraProvider>,
   )
 
@@ -23,7 +24,9 @@ const serverRoot = 'http://localhost:8200'
 
 describe('ServerStatus', () => {
   test('shows a prompt when identity is missing', () => {
-    asMock(useGetConnectDetails).mockReturnValue(mockGetDefinedQuery({ data: { serverRoot } }))
+    asMock(useGetConnectDetails).mockReturnValue(
+      mockGetDefinedQuery({ data: { profileName, serverRoot } }),
+    )
     asMock(useSetConnectDetails).mockReturnValue(mockMutationResult())
     asMock(useServerIdentity).mockReturnValue(mockGetQuery<ServerIdentity>())
 
@@ -33,7 +36,9 @@ describe('ServerStatus', () => {
   })
 
   test('renders server root and identity when available', () => {
-    asMock(useGetConnectDetails).mockReturnValue(mockGetDefinedQuery({ data: { serverRoot } }))
+    asMock(useGetConnectDetails).mockReturnValue(
+      mockGetDefinedQuery({ data: { profileName, serverRoot } }),
+    )
     asMock(useServerIdentity).mockReturnValue(
       mockGetQuery({
         data: {
@@ -54,7 +59,9 @@ describe('ServerStatus', () => {
   })
 
   test('marks the icon button as loading while fetching', () => {
-    asMock(useGetConnectDetails).mockReturnValue(mockGetDefinedQuery({ data: { serverRoot } }))
+    asMock(useGetConnectDetails).mockReturnValue(
+      mockGetDefinedQuery({ data: { profileName, serverRoot } }),
+    )
     asMock(useServerIdentity).mockReturnValue(
       mockGetQuery<ServerIdentity>({
         data: undefined,

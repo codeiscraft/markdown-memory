@@ -19,10 +19,11 @@ jest.mock('@mdm/server-status', () => ({
   useSetConnectDetails: jest.fn(),
 }))
 
+const profileName = 'test-profile'
 const renderServerConnect = () =>
   render(
     <ChakraProvider value={defaultSystem}>
-      <ServerConnect />
+      <ServerConnect profileName={profileName} />
     </ChakraProvider>,
   )
 
@@ -34,7 +35,7 @@ describe('ServerConnect', () => {
 
   test('prefills the input when server root is available', async () => {
     asMock(useGetConnectDetails).mockReturnValue(
-      mockGetDefinedQuery<ConnectDetails>({ data: { serverRoot } }),
+      mockGetDefinedQuery<ConnectDetails>({ data: { profileName, serverRoot } }),
     )
     asMock(useSetConnectDetails).mockReturnValue(mockMutationResult())
 
@@ -46,7 +47,7 @@ describe('ServerConnect', () => {
   test('calls mutate with a valid url', () => {
     const mutate = jest.fn()
     asMock(useGetConnectDetails).mockReturnValue(
-      mockGetDefinedQuery<ConnectDetails>({ data: { serverRoot } }),
+      mockGetDefinedQuery<ConnectDetails>({ data: { profileName, serverRoot } }),
     )
     asMock(useSetConnectDetails).mockReturnValue(mockMutationResult({ mutate }))
 
@@ -59,6 +60,23 @@ describe('ServerConnect', () => {
     )
     jest.runAllTimers()
 
-    expect(mutate).toHaveBeenCalledWith({ serverRoot: 'http://localhost:8301' })
+    expect(mutate).toHaveBeenCalledWith({ profileName, serverRoot: 'http://localhost:8301' })
+  })
+
+  test('displays the url with the profile slug', () => {
+    asMock(useGetConnectDetails).mockReturnValue(
+      mockGetDefinedQuery<ConnectDetails>({ data: { profileName, serverRoot } }),
+    )
+
+    renderServerConnect()
+    fireEvent.change(
+      screen.getByPlaceholderText('enter the address for your markdown memory server'),
+      {
+        target: { value: 'http://localhost:8301' },
+      },
+    )
+    jest.runAllTimers()
+
+    expect(screen.getByText('http://localhost:8301/test-profile')).toBeInTheDocument()
   })
 })

@@ -8,6 +8,7 @@ import { renderHook, waitFor } from '@testing-library/react'
 
 import { useSetConnectDetails } from './useSetConnectDetails'
 
+const profileName = 'test-profile'
 describe('useSetConnectDetails', () => {
   test('sets connect details in local storage', async () => {
     const client = queryClient()
@@ -15,14 +16,18 @@ describe('useSetConnectDetails', () => {
       <QueryClientProvider client={client}>{children}</QueryClientProvider>
     )
     client.setQueryData(['connectDetails'], 'cachedConnectDetails')
-    const newData = { connected: true, serverRoot: 'newConnectDetails' }
+    const newData = { connected: true, profileName, serverRoot: 'newConnectDetails' }
 
-    const { result } = renderHook(() => useSetConnectDetails(), { wrapper })
+    const { result } = renderHook(() => useSetConnectDetails(profileName), { wrapper })
 
     await result.current.mutate(newData)
 
     await waitFor(() => expect(result.current.isPending).toBeFalsy())
 
-    expect(asMock(fetchLocal)).toHaveBeenCalledWith('mdm.connectDetails', 'set', newData)
+    expect(asMock(fetchLocal)).toHaveBeenCalledWith(
+      'mdm.test-profile.connectDetails',
+      'set',
+      newData,
+    )
   })
 })

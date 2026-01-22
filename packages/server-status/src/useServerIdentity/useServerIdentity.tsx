@@ -14,7 +14,7 @@ export function useServerIdentity(connect?: ConnectDetails | null) {
   const url = `${connect?.serverRoot}/api/identity`
   const isValid = /^https?:\/\/\S+$/.test(connect?.serverRoot || '')
   const enabled = isValid && Boolean(connect?.serverRoot)
-  const queryKey = ['identity', connect?.serverRoot]
+  const queryKey = ['identity', connect?.profileName, connect?.serverRoot]
   return useQuery({
     enabled,
     queryFn: async () => fetchTyped<ServerIdentity>(url),

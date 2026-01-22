@@ -7,29 +7,28 @@ import { useServerIdentity } from '../useServerIdentity/useServerIdentity'
 import { useSetConnectDetails } from '../useSetConnectDetails/useSetConnectDetails'
 import { getColor, getIcon } from './ServerStatus.util'
 
-export function ServerStatus() {
-  const { isPending: setPending, mutate: setConnectDetails } = useSetConnectDetails()
-  const { data: connectDetails } = useGetConnectDetails()
+export interface ServerStatusProps {
+  profileName: string
+}
+
+export function ServerStatus({ profileName }: ServerStatusProps) {
+  const { isPending: setPending, mutate: setConnectDetails } = useSetConnectDetails(profileName)
+  const { data: connectDetails, isError, isPending } = useGetConnectDetails(profileName)
+  console.log(connectDetails, isError, isPending, profileName)
   const result = useServerIdentity(connectDetails)
   const { data: identity, isFetching, isSuccess: identitySuccess } = result
 
   useEffect(() => {
     if (!identitySuccess || !identity) return
     if (connectDetails?.lastConnected) return
+    if (!connectDetails?.profileName) return
     if (setPending) return
 
     setConnectDetails({
+      ...connectDetails,
       lastConnected: new Date().toISOString(),
-      serverRoot: connectDetails?.serverRoot || '',
     })
-  }, [
-    identitySuccess,
-    identity,
-    connectDetails?.lastConnected,
-    connectDetails?.serverRoot,
-    setPending,
-    setConnectDetails,
-  ])
+  }, [identitySuccess, identity, connectDetails, setPending, setConnectDetails])
 
   const icon = getIcon(result)
   const color = getColor(result)

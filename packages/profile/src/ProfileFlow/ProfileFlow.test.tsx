@@ -14,6 +14,7 @@ jest.mock('../ProfileForm/ProfileForm', () => ({
   ProfileForm: ({ serverRoot }: { serverRoot: string }) => <div>profile-form:{serverRoot}</div>,
 }))
 
+const profileName = 'test-profile'
 const renderNewProfileFlow = (ui?: ReactNode) =>
   render(
     <ChakraProvider value={defaultSystem}>
@@ -25,7 +26,9 @@ const serverRoot = 'http://localhost:8200'
 
 describe('NewProfileFlow', () => {
   test('renders the step titles', () => {
-    asMock(useGetConnectDetails).mockReturnValue(mockGetDefinedQuery({ data: { serverRoot } }))
+    asMock(useGetConnectDetails).mockReturnValue(
+      mockGetDefinedQuery({ data: { profileName, serverRoot } }),
+    )
 
     renderNewProfileFlow()
 
@@ -34,7 +37,9 @@ describe('NewProfileFlow', () => {
   })
 
   test('disables next by default', () => {
-    asMock(useGetConnectDetails).mockReturnValue(mockGetDefinedQuery({ data: { serverRoot: '' } }))
+    asMock(useGetConnectDetails).mockReturnValue(
+      mockGetDefinedQuery({ data: { profileName, serverRoot: '' } }),
+    )
 
     renderNewProfileFlow()
 

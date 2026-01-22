@@ -1,20 +1,26 @@
-import { Field, Input, Stack } from '@chakra-ui/react'
+import { Field, Input, Stack, Strong, Text } from '@chakra-ui/react'
 import { ServerStatus, useGetConnectDetails, useSetConnectDetails } from '@mdm/server-status'
 import { useEffect, useState } from 'react'
 
-export function ServerConnect() {
-  const { data: connectDetails } = useGetConnectDetails()
-  const { mutate: setServer } = useSetConnectDetails()
-  const [serverRoot, setServerRoot] = useState(connectDetails?.serverRoot || '')
-  const isValid = /^https?:\/\/\S+$/.test(serverRoot)
+export interface ServerConnectProps {
+  profileName: string
+}
+
+export function ServerConnect({ profileName }: ServerConnectProps) {
+  const { data: connectDetails } = useGetConnectDetails(profileName)
+  const { mutate: setServer } = useSetConnectDetails(profileName)
+  const [serverRoot, setServerRoot] = useState(connectDetails?.serverRoot || undefined)
+
+  const isValid = serverRoot ? /^https?:\/\/\S+$/.test(serverRoot) : false
+  const url = serverRoot ? `${serverRoot}/${profileName}` : undefined
 
   useEffect(() => {
-    if (!isValid) return
+    if (!isValid || !serverRoot) return
 
-    const timeoutId = setTimeout(() => setServer({ serverRoot }), 400)
+    const timeoutId = setTimeout(() => setServer({ profileName, serverRoot }), 400)
 
     return () => clearTimeout(timeoutId)
-  }, [isValid, serverRoot, setServer])
+  }, [isValid, serverRoot, setServer, profileName])
 
   return (
     <Field.Root invalid={serverRoot !== '' && !isValid} required>
@@ -27,8 +33,16 @@ export function ServerConnect() {
           size="sm"
           value={serverRoot}
         />
-        <ServerStatus />
+        <ServerStatus profileName={profileName} />
       </Stack>
+      <Field.HelperText>
+        {url && (
+          <Stack direction="row">
+            <Text>the url for this profile will be</Text>
+            <Strong>{url}</Strong>
+          </Stack>
+        )}
+      </Field.HelperText>
     </Field.Root>
   )
 }
