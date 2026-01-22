@@ -1,6 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/react'
 import { system } from '@mdm/components/theme'
-import { NewProfileFlow, Sources } from '@mdm/profile'
+import { ProfileFlow, Source } from '@mdm/profile'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Route, HashRouter as Router, Routes } from 'react-router-dom'
@@ -11,7 +11,7 @@ import { Sync } from '../Sync/Sync'
 const queryClient = new QueryClient()
 
 function App() {
-  const verifyDirectoryExists = (source: Sources, directoryPath: string) =>
+  const verifyDirectoryExists = (source: Source, directoryPath: string) =>
     getElectronApi().verifyDirectoryExists(source, directoryPath)
 
   return (
@@ -21,7 +21,7 @@ function App() {
           <Routes>
             <Route element={<Sync />} path="/" />
             <Route
-              element={<NewProfileFlow verifyDirectoryExists={verifyDirectoryExists} />}
+              element={<ProfileFlow verifyDirectoryExists={verifyDirectoryExists} />}
               path="/new"
             />
           </Routes>

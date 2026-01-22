@@ -2,15 +2,22 @@ import { Box, Button, ButtonGroup, Heading, Stack, Steps } from '@chakra-ui/reac
 import { useGetConnectDetails } from '@mdm/server-status'
 import { useState } from 'react'
 
-import { ProfileForm } from '../ProfileForm/ProfileForm'
-import { ServerConnect } from '../ServerConnect/ServerConnect'
+import { NameForm } from '../NameForm/NameForm'
 import { Source, SourceDirectoryDetails } from '../types'
+//import { Source, SourceDirectoryDetails } from '../types'
 
-interface NewProfileFlowProps {
+interface ProfileFlowProps {
   verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
 }
 
-export function NewProfileFlow({ verifyDirectoryExists }: NewProfileFlowProps) {
+const steps = [
+  {
+    content: <NameForm />,
+    title: 'profile name',
+  },
+]
+
+export function ProfileFlow(_props: ProfileFlowProps) {
   const [step, setStep] = useState(0)
   const { data: connectDetails } = useGetConnectDetails()
   const isValid = () => {
@@ -19,17 +26,6 @@ export function NewProfileFlow({ verifyDirectoryExists }: NewProfileFlowProps) {
     }
     return true
   }
-
-  const steps = [
-    {
-      content: <ServerConnect />,
-      title: 'connect',
-    },
-    {
-      content: <ProfileForm verifyDirectoryExists={verifyDirectoryExists} />,
-      title: 'profile',
-    },
-  ]
 
   return (
     <Box maxW="container.md" mx="auto" px={{ base: 4, md: 6 }} py={6}>

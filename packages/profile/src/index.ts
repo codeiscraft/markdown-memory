@@ -1,2 +1,2 @@
-export * from './NewProfileFlow/NewProfileFlow'
+export * from './ProfileFlow/ProfileFlow'
 export * from './types'
