@@ -8,7 +8,7 @@ import { renderHook, waitFor } from '@testing-library/react'
 
 import { useSetConnectDetails } from './useSetConnectDetails'
 
-const profileName = 'test-profile'
+const profileSlug = 'test-profile'
 describe('useSetConnectDetails', () => {
   test('sets connect details in local storage', async () => {
     const client = queryClient()
@@ -16,9 +16,9 @@ describe('useSetConnectDetails', () => {
       <QueryClientProvider client={client}>{children}</QueryClientProvider>
     )
     client.setQueryData(['connectDetails'], 'cachedConnectDetails')
-    const newData = { connected: true, profileName, serverRoot: 'newConnectDetails' }
+    const newData = { connected: true, profileSlug, serverRoot: 'newConnectDetails' }
 
-    const { result } = renderHook(() => useSetConnectDetails(profileName), { wrapper })
+    const { result } = renderHook(() => useSetConnectDetails(profileSlug), { wrapper })
 
     await result.current.mutate(newData)
 
