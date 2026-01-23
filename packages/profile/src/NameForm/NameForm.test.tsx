@@ -30,7 +30,7 @@ describe('NameForm', () => {
     })
   })
 
-  test('calls setName callback when name is updated', () => {
+  test('calls updateProfile callback when name and slug are updated', () => {
     const mockUpdateProfile = renderNameForm()
 
     fireEvent.change(screen.getByPlaceholderText('provide a name for this profile'), {
