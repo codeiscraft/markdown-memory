@@ -1,14 +1,17 @@
 import { fetchLocal } from '@mdm/utils'
 import { useQuery } from '@tanstack/react-query'
 
-import { connectDetailsKey } from '../server'
+import { connectDetailsQueryKey, connectDetailsStorageKey } from '../server'
 import { ConnectDetails } from '../types'
 
-export function useGetConnectDetails() {
-  const queryKey = ['connectDetails']
+export function useGetConnectDetails(profileSlug?: string) {
+  const queryKey = connectDetailsQueryKey(profileSlug ?? '')
+  const storageKey = connectDetailsStorageKey(profileSlug ?? '')
+
   return useQuery({
-    initialData: () => fetchLocal<ConnectDetails>(connectDetailsKey, 'get'),
-    queryFn: () => fetchLocal<ConnectDetails>(connectDetailsKey, 'get'),
+    enabled: !!profileSlug,
+    initialData: () => fetchLocal<ConnectDetails>(storageKey, 'get'),
+    queryFn: () => fetchLocal<ConnectDetails>(storageKey, 'get'),
     queryKey,
   })
 }

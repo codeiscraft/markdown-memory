@@ -19,10 +19,14 @@ jest.mock('@mdm/server-status', () => ({
   useSetConnectDetails: jest.fn(),
 }))
 
+const profile = {
+  name: 'Test Profile',
+  slug: 'test-profile',
+}
 const renderServerConnect = () =>
   render(
     <ChakraProvider value={defaultSystem}>
-      <ServerConnect />
+      <ServerConnect profile={profile} />
     </ChakraProvider>,
   )
 
@@ -60,5 +64,22 @@ describe('ServerConnect', () => {
     jest.runAllTimers()
 
     expect(mutate).toHaveBeenCalledWith({ serverRoot: 'http://localhost:8301' })
+  })
+
+  test('displays the url with the profile slug', () => {
+    asMock(useGetConnectDetails).mockReturnValue(
+      mockGetDefinedQuery<ConnectDetails>({ data: { serverRoot } }),
+    )
+
+    renderServerConnect()
+    fireEvent.change(
+      screen.getByPlaceholderText('enter the address for your markdown memory server'),
+      {
+        target: { value: 'http://localhost:8301' },
+      },
+    )
+    jest.runAllTimers()
+
+    expect(screen.getByText('http://localhost:8301/test-profile')).toBeInTheDocument()
   })
 })

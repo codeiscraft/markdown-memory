@@ -7,29 +7,28 @@ import { useServerIdentity } from '../useServerIdentity/useServerIdentity'
 import { useSetConnectDetails } from '../useSetConnectDetails/useSetConnectDetails'
 import { getColor, getIcon } from './ServerStatus.util'
 
-export function ServerStatus() {
-  const { isPending: setPending, mutate: setConnectDetails } = useSetConnectDetails()
-  const { data: connectDetails } = useGetConnectDetails()
-  const result = useServerIdentity(connectDetails)
+export interface ServerStatusProps {
+  profileSlug?: string
+}
+
+export function ServerStatus({ profileSlug }: ServerStatusProps) {
+  const { isPending: setPending, mutate: setConnectDetails } = useSetConnectDetails(profileSlug)
+  const { data: connectDetails } = useGetConnectDetails(profileSlug)
+  const result = useServerIdentity(profileSlug, connectDetails)
   const { data: identity, isFetching, isSuccess: identitySuccess } = result
 
   useEffect(() => {
     if (!identitySuccess || !identity) return
     if (connectDetails?.lastConnected) return
+    if (!connectDetails?.serverRoot) return
+    if (!profileSlug) return
     if (setPending) return
 
     setConnectDetails({
+      ...connectDetails,
       lastConnected: new Date().toISOString(),
-      serverRoot: connectDetails?.serverRoot || '',
     })
-  }, [
-    identitySuccess,
-    identity,
-    connectDetails?.lastConnected,
-    connectDetails?.serverRoot,
-    setPending,
-    setConnectDetails,
-  ])
+  }, [identitySuccess, identity, connectDetails, setPending, setConnectDetails, profileSlug])
 
   const icon = getIcon(result)
   const color = getColor(result)

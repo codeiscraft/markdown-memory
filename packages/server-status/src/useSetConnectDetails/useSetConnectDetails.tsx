@@ -1,17 +1,25 @@
 import { fetchLocal } from '@mdm/utils'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { connectDetailsKey } from '../server'
+import { connectDetailsQueryKey, connectDetailsStorageKey } from '../server'
 import { ConnectDetails } from '../types'
 
-export function useSetConnectDetails() {
+export function useSetConnectDetails(profileSlug?: string) {
   const queryClient = useQueryClient()
-  const queryKey = ['connectDetails']
+  const queryKey = connectDetailsQueryKey(profileSlug ?? '')
+  const storageKey = connectDetailsStorageKey(profileSlug ?? '')
 
   return useMutation({
     mutationFn: async (connect: ConnectDetails) =>
-      fetchLocal<ConnectDetails>(connectDetailsKey, 'set', connect),
-    mutationKey: ['setConnectDetails'],
-    onSuccess: (data) => queryClient.setQueryData(queryKey, data),
+      fetchLocal<ConnectDetails>(storageKey, 'set', connect),
+    mutationKey: ['setConnectDetails', profileSlug],
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ exact: false, queryKey })
+      queryClient.setQueryData(queryKey, data)
+      queryClient.removeQueries({
+        exact: false,
+        queryKey: ['identity', profileSlug],
+      })
+    },
   })
 }

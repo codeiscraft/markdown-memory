@@ -12,12 +12,16 @@ jest.mock('../useSetConnectDetails/useSetConnectDetails')
 jest.mock('../useGetConnectDetails/useGetConnectDetails')
 jest.mock('../useServerIdentity/useServerIdentity')
 
-const renderServerStatus = () =>
+const profileSlug = 'test-profile'
+const renderServerStatus = () => {
+  const updateProfile = jest.fn()
   render(
     <ChakraProvider value={defaultSystem}>
-      <ServerStatus />
+      <ServerStatus profileSlug={profileSlug} />
     </ChakraProvider>,
   )
+  return updateProfile
+}
 
 const serverRoot = 'http://localhost:8200'
 

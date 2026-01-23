@@ -1,1 +1,2 @@
-export const connectDetailsKey = 'mdm.connectDetails'
+export const connectDetailsStorageKey = (profileSlug: string) => `mdm.${profileSlug}.connectDetails`
+export const connectDetailsQueryKey = (profileSlug: string) => ['connectDetails', profileSlug]
