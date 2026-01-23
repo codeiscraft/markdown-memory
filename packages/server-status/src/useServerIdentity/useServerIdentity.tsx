@@ -10,11 +10,11 @@ export interface ServerIdentity {
   version: string
 }
 
-export function useServerIdentity(connect?: ConnectDetails | null) {
+export function useServerIdentity(profileSlug?: string, connect?: ConnectDetails | null) {
   const url = `${connect?.serverRoot}/api/identity`
   const isValid = /^https?:\/\/\S+$/.test(connect?.serverRoot || '')
-  const enabled = isValid && Boolean(connect?.serverRoot)
-  const queryKey = ['identity', connect?.profileName, connect?.serverRoot]
+  const enabled = isValid && Boolean(profileSlug && connect?.serverRoot)
+  const queryKey = ['identity', profileSlug, connect?.serverRoot]
   return useQuery({
     enabled,
     queryFn: async () => fetchTyped<ServerIdentity>(url),

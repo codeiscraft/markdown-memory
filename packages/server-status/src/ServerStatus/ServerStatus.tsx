@@ -14,7 +14,7 @@ export interface ServerStatusProps {
 export function ServerStatus({ profileSlug }: ServerStatusProps) {
   const { isPending: setPending, mutate: setConnectDetails } = useSetConnectDetails(profileSlug)
   const { data: connectDetails } = useGetConnectDetails(profileSlug)
-  const result = useServerIdentity(connectDetails)
+  const result = useServerIdentity(profileSlug, connectDetails)
   const { data: identity, isFetching, isSuccess: identitySuccess } = result
 
   useEffect(() => {

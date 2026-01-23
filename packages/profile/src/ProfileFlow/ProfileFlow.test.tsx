@@ -10,9 +10,7 @@ import { ProfileFlow } from './ProfileFlow'
 
 jest.mock('@mdm/server-status')
 jest.mock('../ServerConnect/ServerConnect')
-jest.mock('../ProfileForm/ProfileForm', () => ({
-  ProfileForm: ({ serverRoot }: { serverRoot: string }) => <div>profile-form:{serverRoot}</div>,
-}))
+jest.mock('../PassphraseForm/PassphraseForm')
 
 const profileName = 'test-profile'
 const renderNewProfileFlow = (ui?: ReactNode) =>

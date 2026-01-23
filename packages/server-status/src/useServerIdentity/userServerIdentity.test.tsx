@@ -11,13 +11,13 @@ const testIdentity = {
   product: 'markdown-memory',
   version: '0.0.2',
 }
-const profileName = 'test-profile'
+const profileSlug = 'test-profile'
 describe('useServerIdentity', () => {
   test('api/identity fetched and response returned', async () => {
     asMock(fetchTyped).mockResolvedValue(testIdentity)
 
     const { result } = renderHook(
-      () => useServerIdentity({ profileName, serverRoot: 'http://server-root:8000' }),
+      () => useServerIdentity(profileSlug, { serverRoot: 'http://server-root:8000' }),
       { wrapper },
     )
 

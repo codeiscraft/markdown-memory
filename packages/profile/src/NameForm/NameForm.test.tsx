@@ -36,6 +36,9 @@ describe('NameForm', () => {
     fireEvent.change(screen.getByPlaceholderText('provide a name for this profile'), {
       target: { value: 'New Profile Name' },
     })
-    expect(mockUpdateProfile).toHaveBeenCalledWith('New Profile Name')
+    expect(mockUpdateProfile).toHaveBeenCalledWith({
+      name: 'New Profile Name',
+      slug: 'a-generated-slug',
+    })
   })
 })

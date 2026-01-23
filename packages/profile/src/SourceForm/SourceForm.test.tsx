@@ -6,15 +6,17 @@ import { ReactNode } from 'react'
 
 import { SourceForm } from './SourceForm'
 
-const profileName = 'test-profile'
 const renderSourceForm = (ui?: ReactNode) => {
   const verifyDirectoryExists = jest.fn()
+  const updateProfile = jest.fn()
   render(
     <ChakraProvider value={defaultSystem}>
-      {ui ?? <SourceForm profileName={profileName} verifyDirectoryExists={verifyDirectoryExists} />}
+      {ui ?? (
+        <SourceForm updateProfile={updateProfile} verifyDirectoryExists={verifyDirectoryExists} />
+      )}
     </ChakraProvider>,
   )
-  return verifyDirectoryExists
+  return { updateProfile, verifyDirectoryExists }
 }
 
 describe('SourceForm', () => {
@@ -34,7 +36,7 @@ describe('SourceForm', () => {
   })
 
   test('invokes the verifyDirectoryExists callback', async () => {
-    const verifyDirectoryExists = renderSourceForm()
+    const { verifyDirectoryExists } = renderSourceForm()
 
     const user = userEvent.setup()
     await user.click(screen.getByRole('radio', { name: /file/i }))
@@ -47,7 +49,7 @@ describe('SourceForm', () => {
   })
 
   test('renders the verified source details', async () => {
-    const verifyDirectoryExists = renderSourceForm()
+    const { updateProfile, verifyDirectoryExists } = renderSourceForm()
     asMock(verifyDirectoryExists).mockResolvedValueOnce({
       fileCount: 10,
       isValid: true,
@@ -62,10 +64,14 @@ describe('SourceForm', () => {
     await user.tab() // blur to trigger verification
 
     expect(await screen.findByText(/file:\/path\/to\/source - Valid/i)).toBeInTheDocument()
+    expect(updateProfile).toHaveBeenCalledWith({
+      source: 'file',
+      sourceDirectory: '/path/to/source',
+    })
   })
 
   test('renders a failure if the source is invalid', async () => {
-    const verifyDirectoryExists = renderSourceForm()
+    const { verifyDirectoryExists } = renderSourceForm()
     asMock(verifyDirectoryExists).mockResolvedValueOnce({
       fileCount: 10,
       isValid: false,

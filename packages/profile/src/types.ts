@@ -5,7 +5,7 @@ export interface Profile {
   encryptionProfile?: EncryptionProfile
   name: string
   slug: string
-  source: Source
+  source?: Source
   sourceDirectory?: string
 }
 
