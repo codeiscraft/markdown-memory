@@ -17,9 +17,11 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
   const [profile, setProfile] = useState<Profile | undefined>(undefined)
   const [step, setStep] = useState(0)
   const { data: connectDetails } = useGetConnectDetails(profile?.slug)
-  const updateProfile = useCallback((nextProfile: Partial<Profile>) => {
-    setProfile((prevProfile) => ({ ...prevProfile, ...nextProfile }) as Profile)
-  }, [])
+  const updateProfile = useCallback(
+    (nextProfile: Partial<Profile>) =>
+      setProfile((prevProfile) => ({ ...prevProfile, ...nextProfile }) as Profile),
+    [],
+  )
 
   const isValid = () => {
     if (step === 0) {
@@ -41,19 +43,19 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
     {
       content: <NameForm updateProfile={updateProfile} />,
       icon: 'FolderPen',
-      title: 'profile name',
+      title: 'name',
     },
     {
       content: <ServerConnect profile={profile} />,
       icon: 'Cloud',
-      title: 'server connect',
+      title: 'connect',
     },
     {
       content: (
         <SourceForm updateProfile={updateProfile} verifyDirectoryExists={verifyDirectoryExists} />
       ),
       icon: 'FolderOpen',
-      title: 'markdown source',
+      title: 'markdown',
     },
     {
       content: <PassphraseForm profile={profile} updateProfile={updateProfile} />,

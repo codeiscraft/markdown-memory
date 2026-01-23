@@ -11,6 +11,7 @@ import { ProfileFlow } from './ProfileFlow'
 jest.mock('@mdm/server-status')
 jest.mock('../ServerConnect/ServerConnect')
 jest.mock('../PassphraseForm/PassphraseForm')
+jest.mock('../NameForm/NameForm')
 
 const profileName = 'test-profile'
 const renderNewProfileFlow = (ui?: ReactNode) =>
@@ -30,8 +31,10 @@ describe('NewProfileFlow', () => {
 
     renderNewProfileFlow()
 
-    // expect(screen.getByText('connect'))
-    // expect(screen.getByText('profile'))
+    expect(screen.getByText('name'))
+    expect(screen.getByText('connect'))
+    expect(screen.getByText('markdown'))
+    expect(screen.getByText('passphrase'))
   })
 
   test('disables next by default', () => {

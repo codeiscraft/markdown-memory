@@ -23,7 +23,6 @@ export function PassphraseForm({ updateProfile }: PassphraseFormProps) {
   useEffect(() => {
     const deriveKey = async () => {
       if (passphrase && salt) {
-        console.log('generating encryption profile...')
         const encryptionProfile = await generateEncryptionProfile(passphrase, salt)
         updateProfile?.({ encryptionProfile } as Profile)
         setEncryptionProfile(encryptionProfile)
