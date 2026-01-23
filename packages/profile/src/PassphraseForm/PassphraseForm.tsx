@@ -1,10 +1,18 @@
-import { Field, Stack } from '@chakra-ui/react'
+import { Code, Field, Stack } from '@chakra-ui/react'
 import { PasswordInput } from '@mdm/components'
-import { generateEncryptionProfile, generateUserSalt } from '@mdm/utils'
+import { EncryptionProfile, generateEncryptionProfile, generateUserSalt } from '@mdm/utils'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 
-export function PassphraseForm() {
+import { Profile } from '../types'
+
+export interface PassphraseFormProps {
+  profile?: Profile
+  updateProfile?: (profile: Profile) => void
+}
+
+export function PassphraseForm({ updateProfile }: PassphraseFormProps) {
   const [passphrase, setPassphrase] = useState('')
+  const [encryptionProfile, setEncryptionProfile] = useState<EncryptionProfile | null>(null)
   const [salt] = useState(generateUserSalt())
 
   const updatePassphrase = (event: ChangeEvent<HTMLInputElement>) =>
@@ -15,12 +23,14 @@ export function PassphraseForm() {
   useEffect(() => {
     const deriveKey = async () => {
       if (passphrase && salt) {
-        await generateEncryptionProfile(passphrase, salt)
-        // TODO: save to cache along with other details
+        console.log('generating encryption profile...')
+        const encryptionProfile = await generateEncryptionProfile(passphrase, salt)
+        updateProfile?.({ encryptionProfile } as Profile)
+        setEncryptionProfile(encryptionProfile)
       }
     }
     deriveKey()
-  }, [passphrase, salt])
+  }, [passphrase, salt, updateProfile])
 
   return (
     <Stack as="form" onSubmit={handleSubmit}>
@@ -32,6 +42,11 @@ export function PassphraseForm() {
           value={passphrase}
         />
       </Field.Root>
+      {encryptionProfile && (
+        <Code p={2} variant="solid" whiteSpace="pre-wrap">
+          {JSON.stringify(encryptionProfile, null, 2)}
+        </Code>
+      )}
     </Stack>
   )
 }

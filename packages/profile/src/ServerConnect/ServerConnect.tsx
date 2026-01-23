@@ -11,7 +11,7 @@ export interface ServerConnectProps {
 export function ServerConnect({ profile }: ServerConnectProps) {
   const { data: connectDetails } = useGetConnectDetails(profile?.slug)
   const { mutate: setConnectDetails } = useSetConnectDetails(profile?.slug)
-  const [serverRoot, setServerRoot] = useState(connectDetails?.serverRoot || undefined)
+  const [serverRoot, setServerRoot] = useState(connectDetails?.serverRoot || '')
 
   const isValid = serverRoot ? /^https?:\/\/\S+$/.test(serverRoot) : false
   const url = serverRoot ? `${serverRoot}/${profile?.slug}` : undefined
@@ -30,7 +30,6 @@ export function ServerConnect({ profile }: ServerConnectProps) {
       <Stack direction="row" gap={1} width="100%">
         <Input
           autoFocus
-          flex={1}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setServerRoot(e.target.value)}
           placeholder="enter the address for your markdown memory server"
           size="sm"

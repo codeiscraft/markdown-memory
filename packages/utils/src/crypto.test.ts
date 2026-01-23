@@ -14,7 +14,7 @@ describe('Crypto Utils', () => {
 
   test('a passphrase and salt can be used to generate an encryption profile', async () => {
     const profile = await generateEncryptionProfile('test-passphrase', salt)
-    expect(profile.iterations).toBe(250000)
+    expect(profile.iterations).toBe(400000)
     expect(profile.salt_b64).toBe('AQIDBA==')
     expect(profile.verification.alg).toBe('AES-GCM')
     expect(typeof profile.verification.ciphertext_b64).toBe('string')

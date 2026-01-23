@@ -5,7 +5,7 @@ import { ChangeEvent, FormEvent, useState } from 'react'
 import { Profile } from '../types'
 
 export interface NameFormProps {
-  updateProfile: (profile: Profile) => void
+  updateProfile: (profile: Partial<Profile>) => void
 }
 
 export function NameForm({ updateProfile }: NameFormProps) {
@@ -23,7 +23,12 @@ export function NameForm({ updateProfile }: NameFormProps) {
     <Stack as="form" onSubmit={handleSubmit}>
       <Field.Root required>
         <Field.Label>name</Field.Label>
-        <Input onChange={updateName} placeholder="provide a name for this profile" value={name} />
+        <Input
+          autoFocus
+          onChange={updateName}
+          placeholder="provide a name for this profile"
+          value={name}
+        />
         <Field.HelperText>
           {slug && (
             <Stack direction="row">

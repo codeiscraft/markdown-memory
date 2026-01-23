@@ -4,7 +4,7 @@ import { EncryptionProfile } from './crypto.types'
 const kdf = 'PBKDF2-SHA256'
 const v = 1
 const VERIFICATION_PLAINTEXT = 'markdown-memory:passphrase-check'
-const PBKDF2_ITERATIONS = 250_000
+const PBKDF2_ITERATIONS = 400_000
 const ENCRYPT_ALG = 'AES-GCM'
 
 export async function deriveMasterKey(
