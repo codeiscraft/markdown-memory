@@ -9,7 +9,9 @@ import { NameForm } from './NameForm'
 const renderNameForm = (ui?: ReactNode) => {
   const callback = jest.fn()
   render(
-    <ChakraProvider value={defaultSystem}>{ui ?? <NameForm setName={callback} />}</ChakraProvider>,
+    <ChakraProvider value={defaultSystem}>
+      {ui ?? <NameForm updateProfile={callback} />}
+    </ChakraProvider>,
   )
   return callback
 }
@@ -29,11 +31,11 @@ describe('NameForm', () => {
   })
 
   test('calls setName callback when name is updated', () => {
-    const mockSetName = renderNameForm()
+    const mockUpdateProfile = renderNameForm()
 
     fireEvent.change(screen.getByPlaceholderText('provide a name for this profile'), {
       target: { value: 'New Profile Name' },
     })
-    expect(mockSetName).toHaveBeenCalledWith('New Profile Name')
+    expect(mockUpdateProfile).toHaveBeenCalledWith('New Profile Name')
   })
 })

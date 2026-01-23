@@ -3,11 +3,11 @@ import { BEAR_ROOT, BEAR_SOURCE_LABEL } from '@mdm/sync-bear/constants'
 import { FormEvent, useState } from 'react'
 
 import { sources } from '../sources'
-import { Source, SourceDirectoryDetails } from '../types'
+import { Profile, Source, SourceDirectoryDetails } from '../types'
 import { SourceDetails } from './SourceDetails'
 
 export interface SourceFormProps {
-  profileName: string
+  updateProfile: (profile: Partial<Profile>) => void
   verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
 }
 
@@ -17,7 +17,7 @@ const getDirLabel = (source: null | string | undefined) => {
   return 'source file path'
 }
 
-export function SourceForm({ verifyDirectoryExists }: SourceFormProps) {
+export function SourceForm({ updateProfile, verifyDirectoryExists }: SourceFormProps) {
   const [source, setSource] = useState<null | Source>()
   const [directory, setDirectory] = useState('')
   const [directoryDetails, setDirectoryDetails] = useState<null | SourceDirectoryDetails>(null)
@@ -38,6 +38,10 @@ export function SourceForm({ verifyDirectoryExists }: SourceFormProps) {
     try {
       const details = await verifyDirectoryExists(source, directory)
       setDirectoryDetails(details)
+      updateProfile({
+        source,
+        sourceDirectory: details.sourcePath,
+      })
     } catch {
       setDirectoryDetails({
         isValid: false,

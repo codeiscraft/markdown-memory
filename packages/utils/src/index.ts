@@ -1,4 +1,5 @@
 export * from './crypto'
 export * from './crypto.helpers'
+export * from './crypto.types'
 export * from './fetch'
 export * from './strings'

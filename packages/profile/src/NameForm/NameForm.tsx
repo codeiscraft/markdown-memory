@@ -2,16 +2,18 @@ import { Field, Input, Stack, Strong, Text } from '@chakra-ui/react'
 import { toSlug } from '@mdm/utils'
 import { ChangeEvent, FormEvent, useState } from 'react'
 
+import { Profile } from '../types'
+
 export interface NameFormProps {
-  setName: (name: string) => void
+  updateProfile: (profile: Profile) => void
 }
 
-export function NameForm({ setName: setParentName }: NameFormProps) {
+export function NameForm({ updateProfile }: NameFormProps) {
   const [name, setName] = useState('')
   const updateName = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
     setName(value)
-    setParentName(value)
+    updateProfile({ name: value, slug: toSlug(value) })
   }
 
   const handleSubmit = (event: FormEvent) => event.preventDefault()

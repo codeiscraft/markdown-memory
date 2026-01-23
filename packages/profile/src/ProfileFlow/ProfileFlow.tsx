@@ -1,27 +1,26 @@
 import { Box, Button, ButtonGroup, Heading, Stack, Steps } from '@chakra-ui/react'
 import { useGetConnectDetails } from '@mdm/server-status'
-import { toSlug } from '@mdm/utils'
 import { useState } from 'react'
 
 import { NameForm } from '../NameForm/NameForm'
 import { ServerConnect } from '../ServerConnect/ServerConnect'
 import { SourceForm } from '../SourceForm/SourceForm'
-import { Source, SourceDirectoryDetails } from '../types'
+import { Profile, Source, SourceDirectoryDetails } from '../types'
 
 interface ProfileFlowProps {
   verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
 }
 
 export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
-  const [name, setName] = useState('')
+  const [profile, setProfile] = useState<Profile | undefined>(undefined)
   const [step, setStep] = useState(0)
-  const { data: connectDetails } = useGetConnectDetails(name)
+  const { data: connectDetails } = useGetConnectDetails(profile?.slug)
 
-  const slug = toSlug(name)
+  console.log('ProfileFlow', profile)
 
   const isValid = () => {
     if (step === 0) {
-      return name && name.length > 0
+      return profile && profile.name.length > 0
     }
     if (step === 1) {
       return Boolean(connectDetails?.serverRoot && connectDetails.lastConnected)
@@ -31,15 +30,20 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
 
   const steps = [
     {
-      content: <NameForm setName={setName} />,
+      content: <NameForm updateProfile={setProfile} />,
       title: 'profile name',
     },
     {
-      content: <ServerConnect profileName={slug} />,
+      content: <ServerConnect profile={profile} />,
       title: 'server connect',
     },
     {
-      content: <SourceForm profileName={slug} verifyDirectoryExists={verifyDirectoryExists} />,
+      content: (
+        <SourceForm
+          updateProfile={(p: Partial<Profile>) => setProfile({ ...profile, ...p } as Profile)}
+          verifyDirectoryExists={verifyDirectoryExists}
+        />
+      ),
       title: 'markdown source',
     },
   ]
