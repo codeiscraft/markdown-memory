@@ -9,6 +9,7 @@ import { getElectronApi } from '../../src/electron'
 import { Sync } from '../Sync/Sync'
 
 const queryClient = new QueryClient()
+const enableDevTools = false
 
 function App() {
   const verifyDirectoryExists = (source: Source, directoryPath: string) =>
@@ -26,7 +27,7 @@ function App() {
             />
           </Routes>
         </Router>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {enableDevTools && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
     </ChakraProvider>
   )
