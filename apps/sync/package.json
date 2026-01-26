@@ -35,14 +35,14 @@
     "@mdm/sync-bear": "*",
     "@mdm/testing-support": "*",
     "@mdm/utils": "*",
-    "@tanstack/react-query": "5.90.19",
+    "@tanstack/react-query": "5.90.20",
     "@tanstack/react-query-devtools": "5.91.2",
-    "lucide-react": "0.562.0",
+    "lucide-react": "0.563.0",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
   "devDependencies": {
-    "@types/react": "19.2.8",
+    "@types/react": "19.2.9",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "5.1.2",
     "concurrently": "9.2.1",
