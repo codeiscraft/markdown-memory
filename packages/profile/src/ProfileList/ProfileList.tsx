@@ -1,5 +1,4 @@
-import { Button, Card, Heading, Stack } from '@chakra-ui/react'
-import { Icon } from '@mdm/components'
+import { Button, Card, Heading, Link, Stack, Strong } from '@chakra-ui/react'
 
 export interface ProfileListProps {
   createProfile: () => void
@@ -9,7 +8,7 @@ export function ProfileList({ createProfile }: ProfileListProps) {
   return (
     <Stack>
       <Heading size="sm">select profile</Heading>
-      <Card.Root size="sm">
+      <Card.Root size="sm" variant="subtle">
         <Card.Header>
           <Heading size="sm">add new profile</Heading>
         </Card.Header>
@@ -18,16 +17,18 @@ export function ProfileList({ createProfile }: ProfileListProps) {
           notes which will be synced
         </Card.Body>
         <Card.Footer>
-          <Button
-            onClick={() => {
-              createProfile()
-            }}
-            size="sm"
-            variant="subtle"
-          >
-            <Icon name="Play" />
-            get started
-          </Button>
+          <Stack direction="row" justify="flex-end" width="100%">
+            <Button
+              as={Link}
+              onClick={() => {
+                createProfile()
+              }}
+              size="sm"
+              variant="plain"
+            >
+              <Strong>get started</Strong>
+            </Button>
+          </Stack>
         </Card.Footer>
       </Card.Root>
     </Stack>

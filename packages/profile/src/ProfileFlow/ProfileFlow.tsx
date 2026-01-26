@@ -47,7 +47,7 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
     },
     {
       content: <ServerConnect profile={profile} />,
-      icon: 'Cloud',
+      icon: 'Server',
       title: 'connect',
     },
     {
@@ -67,47 +67,40 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
   const allStepsComplete = step === steps.length
 
   return (
-    <Box maxW="container.md" mx="auto" px={{ base: 4, md: 6 }} py={6}>
-      <Stack gap={6}>
-        <Heading>configuration</Heading>
-        <Steps.Root
-          count={steps.length}
-          onStepChange={(e) => setStep(e.step)}
-          size="sm"
-          step={step}
-        >
-          <Steps.List>
-            {steps.map((step, index) => (
-              <Steps.Item index={index} key={index} title={step.title}>
-                <Steps.Indicator>
-                  <Steps.Status
-                    complete={<Icon name="Check" />}
-                    incomplete={<Icon name={step.icon} />}
-                  />
-                </Steps.Indicator>
-                <Steps.Title>{step.title}</Steps.Title>
-                <Steps.Separator />
-              </Steps.Item>
-            ))}
-          </Steps.List>
+    <Stack gap={6}>
+      <Heading size="sm">add profile</Heading>
+      <Steps.Root count={steps.length} onStepChange={(e) => setStep(e.step)} size="sm" step={step}>
+        <Steps.List>
           {steps.map((step, index) => (
-            <Steps.Content index={index} key={index}>
-              {step.content}
-            </Steps.Content>
+            <Steps.Item index={index} key={index} title={step.title}>
+              <Steps.Indicator>
+                <Steps.Status
+                  complete={<Icon name="Check" />}
+                  incomplete={<Icon name={step.icon} />}
+                />
+              </Steps.Indicator>
+              <Steps.Title>{step.title}</Steps.Title>
+              <Steps.Separator />
+            </Steps.Item>
           ))}
-          <Steps.CompletedContent>All steps are complete!</Steps.CompletedContent>
-          <ButtonGroup display="flex" w="full">
-            <Steps.PrevTrigger asChild>
-              <Button flex="1">prev</Button>
-            </Steps.PrevTrigger>
-            <Steps.NextTrigger asChild>
-              <Button disabled={!isValid() || allStepsComplete} flex="1">
-                next
-              </Button>
-            </Steps.NextTrigger>
-          </ButtonGroup>
-        </Steps.Root>
-      </Stack>
-    </Box>
+        </Steps.List>
+        {steps.map((step, index) => (
+          <Steps.Content index={index} key={index}>
+            {step.content}
+          </Steps.Content>
+        ))}
+        <Steps.CompletedContent>All steps are complete!</Steps.CompletedContent>
+        <ButtonGroup display="flex" w="full">
+          <Steps.PrevTrigger asChild>
+            <Button flex="1">prev</Button>
+          </Steps.PrevTrigger>
+          <Steps.NextTrigger asChild>
+            <Button disabled={!isValid() || allStepsComplete} flex="1">
+              next
+            </Button>
+          </Steps.NextTrigger>
+        </ButtonGroup>
+      </Steps.Root>
+    </Stack>
   )
 }
