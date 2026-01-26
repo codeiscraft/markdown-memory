@@ -4,11 +4,11 @@ import { Router } from 'express'
 import get from './get'
 import post from './post'
 
-export function createCacheRoutes(redis: RedisClient) {
+export function createCacheHashRoutes(redis: RedisClient) {
   const router = Router()
 
-  router.get('/api/cache/:key', get(redis))
-  router.post('/api/cache', post(redis))
+  router.get('/api/cache/hash/:key', get(redis))
+  router.post('/api/cache/hash', post(redis))
 
   return router
 }

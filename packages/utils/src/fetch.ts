@@ -8,6 +8,16 @@ export const fetchTyped = async <T>(url: string, headers?: HeadersInit): Promise
   return result as T
 }
 
+export const postTyped = async <T>(url: string, body: T, headers?: HeadersInit): Promise<T> => {
+  const res = await fetch(url, { body: JSON.stringify(body), headers, method: 'POST' })
+  if (!res.ok) {
+    throw new Error(`failed to fetch: ${res.status} ${res.statusText}`)
+  }
+  const result = await res.json()
+
+  return result as T
+}
+
 export const fetchLocal = <T>(key: string, operation: 'get' | 'set', value?: T): null | T => {
   if (operation === 'get') {
     const item = localStorage.getItem(key)

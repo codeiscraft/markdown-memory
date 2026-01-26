@@ -4,7 +4,8 @@ import express from 'express'
 import morgan from 'morgan'
 import { createClient } from 'redis'
 
-import { createCacheRoutes } from './cache/route'
+import { createCacheHashRoutes } from './cache-hash/route'
+import { createCacheStringRoutes } from './cache-string/route'
 import { createIdentityRoutes } from './identity/route'
 
 const host = process.env.MDM_HOST || '0.0.0.0'
@@ -35,7 +36,8 @@ export const startup = async () => {
   })
   app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
   app.use(express.json())
-  app.use(createCacheRoutes(redisClient))
+  app.use(createCacheStringRoutes(redisClient))
+  app.use(createCacheHashRoutes(redisClient))
   app.use(createIdentityRoutes())
   app.use(errorResponse)
 
