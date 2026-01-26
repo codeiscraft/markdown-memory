@@ -10,6 +10,7 @@ export const fetchTyped = async <T>(url: string, headers?: HeadersInit): Promise
 
 export const postTyped = async <T>(url: string, body: T, headers?: HeadersInit): Promise<T> => {
   const res = await fetch(url, { body: JSON.stringify(body), headers, method: 'POST' })
+  console.log('postTyped response:', res, body)
   if (!res.ok) {
     throw new Error(`failed to fetch: ${res.status} ${res.statusText}`)
   }

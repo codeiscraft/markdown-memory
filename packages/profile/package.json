@@ -19,6 +19,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@mdm/cache": "*",
     "@mdm/utils": "*",
     "@mdm/sync-bear": "*",
     "@mdm/server-status": "*",
