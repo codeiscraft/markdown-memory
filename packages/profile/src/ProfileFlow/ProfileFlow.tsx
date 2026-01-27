@@ -1,5 +1,4 @@
 import { Button, ButtonGroup, Heading, Stack, Steps } from '@chakra-ui/react'
-import { useSetHash } from '@mdm/cache'
 import { Icon } from '@mdm/components'
 import { useGetConnectDetails } from '@mdm/server-status'
 import { useCallback, useEffect, useState } from 'react'
@@ -16,7 +15,7 @@ interface ProfileFlowProps {
 
 export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
   const [profile, setProfile] = useState<Profile | undefined>(undefined)
-  const { mutate: saveProfile } = useSetHash<Profile>(`profiles-${profile?.slug}`)
+  // const { mutate: saveProfile } = useSetHash<Profile>(`profiles-${profile?.slug}`)
   const [step, setStep] = useState(0)
   const { data: connectDetails } = useGetConnectDetails(profile?.slug)
   const updateProfile = useCallback(
@@ -70,11 +69,11 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
   useEffect(() => {
     if (allStepsComplete) {
       if (profile) {
-        saveProfile(profile)
+        //saveProfile(profile)
         console.log('Profile to save:', profile)
       }
     }
-  }, [allStepsComplete, profile, saveProfile])
+  }, [allStepsComplete, profile])
 
   return (
     <Stack gap={6}>
