@@ -9,10 +9,10 @@ import put from './put'
 export function createProfileRoutes(redis: RedisClient) {
   const router = Router()
 
-  router.get('/api/profile', getAll(redis))
-  router.get('/api/profile/:slug', getById(redis))
-  router.put('/api/profile/:slug', put(redis))
-  router.delete('/api/profile/:id', deleteProfile(redis))
+  router.get('/api/profiles', getAll(redis))
+  router.get('/api/profiles/:slug', getById(redis))
+  router.put('/api/profiles/:slug', put(redis))
+  router.delete('/api/profiles/:slug', deleteProfile(redis))
 
   return router
 }

@@ -3,6 +3,7 @@ import { Icon } from '@mdm/components'
 import { useGetConnectDetails } from '@mdm/server-status'
 import { useCallback, useEffect, useState } from 'react'
 
+import { usePutProfile } from '../hooks/usePutProfile'
 import { NameForm } from '../NameForm/NameForm'
 import { PassphraseForm } from '../PassphraseForm/PassphraseForm'
 import { ServerConnect } from '../ServerConnect/ServerConnect'
@@ -15,7 +16,6 @@ interface ProfileFlowProps {
 
 export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
   const [profile, setProfile] = useState<Profile | undefined>(undefined)
-  // const { mutate: saveProfile } = useSetHash<Profile>(`profiles-${profile?.slug}`)
   const [step, setStep] = useState(0)
   const { data: connectDetails } = useGetConnectDetails(profile?.slug)
   const updateProfile = useCallback(
@@ -23,6 +23,7 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
       setProfile((prevProfile) => ({ ...prevProfile, ...nextProfile }) as Profile),
     [],
   )
+  const { mutate: saveProfile } = usePutProfile(profile?.slug, connectDetails?.serverRoot)
 
   const isValid = () => {
     if (step === 0) {
@@ -69,11 +70,10 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
   useEffect(() => {
     if (allStepsComplete) {
       if (profile) {
-        //saveProfile(profile)
-        console.log('Profile to save:', profile)
+        saveProfile(profile)
       }
     }
-  }, [allStepsComplete, profile])
+  }, [allStepsComplete, profile, saveProfile])
 
   return (
     <Stack gap={6}>

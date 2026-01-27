@@ -7,13 +7,13 @@ import { createProfileKey } from './key'
 export default function deleteProfile(redis: RedisClient) {
   return async (req: Request, res: Response) => {
     try {
-      const id = typeof req.params.id === 'string' ? req.params.id : undefined
+      const slug = typeof req.params.slug === 'string' ? req.params.slug : undefined
 
-      if (!id) {
-        return res.status(400).json({ error: "Missing required route param ':id'" })
+      if (!slug) {
+        return res.status(400).json({ error: "Missing required route param ':slug'" })
       }
 
-      const key = createProfileKey(id)
+      const key = createProfileKey(slug)
       const deleted = await redis.del(key)
 
       if (deleted === 0) {
