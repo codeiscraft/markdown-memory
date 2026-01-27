@@ -9,24 +9,23 @@ export interface ServerStatusProps {
   profileSlug?: string
 }
 
-export function ServerStatus({ profileSlug }: ServerStatusProps) {
+export function ServerStatus() {
   const { isPending: setPending, mutate: setConnectDetails } = useSetConnectDetails()
   const { data: connectDetails } = useGetConnectDetails()
-  const result = useServerIdentity(profileSlug, connectDetails)
+  const result = useServerIdentity(connectDetails)
   const { data: identity, isFetching, isSuccess: identitySuccess } = result
 
   useEffect(() => {
     if (!identitySuccess || !identity) return
     if (connectDetails?.lastConnected) return
     if (!connectDetails?.serverRoot) return
-    if (!profileSlug) return
     if (setPending) return
 
     setConnectDetails({
       ...connectDetails,
       lastConnected: new Date().toISOString(),
     })
-  }, [identitySuccess, identity, connectDetails, setPending, setConnectDetails, profileSlug])
+  }, [identitySuccess, identity, connectDetails, setPending, setConnectDetails])
 
   const icon = getIcon(result)
   const color = getColor(result)

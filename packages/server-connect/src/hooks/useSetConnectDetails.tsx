@@ -1,12 +1,13 @@
 import { fetchLocal } from '@mdm/utils'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { connectDetailsQueryKey, connectDetailsStorageKey } from '../server'
 import { ConnectDetails } from '../types'
 
 export function useSetConnectDetails() {
   const queryClient = useQueryClient()
-  const key = ['connectDetails']
-  const storageKey = 'mdm.connectDetails'
+  const key = connectDetailsQueryKey
+  const storageKey = connectDetailsStorageKey
 
   return useMutation({
     mutationFn: async (connect: ConnectDetails) =>

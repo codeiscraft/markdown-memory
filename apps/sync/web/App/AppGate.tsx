@@ -13,5 +13,7 @@ export function AppGate() {
     return <Navigate replace to="/connect" />
   }
 
+  console.log('AppGate: connected to server at', connectDetails.serverRoot)
+
   return <Outlet />
 }
