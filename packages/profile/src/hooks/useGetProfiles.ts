@@ -1,4 +1,4 @@
-import { ConnectDetails } from '@mdm/server-status'
+import { ConnectDetails } from '@mdm/server-connect'
 import { fetchTyped } from '@mdm/utils'
 import { useQuery } from '@tanstack/react-query'
 

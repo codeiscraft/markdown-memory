@@ -1,6 +1,6 @@
 import { UseQueryResult } from '@tanstack/react-query'
 
-import { ServerIdentity } from '../useServerIdentity/useServerIdentity'
+import { ServerIdentity } from '../hooks/useServerIdentity'
 
 export const getIcon = ({ isError, isSuccess }: UseQueryResult<ServerIdentity, Error>) => {
   if (isSuccess) {

@@ -2,9 +2,7 @@ import { Em, HoverCard, IconButton, Portal, Stack, Strong, Text } from '@chakra-
 import { Icon } from '@mdm/components'
 import { useEffect } from 'react'
 
-import { useGetConnectDetails } from '../useGetConnectDetails/useGetConnectDetails'
-import { useServerIdentity } from '../useServerIdentity/useServerIdentity'
-import { useSetConnectDetails } from '../useSetConnectDetails/useSetConnectDetails'
+import { useGetConnectDetails, useServerIdentity, useSetConnectDetails } from '../hooks'
 import { getColor, getIcon } from './ServerStatus.util'
 
 export interface ServerStatusProps {
@@ -12,8 +10,8 @@ export interface ServerStatusProps {
 }
 
 export function ServerStatus({ profileSlug }: ServerStatusProps) {
-  const { isPending: setPending, mutate: setConnectDetails } = useSetConnectDetails(profileSlug)
-  const { data: connectDetails } = useGetConnectDetails(profileSlug)
+  const { isPending: setPending, mutate: setConnectDetails } = useSetConnectDetails()
+  const { data: connectDetails } = useGetConnectDetails()
   const result = useServerIdentity(profileSlug, connectDetails)
   const { data: identity, isFetching, isSuccess: identitySuccess } = result
 

@@ -1,14 +1,13 @@
 import { Button, ButtonGroup, Heading, Stack, Steps } from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
-import { useGetConnectDetails } from '@mdm/server-status'
+import { useGetConnectDetails } from '@mdm/server-connect'
 import { useCallback, useEffect, useState } from 'react'
 
 import { usePutProfile } from '../hooks/usePutProfile'
-import { NameForm } from '../NameForm/NameForm'
-import { PassphraseForm } from '../PassphraseForm/PassphraseForm'
-import { ServerConnect } from '../ServerConnect/ServerConnect'
-import { SourceForm } from '../SourceForm/SourceForm'
 import { Profile, Source, SourceDirectoryDetails } from '../types'
+import { NameForm } from './NameForm'
+import { PassphraseForm } from './PassphraseForm'
+import { SourceForm } from './SourceForm'
 
 interface ProfileFlowProps {
   verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
@@ -17,7 +16,7 @@ interface ProfileFlowProps {
 export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
   const [profile, setProfile] = useState<Profile | undefined>(undefined)
   const [step, setStep] = useState(0)
-  const { data: connectDetails } = useGetConnectDetails(profile?.slug)
+  const { data: connectDetails } = useGetConnectDetails()
   const updateProfile = useCallback(
     (nextProfile: Partial<Profile>) =>
       setProfile((prevProfile) => ({ ...prevProfile, ...nextProfile }) as Profile),
@@ -30,12 +29,9 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
       return profile && profile.name.length > 0
     }
     if (step === 1) {
-      return Boolean(connectDetails?.serverRoot && connectDetails.lastConnected)
-    }
-    if (step === 2) {
       return Boolean(profile?.source && profile?.sourceDirectory)
     }
-    if (step === 3) {
+    if (step === 2) {
       return Boolean(profile?.encryptionProfile)
     }
     return true
@@ -46,11 +42,6 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
       content: <NameForm updateProfile={updateProfile} />,
       icon: 'FolderPen',
       title: 'name',
-    },
-    {
-      content: <ServerConnect profile={profile} />,
-      icon: 'Server',
-      title: 'connect',
     },
     {
       content: (
