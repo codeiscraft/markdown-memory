@@ -1,6 +1,6 @@
 {
   "extends": "@mdm/typescript-config/react.json",
-  "include": ["src"],
+  "include": ["src", "../server-connect/ServerConnect"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "rootDir": "src",

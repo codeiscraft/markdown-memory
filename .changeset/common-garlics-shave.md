@@ -1,7 +1,7 @@
 ---
 '@mdm/typescript-config': patch
 '@mdm/testing-support': patch
-'@mdm/server-status': patch
+'@mdm/server-connect': patch
 '@mdm/components': patch
 '@mdm/profile': patch
 '@mdm/cache': patch

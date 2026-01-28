@@ -1,32 +1,31 @@
 import { ChakraProvider } from '@chakra-ui/react'
 import { system } from '@mdm/components/theme'
-import { ProfileFlow, Source } from '@mdm/profile'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Route, HashRouter as Router, Routes } from 'react-router-dom'
 
-import { getElectronApi } from '../../src/electron'
-import { Sync } from '../Sync/Sync'
+import { AppGate } from './AppGate'
+import { Connect } from './Connect'
+import { NewProfile } from './NewProfile'
+import { Start } from './Start'
 
 const queryClient = new QueryClient()
+const enableDevTools = false
 
 function App() {
-  const verifyDirectoryExists = (source: Source, directoryPath: string) =>
-    getElectronApi().verifyDirectoryExists(source, directoryPath)
-
   return (
     <ChakraProvider value={system}>
       <QueryClientProvider client={queryClient}>
         <Router>
           <Routes>
-            <Route element={<Sync />} path="/" />
-            <Route
-              element={<ProfileFlow verifyDirectoryExists={verifyDirectoryExists} />}
-              path="/new"
-            />
+            <Route element={<AppGate />}>
+              <Route element={<Start />} path="/" />
+              <Route element={<NewProfile />} path="/new" />
+            </Route>
+            <Route element={<Connect />} path="/connect" />
           </Routes>
         </Router>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {enableDevTools && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
     </ChakraProvider>
   )

@@ -5,7 +5,7 @@ module.exports = {
   moduleNameMapper: {
     '^@mdm/cache$': require.resolve('@mdm/cache/mocks'),
     '^@mdm/components$': require.resolve('@mdm/components/mocks'),
-    '^@mdm/server-status$': require.resolve('@mdm/server-status/mocks'),
+    '^@mdm/server-connect$': require.resolve('@mdm/server-connect/mocks'),
     '^@mdm/sync-bear/backend$': require.resolve('@mdm/sync-bear/mocks'),
     '^@mdm/sync-bear/components$': require.resolve('@mdm/sync-bear/mocks'),
     '^@mdm/sync-bear/constants$': require.resolve('@mdm/sync-bear/mocks'),

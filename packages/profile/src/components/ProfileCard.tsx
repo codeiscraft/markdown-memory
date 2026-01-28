@@ -1,0 +1,66 @@
+import { Card, Heading, IconButton, Link, Skeleton, Spacer, Stack } from '@chakra-ui/react'
+import { Icon } from '@mdm/components'
+import { useEffect, useState } from 'react'
+
+import { useDeleteProfile } from '../hooks/useDeleteProfile'
+import { useGetProfile } from '../hooks/useGetProfile'
+import { Source, SourceDirectoryDetails } from '../types'
+import { SourceDetails } from './SourceDetails'
+
+export interface ProfileCardProps {
+  profileId: string
+  verifySourceDirectory: (source: Source, path: string) => Promise<SourceDirectoryDetails>
+}
+
+export function ProfileCard({ profileId, verifySourceDirectory }: ProfileCardProps) {
+  const { data: profile, isPending } = useGetProfile(profileId)
+  const { isPending: isDeleting, mutate: deleteProfile } = useDeleteProfile(profileId)
+  const [sourceDetails, setSourceDetails] = useState<null | SourceDirectoryDetails>(null)
+
+  useEffect(() => {
+    const fetchSourceDetails = async () => {
+      if (profile && profile.source && profile.sourceDirectory) {
+        const details = await verifySourceDirectory(profile.source, profile.sourceDirectory)
+        setSourceDetails(details)
+      }
+    }
+    fetchSourceDetails()
+  }, [profile, verifySourceDirectory])
+
+  if (isPending) {
+    return <Skeleton height="150px" />
+  }
+
+  const { name, slug, source } = profile!
+
+  if (!slug || !source || !sourceDetails) {
+    return null
+  }
+
+  return (
+    <Card.Root size="sm" variant="outline">
+      <Card.Header pt={1}>
+        <Stack align="center" direction="row">
+          <Heading size="sm">
+            <Link href={`#/profiles/${slug}`}>{name}</Link>
+          </Heading>
+
+          <Spacer />
+
+          <IconButton
+            aria-label="delete profile"
+            loading={isDeleting}
+            onClick={() => deleteProfile()}
+            size="sm"
+            variant="ghost"
+          >
+            <Icon name="Trash" />
+          </IconButton>
+        </Stack>
+      </Card.Header>
+      <Card.Body color="fg.muted" fontSize="sm">
+        <SourceDetails source={source} sourceDetails={sourceDetails} />
+      </Card.Body>
+    </Card.Root>
+  )
+}

@@ -1,7 +1,5 @@
 # markdown memory
 
-[![codecov](https://codecov.io/github/codeiscraft/markdown-memory/graph/badge.svg?token=E7OV36PKFR)](https://codecov.io/github/codeiscraft/markdown-memory)
-
 `markdown memory` is not _yet another_ application for writing in markdown.
 
 Rather, it's an application that acknowledges that the act of _review_ and _reflection_ on your markdown is different than the act of writing.
