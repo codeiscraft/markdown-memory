@@ -1,4 +1,4 @@
-import { Box, Box, Field, Input, SegmentGroup, Stack } from '@chakra-ui/react'
+import { Box, Field, Input, SegmentGroup, Stack } from '@chakra-ui/react'
 import { BEAR_ROOT, BEAR_SOURCE_LABEL } from '@mdm/sync-bear/constants'
 import { FormEvent, useState } from 'react'
 

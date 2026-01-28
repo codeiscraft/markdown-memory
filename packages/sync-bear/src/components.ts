@@ -1,1 +1,1 @@
-export * from './BearSourceDir/BearSourceDir'
+export * from './components/BearSourceDir'
