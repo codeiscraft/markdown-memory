@@ -20,7 +20,12 @@ export function SourceDetails({ source, sourceDetails }: SourceDetailsProps) {
   }
 
   if (source === 'bear' && sourceDetails.bearDetails) {
-    return <BearSourceDir bearDetails={sourceDetails.bearDetails} />
+    return (
+      <BearSourceDir
+        bearDetails={sourceDetails.bearDetails}
+        sourceDirectory={sourceDetails.sourcePath}
+      />
+    )
   }
 
   return (

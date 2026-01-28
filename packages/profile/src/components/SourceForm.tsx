@@ -1,4 +1,4 @@
-import { Field, Input, SegmentGroup, Stack } from '@chakra-ui/react'
+import { Box, Box, Field, Input, SegmentGroup, Stack } from '@chakra-ui/react'
 import { BEAR_ROOT, BEAR_SOURCE_LABEL } from '@mdm/sync-bear/constants'
 import { FormEvent, useState } from 'react'
 
@@ -69,7 +69,9 @@ export function SourceForm({ updateProfile, verifyDirectoryExists }: SourceFormP
           value={directory}
         />
         {source && directoryDetails && (
-          <SourceDetails source={source} sourceDetails={directoryDetails} />
+          <Box border="1px solid" borderColor="gray.200" borderRadius="md" gap={4} p={4} w="full">
+            <SourceDetails source={source} sourceDetails={directoryDetails} />
+          </Box>
         )}
       </Field.Root>
     </Stack>

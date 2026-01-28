@@ -1,14 +1,22 @@
-import { ConnectDetails } from '@mdm/server-connect'
+import { useGetConnectDetails } from '@mdm/server-connect'
 import { fetchTyped } from '@mdm/utils'
 import { useQuery } from '@tanstack/react-query'
 
-export function useGetProfiles(serverRoot?: string) {
-  const queryKey = ['profiles', serverRoot ?? '']
-  const url = `${serverRoot}/api/profiles`
+import { apiUrl, profileKey } from './util'
+
+export interface ProfilesResponse {
+  ids: string[]
+}
+
+export function useGetProfiles() {
+  const { data: connectDetails } = useGetConnectDetails()
+  const serverRoot = connectDetails?.serverRoot
+  const queryKey = profileKey(serverRoot)
+  const url = apiUrl(serverRoot!)
 
   return useQuery({
     enabled: !!serverRoot,
-    queryFn: () => fetchTyped<ConnectDetails>(url),
+    queryFn: () => fetchTyped<ProfilesResponse>(url),
     queryKey,
   })
 }

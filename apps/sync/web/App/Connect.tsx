@@ -6,10 +6,7 @@ import { Header } from './Header'
 
 export function Connect() {
   const navigate = useNavigate()
-  const connectSuccess = () => {
-    console.log('Connect: connection successful, navigating to /')
-    navigate('/')
-  }
+  const connectSuccess = () => navigate('/')
   return (
     <Flex direction="column" minH="100vh">
       <Header />

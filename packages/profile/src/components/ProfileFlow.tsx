@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Heading, Stack, Steps } from '@chakra-ui/react'
+import { Button, ButtonGroup, Heading, Link, Stack, Steps, Strong, Text } from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
 import { useGetConnectDetails } from '@mdm/server-connect'
 import { useCallback, useEffect, useState } from 'react'
@@ -89,7 +89,14 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
             {step.content}
           </Steps.Content>
         ))}
-        <Steps.CompletedContent>All steps are complete!</Steps.CompletedContent>
+        <Steps.CompletedContent>
+          <Stack>
+            <Text>
+              profile <Strong>{profile?.name}</Strong> added successfully!
+            </Text>
+            <Link href="/start">view all your profiles on the dashboard</Link>
+          </Stack>
+        </Steps.CompletedContent>
         <ButtonGroup display="flex" w="full">
           <Steps.PrevTrigger asChild>
             <Button flex="1">prev</Button>

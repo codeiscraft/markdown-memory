@@ -5,15 +5,24 @@ import { BearSourceDetails } from '../types'
 
 export interface BearSourceDirProps {
   bearDetails: BearSourceDetails
+  sourceDirectory: string
 }
 
-export function BearSourceDir({ bearDetails }: BearSourceDirProps) {
+export function BearSourceDir({ bearDetails, sourceDirectory }: BearSourceDirProps) {
   const { database, files, images } = bearDetails
   return (
-    <Stack border="1px solid" borderColor="gray.200" borderRadius="md" gap={4} p={4} w="full">
+    <Stack w="full">
+      <Stack alignItems="center" direction="row" gap={2}>
+        <Icon color="green.600" name="FolderRoot" size="sm" />
+        <Strong textStyle="xs">source: bear</Strong>
+      </Stack>
+      <Stack alignItems="center" direction="row" gap={2}>
+        <Icon color="green.600" name="FolderOpen" size="sm" />
+        <Strong textStyle="xs">{sourceDirectory}</Strong>
+      </Stack>
       <Stack alignItems="center" direction="row" gap={2}>
         <Icon color="green.600" name="FolderCheck" size="sm" />
-        <Strong textStyle="xs">source directory valid</Strong>
+        <Strong textStyle="xs">valid directory with read permissions</Strong>
       </Stack>
       <Separator />
       <Stack alignItems="center" direction="row" gap={2}>

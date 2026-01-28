@@ -1,36 +1,34 @@
-import { Button, Card, Heading, Link, Stack, Strong } from '@chakra-ui/react'
+import { Heading, Stack } from '@chakra-ui/react'
+
+import { CenteredSpinner } from '../../../components/dist/CenteredSpinner/CenteredSpinner'
+import { useGetProfiles } from '../hooks'
+import { Source, SourceDirectoryDetails } from '../types'
+import { NewProfileCard } from './NewProfileCard'
+import { ProfileCard } from './ProfileCard'
 
 export interface ProfileListProps {
   createProfile: () => void
+  verifySourceDirectory: (source: Source, path: string) => Promise<SourceDirectoryDetails>
 }
 
-export function ProfileList({ createProfile }: ProfileListProps) {
+export function ProfileList({ createProfile, verifySourceDirectory }: ProfileListProps) {
+  const { data: profiles, isPending } = useGetProfiles()
+
+  if (isPending) {
+    return <CenteredSpinner />
+  }
+
   return (
     <Stack>
-      <Heading size="sm">select profile</Heading>
-      <Card.Root size="sm" variant="subtle">
-        <Card.Header>
-          <Heading size="sm">add new profile</Heading>
-        </Card.Header>
-        <Card.Body color="fg.muted" fontSize="sm">
-          create a secure connection to a markdown memory server and define which sets of markdown
-          notes which will be synced
-        </Card.Body>
-        <Card.Footer>
-          <Stack direction="row" justify="flex-end" width="100%">
-            <Button
-              as={Link}
-              onClick={() => {
-                createProfile()
-              }}
-              size="sm"
-              variant="plain"
-            >
-              <Strong>get started</Strong>
-            </Button>
-          </Stack>
-        </Card.Footer>
-      </Card.Root>
+      <Heading size="sm">profiles</Heading>
+      {profiles?.ids.map((profileId: string) => (
+        <ProfileCard
+          key={profileId}
+          profileId={profileId}
+          verifySourceDirectory={verifySourceDirectory}
+        />
+      ))}
+      <NewProfileCard createProfile={createProfile} />
     </Stack>
   )
 }
