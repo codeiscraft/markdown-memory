@@ -36,6 +36,7 @@ export function PassphraseForm({ updateProfile }: PassphraseFormProps) {
       <Field.Root required>
         <Field.Label>passphrase</Field.Label>
         <PasswordInput
+          autoFocus
           onChange={updatePassphrase}
           placeholder="use a passphrase that is easy to remember but hard to guess."
           value={passphrase}

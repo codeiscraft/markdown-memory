@@ -62,7 +62,11 @@ export function SourceForm({ updateProfile, verifyDirectoryExists }: SourceFormP
     <Stack as="form" onSubmit={handleSubmit}>
       <Field.Root required>
         <Field.Label>markdown source</Field.Label>
-        <SegmentGroup.Root onValueChange={(e) => updateSource(e.value as Source)} value={source}>
+        <SegmentGroup.Root
+          autoFocus
+          onValueChange={(e) => updateSource(e.value as Source)}
+          value={source}
+        >
           <SegmentGroup.Indicator />
           <SegmentGroup.Items items={sources} />
         </SegmentGroup.Root>
