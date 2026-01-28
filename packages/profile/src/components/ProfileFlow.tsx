@@ -84,11 +84,9 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
             </Steps.Item>
           ))}
         </Steps.List>
-        {steps.map((step, index) => (
-          <Steps.Content index={index} key={index}>
-            {step.content}
-          </Steps.Content>
-        ))}
+        <Steps.Content index={step} key={step}>
+          {steps[step] ? steps[step].content : null}
+        </Steps.Content>
         <Steps.CompletedContent>
           <Stack>
             <Text>

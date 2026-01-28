@@ -1,6 +1,6 @@
 import { Box, Field, Input, SegmentGroup, Stack } from '@chakra-ui/react'
 import { BEAR_ROOT, BEAR_SOURCE_LABEL } from '@mdm/sync-bear/constants'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 
 import { sources } from '../sources'
 import { Profile, Source, SourceDirectoryDetails } from '../types'
@@ -21,6 +21,7 @@ export function SourceForm({ updateProfile, verifyDirectoryExists }: SourceFormP
   const [source, setSource] = useState<null | Source>()
   const [directory, setDirectory] = useState('')
   const [directoryDetails, setDirectoryDetails] = useState<null | SourceDirectoryDetails>(null)
+  const [status, setStatus] = useState<'idle' | 'invalid' | 'valid' | 'verifying'>('idle')
 
   const updateSource = (nextSource: null | Source) => {
     setSource(nextSource)
@@ -29,26 +30,31 @@ export function SourceForm({ updateProfile, verifyDirectoryExists }: SourceFormP
     }
   }
 
-  const verifyDirectory = async () => {
-    if (!verifyDirectoryExists || !directory || !source) {
-      setDirectoryDetails(null)
-      return
+  useEffect(() => {
+    if (!source || !directory) return
+
+    const verify = async () => {
+      try {
+        setStatus('verifying')
+        const details = await verifyDirectoryExists(source, directory)
+        setStatus('valid')
+        setDirectoryDetails(details)
+      } catch {
+        setStatus('invalid')
+        setDirectoryDetails(null)
+      }
     }
 
-    try {
-      const details = await verifyDirectoryExists(source, directory)
-      setDirectoryDetails(details)
-      updateProfile({
-        source,
-        sourceDirectory: details.sourcePath,
-      })
-    } catch {
-      setDirectoryDetails({
-        isValid: false,
-        sourcePath: directory,
-      })
+    const timeoutId = setTimeout(() => verify(), 500)
+
+    return () => clearTimeout(timeoutId)
+  }, [source, directory, verifyDirectoryExists])
+
+  useEffect(() => {
+    if (source && directory && directoryDetails && directoryDetails.isValid) {
+      updateProfile({ source, sourceDirectory: directory })
     }
-  }
+  }, [directoryDetails, updateProfile, source, directory])
 
   const handleSubmit = (event: FormEvent) => event.preventDefault()
 
@@ -64,7 +70,7 @@ export function SourceForm({ updateProfile, verifyDirectoryExists }: SourceFormP
       <Field.Root invalid={directoryDetails?.isValid === false} required>
         <Field.Label>{getDirLabel(source)}</Field.Label>
         <Input
-          onBlur={verifyDirectory}
+          disabled={status === 'verifying'}
           onChange={(e) => setDirectory(e.target.value)}
           value={directory}
         />
