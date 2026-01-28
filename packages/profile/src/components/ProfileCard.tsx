@@ -1,4 +1,4 @@
-import { Card, Heading, IconButton, Skeleton, Stack } from '@chakra-ui/react'
+import { Card, Heading, IconButton, Link, Skeleton, Spacer, Stack } from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
 import { useEffect, useState } from 'react'
 
@@ -39,14 +39,14 @@ export function ProfileCard({ profileId, verifySourceDirectory }: ProfileCardPro
 
   return (
     <Card.Root size="sm" variant="outline">
-      <Card.Header>
-        <Heading size="sm">{name}</Heading>
-      </Card.Header>
-      <Card.Body color="fg.muted" fontSize="sm">
-        <SourceDetails source={source} sourceDetails={sourceDetails} />
-      </Card.Body>
-      <Card.Footer>
-        <Stack direction="row" justify="flex-end" width="100%">
+      <Card.Header pt={1}>
+        <Stack align="center" direction="row">
+          <Heading size="sm">
+            <Link href={`#/profiles/${slug}`}>{name}</Link>
+          </Heading>
+
+          <Spacer />
+
           <IconButton
             aria-label="delete profile"
             loading={isDeleting}
@@ -57,7 +57,10 @@ export function ProfileCard({ profileId, verifySourceDirectory }: ProfileCardPro
             <Icon name="Trash" />
           </IconButton>
         </Stack>
-      </Card.Footer>
+      </Card.Header>
+      <Card.Body color="fg.muted" fontSize="sm">
+        <SourceDetails source={source} sourceDetails={sourceDetails} />
+      </Card.Body>
     </Card.Root>
   )
 }

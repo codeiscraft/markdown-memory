@@ -89,10 +89,12 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
         </Steps.Content>
         <Steps.CompletedContent>
           <Stack>
-            <Text>
+            <Text textStyle="sm">
               profile <Strong>{profile?.name}</Strong> added successfully!
             </Text>
-            <Link href="/start">view all your profiles on the dashboard</Link>
+            <Link href="/start" textStyle="sm">
+              view all your profiles on the dashboard
+            </Link>
           </Stack>
         </Steps.CompletedContent>
         <ButtonGroup display="flex" w="full">
