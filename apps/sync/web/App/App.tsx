@@ -10,7 +10,7 @@ import { NewProfile } from './NewProfile'
 import { Start } from './Start'
 
 const queryClient = new QueryClient()
-const enableDevTools = true
+const enableDevTools = false
 
 function App() {
   return (
