@@ -1,11 +1,25 @@
-import { Card, Heading, IconButton, Link, Skeleton, Spacer, Stack } from '@chakra-ui/react'
+import {
+  Accordion,
+  Box,
+  Card,
+  Collapsible,
+  Heading,
+  IconButton,
+  Link,
+  Skeleton,
+  Spacer,
+  Span,
+  Stack,
+  Strong,
+  Text,
+} from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
 import { useEffect, useState } from 'react'
 
 import { useDeleteProfile } from '../hooks/useDeleteProfile'
 import { useGetProfile } from '../hooks/useGetProfile'
 import { Source, SourceDirectoryDetails } from '../types'
-import { SourceDetails } from './SourceDetails'
+import { SourceDetails, SourceDetails } from './SourceDetails'
 
 export interface ProfileCardProps {
   profileId: string
@@ -59,7 +73,19 @@ export function ProfileCard({ profileId, verifySourceDirectory }: ProfileCardPro
         </Stack>
       </Card.Header>
       <Card.Body color="fg.muted" fontSize="sm">
-        <SourceDetails source={source} sourceDetails={sourceDetails} />
+        <Collapsible.Root>
+          <Collapsible.Trigger>
+            <Stack align="center" cursor="pointer" direction="row">
+              <Icon name="FolderCheck" size="sm" />
+              <Strong textStyle="sm">source details</Strong>
+            </Stack>
+          </Collapsible.Trigger>
+          <Collapsible.Content>
+            <Box borderRadius="md" borderWidth="1px" color="fg.muted" mt="2" p="4">
+              <SourceDetails source={source} sourceDetails={sourceDetails} />
+            </Box>
+          </Collapsible.Content>
+        </Collapsible.Root>
       </Card.Body>
     </Card.Root>
   )

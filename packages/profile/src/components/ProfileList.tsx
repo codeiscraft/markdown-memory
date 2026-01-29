@@ -1,4 +1,5 @@
-import { Heading, Stack } from '@chakra-ui/react'
+import { Heading, IconButton, Stack } from '@chakra-ui/react'
+import { Icon } from '@mdm/components'
 
 import { CenteredSpinner } from '../../../components/dist/CenteredSpinner/CenteredSpinner'
 import { useGetProfiles } from '../hooks'
@@ -28,7 +29,9 @@ export function ProfileList({ createProfile, verifySourceDirectory }: ProfileLis
           verifySourceDirectory={verifySourceDirectory}
         />
       ))}
-      <NewProfileCard createProfile={createProfile} />
+      <IconButton aria-label="Add Profile" onClick={createProfile} size="sm" variant="subtle">
+        <Icon name="Plus" />
+      </IconButton>
     </Stack>
   )
 }
