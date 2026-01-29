@@ -4,7 +4,6 @@ import { Icon } from '@mdm/components'
 import { CenteredSpinner } from '../../../components/dist/CenteredSpinner/CenteredSpinner'
 import { useGetProfiles } from '../hooks'
 import { Source, SourceDirectoryDetails } from '../types'
-import { NewProfileCard } from './NewProfileCard'
 import { ProfileCard } from './ProfileCard'
 
 export interface ProfileListProps {

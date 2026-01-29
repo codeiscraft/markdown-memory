@@ -1,4 +1,16 @@
-import { Button, ButtonGroup, Heading, Link, Stack, Steps, Strong, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Heading,
+  IconButton,
+  Spacer,
+  Stack,
+  Steps,
+  Steps,
+  Strong,
+  Text,
+} from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
 import { useGetConnectDetails } from '@mdm/server-connect'
 import { useCallback, useEffect, useState } from 'react'
@@ -7,13 +19,16 @@ import { usePutProfile } from '../hooks/usePutProfile'
 import { Profile, Source, SourceDirectoryDetails } from '../types'
 import { NameForm } from './NameForm'
 import { PassphraseForm } from './PassphraseForm'
+import { ProfileAbout } from './ProfileAbout'
 import { SourceForm } from './SourceForm'
 
 interface ProfileFlowProps {
+  cancelFlow?: () => void
+  completeFlow?: (profileSlug: string) => void
   verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
 }
 
-export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
+export function ProfileFlow({ cancelFlow, completeFlow, verifyDirectoryExists }: ProfileFlowProps) {
   const [profile, setProfile] = useState<Profile | undefined>(undefined)
   const [step, setStep] = useState(0)
   const { data: connectDetails } = useGetConnectDetails()
@@ -67,8 +82,15 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
   }, [allStepsComplete, profile, saveProfile])
 
   return (
-    <Stack gap={6}>
-      <Heading size="sm">add profile</Heading>
+    <Stack>
+      <Stack direction="row">
+        <Heading size="sm">add a profile</Heading>
+        <Spacer />
+        <IconButton aria-label="close profile flow" onClick={cancelFlow} variant="ghost">
+          <Icon name="X" size="lg" />
+        </IconButton>
+      </Stack>
+      <ProfileAbout />
       <Steps.Root count={steps.length} onStepChange={(e) => setStep(e.step)} size="sm" step={step}>
         <Steps.List>
           {steps.map((step, index) => (
@@ -89,24 +111,33 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
         </Steps.Content>
         <Steps.CompletedContent>
           <Stack>
-            <Text textStyle="sm">
+            <Text textAlign="center" textStyle="sm">
               profile <Strong>{profile?.name}</Strong> added successfully!
             </Text>
-            <Link href="/start" textStyle="sm">
-              view all your profiles on the dashboard
-            </Link>
+            <Button
+              onClick={() => {
+                if (profile?.slug) {
+                  completeFlow?.(profile.slug)
+                }
+              }}
+              type="button"
+            >
+              view profile
+            </Button>
           </Stack>
         </Steps.CompletedContent>
-        <ButtonGroup display="flex" w="full">
-          <Steps.PrevTrigger asChild>
-            <Button flex="1">prev</Button>
-          </Steps.PrevTrigger>
-          <Steps.NextTrigger asChild>
-            <Button disabled={!isValid() || allStepsComplete} flex="1">
-              next
-            </Button>
-          </Steps.NextTrigger>
-        </ButtonGroup>
+        {!allStepsComplete && (
+          <ButtonGroup display="flex" w="full">
+            <Steps.PrevTrigger asChild>
+              <Button flex="1">prev</Button>
+            </Steps.PrevTrigger>
+            <Steps.NextTrigger asChild>
+              <Button disabled={!isValid() || allStepsComplete} flex="1">
+                next
+              </Button>
+            </Steps.NextTrigger>
+          </ButtonGroup>
+        )}
       </Steps.Root>
     </Stack>
   )

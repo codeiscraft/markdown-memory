@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { getElectronApi } from '../../src/electron'
 import { Header } from './Header'
 
-export function Start() {
+export function Dashboard() {
   const navigate = useNavigate()
   const verifySourceDirectory = (source: Source, directoryPath: string) =>
     getElectronApi().verifyDirectoryExists(source, directoryPath)
@@ -15,7 +15,7 @@ export function Start() {
       <Header />
       <Box flex="1" p={4}>
         <ProfileList
-          createProfile={() => navigate('/new')}
+          createProfile={() => navigate('/profiles/new')}
           verifySourceDirectory={verifySourceDirectory}
         />
       </Box>

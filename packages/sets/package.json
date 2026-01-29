@@ -10,10 +10,7 @@
   },
   "exports": {
     "./types": "./dist/types.js",
-    "./constants": "./dist/constants.js",
-    "./components": "./dist/components.js",
-    "./backend": "./dist/backend.js",
-    "./mocks": "./src/mocks.cjs"
+    "./components": "./dist/components.js"
   },
   "type": "module",
   "dependencies": {

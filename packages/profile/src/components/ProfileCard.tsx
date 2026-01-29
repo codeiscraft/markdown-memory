@@ -1,5 +1,4 @@
 import {
-  Accordion,
   Box,
   Card,
   Collapsible,
@@ -8,10 +7,8 @@ import {
   Link,
   Skeleton,
   Spacer,
-  Span,
   Stack,
   Strong,
-  Text,
 } from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
 import { useEffect, useState } from 'react'
@@ -19,7 +16,7 @@ import { useEffect, useState } from 'react'
 import { useDeleteProfile } from '../hooks/useDeleteProfile'
 import { useGetProfile } from '../hooks/useGetProfile'
 import { Source, SourceDirectoryDetails } from '../types'
-import { SourceDetails, SourceDetails } from './SourceDetails'
+import { SourceDetails } from './SourceDetails'
 
 export interface ProfileCardProps {
   profileId: string
@@ -58,9 +55,7 @@ export function ProfileCard({ profileId, verifySourceDirectory }: ProfileCardPro
           <Heading size="sm">
             <Link href={`#/profiles/${slug}`}>{name}</Link>
           </Heading>
-
           <Spacer />
-
           <IconButton
             aria-label="delete profile"
             loading={isDeleting}

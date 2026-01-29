@@ -22,6 +22,8 @@
     "@mdm/utils": "*",
     "@mdm/sync-bear": "*",
     "@mdm/server-connect": "*",
+    "@mdm/sets": "*",
+    "@mdm/components": "*",
     "@tanstack/react-query": "5.90.20",
     "react": "19.2.3"
   },

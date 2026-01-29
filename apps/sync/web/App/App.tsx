@@ -6,8 +6,10 @@ import { Route, HashRouter as Router, Routes } from 'react-router-dom'
 
 import { AppGate } from './AppGate'
 import { Connect } from './Connect'
-import { NewProfile } from './NewProfile'
-import { Start } from './Start'
+import { Dashboard } from './Dashboard'
+import { ProfileNew } from './ProfileNew'
+import { ProfileView } from './ProfileView'
+import { SetNew } from './SetNew'
 
 const queryClient = new QueryClient()
 const enableDevTools = false
@@ -19,8 +21,10 @@ function App() {
         <Router>
           <Routes>
             <Route element={<AppGate />}>
-              <Route element={<Start />} path="/" />
-              <Route element={<NewProfile />} path="/new" />
+              <Route element={<Dashboard />} path="/" />
+              <Route element={<ProfileNew />} path="/profiles/new" />
+              <Route element={<ProfileView />} path="/profiles/:profileSlug" />
+              <Route element={<SetNew />} path="/profiles/:profileSlug/sets/new" />
             </Route>
             <Route element={<Connect />} path="/connect" />
           </Routes>
