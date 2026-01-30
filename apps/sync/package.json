@@ -1,6 +1,6 @@
 {
   "name": "@mdm/sync",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "dist/electron/electron-main.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:vite\" \"npm run dev:electron:watch\" \"npm run dev:electron:run\"",
