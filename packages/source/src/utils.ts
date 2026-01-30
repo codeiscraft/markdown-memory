@@ -1,6 +1,6 @@
 import { BEAR_SOURCE_LABEL } from '@mdm/sync-bear/constants'
 
-import { Source, Source } from './types'
+import { Source } from './types'
 
 export const getDirLabel = (source: null | string | undefined) => {
   if (source === 'bear') return BEAR_SOURCE_LABEL

@@ -6,7 +6,6 @@ import { CenteredSpinner } from '@mdm/components'
 
 import { useGetProfiles } from '../hooks'
 import { ProfileCard } from './ProfileCard'
-///import { ProfileCard } from './ProfileCard'
 
 export interface ProfileListProps {
   createProfile: () => void
