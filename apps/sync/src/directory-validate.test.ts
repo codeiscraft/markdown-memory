@@ -2,7 +2,7 @@ import { validateBearSourcePath } from '@mdm/sync-bear/backend'
 import { asMock } from '@mdm/testing-support/mocks'
 import { isDirectoryWithReadAccess, resolveHomeDir } from '@mdm/utils/fs'
 
-import { validateSourcePath } from './directory-validate'
+import { gatherSourceDetails } from './directory-validate'
 
 const eventMock = {} as unknown as Electron.IpcMainInvokeEvent
 
@@ -11,14 +11,14 @@ describe('directory-validate', () => {
     asMock(resolveHomeDir).mockReturnValue('/some/path/resolved')
     asMock(isDirectoryWithReadAccess).mockResolvedValue(true)
 
-    const result = await validateSourcePath(eventMock, 'file', '/some/path')
+    const result = await gatherSourceDetails(eventMock, 'file', '/some/path')
 
     expect(resolveHomeDir).toHaveBeenCalledWith('/some/path')
     expect(isDirectoryWithReadAccess).toHaveBeenCalledWith('/some/path/resolved')
     expect(validateBearSourcePath).not.toHaveBeenCalled()
 
     expect(result).toEqual({
-      bearDetails: null,
+      bearDetails: undefined,
       isValid: true,
       sourcePath: '/some/path',
     })
@@ -28,14 +28,14 @@ describe('directory-validate', () => {
     asMock(resolveHomeDir).mockReturnValue('/some/path/resolved')
     asMock(isDirectoryWithReadAccess).mockResolvedValue(false)
 
-    const result = await validateSourcePath(eventMock, 'file', '/some/path')
+    const result = await gatherSourceDetails(eventMock, 'file', '/some/path')
 
     expect(resolveHomeDir).toHaveBeenCalledWith('/some/path')
     expect(isDirectoryWithReadAccess).toHaveBeenCalledWith('/some/path/resolved')
     expect(validateBearSourcePath).not.toHaveBeenCalled()
 
     expect(result).toEqual({
-      bearDetails: null,
+      bearDetails: undefined,
       isValid: false,
       sourcePath: '/some/path',
     })
@@ -45,7 +45,7 @@ describe('directory-validate', () => {
     asMock(resolveHomeDir).mockReturnValue('/some/path/resolved')
     asMock(isDirectoryWithReadAccess).mockResolvedValue(true)
 
-    await validateSourcePath(eventMock, 'bear', '/some/path')
+    await gatherSourceDetails(eventMock, 'bear', '/some/path')
 
     expect(validateBearSourcePath).toHaveBeenCalledWith('/some/path/resolved')
   })

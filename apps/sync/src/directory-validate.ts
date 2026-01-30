@@ -8,12 +8,13 @@ export async function gatherSourceDetails(
   sourceType: Source,
   sourcePath: string,
 ): Promise<SourceDetails> {
-  console.log('gatherSourceDetails', sourceType, sourcePath)
   const resolvedPath = resolveHomeDir(sourcePath)
   const isValid = await isDirectoryWithReadAccess(resolvedPath)
 
   const bearDetails =
-    isValid && sourceType === ('bear' as Source) ? await validateBearSourcePath(resolvedPath) : null
+    isValid && sourceType === ('bear' as Source)
+      ? await validateBearSourcePath(resolvedPath)
+      : undefined
 
   return {
     bearDetails,
