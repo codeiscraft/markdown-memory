@@ -21,7 +21,7 @@ export function useDeleteProfile(profileSlug?: string) {
     onSuccess: async () => {
       const clearProfile = profileKey(serverRoot, profileSlug)
       const clearProfiles = profileKey(serverRoot)
-      await queryClient.invalidateQueries({ queryKey: clearProfile })
+      queryClient.removeQueries({ queryKey: clearProfile })
       await queryClient.invalidateQueries({ queryKey: clearProfiles })
     },
   })

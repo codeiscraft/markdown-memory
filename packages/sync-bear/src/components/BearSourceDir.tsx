@@ -4,11 +4,15 @@ import { Icon } from '@mdm/components'
 import { BearSourceDetails } from '../types'
 
 export interface BearSourceDirProps {
-  bearDetails: BearSourceDetails
-  sourceDirectory: string
+  bearDetails?: BearSourceDetails
+  sourceDirectory?: string
 }
 
 export function BearSourceDir({ bearDetails, sourceDirectory }: BearSourceDirProps) {
+  if (!bearDetails || !sourceDirectory) {
+    return null
+  }
+
   const { database, files, images } = bearDetails
   return (
     <Stack w="full">

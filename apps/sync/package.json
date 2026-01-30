@@ -35,6 +35,7 @@
     "@mdm/sync-bear": "*",
     "@mdm/testing-support": "*",
     "@mdm/utils": "*",
+    "@mdm/source": "*",
     "@tanstack/react-query": "5.90.20",
     "@tanstack/react-query-devtools": "5.91.2",
     "lucide-react": "0.563.0",

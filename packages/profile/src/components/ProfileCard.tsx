@@ -1,39 +1,27 @@
 import { Card, Heading, IconButton, Link, Skeleton, Spacer, Stack } from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
-import { useEffect, useState } from 'react'
+import { SourceDetailsView } from '@mdm/source'
 
 import { useDeleteProfile } from '../hooks/useDeleteProfile'
 import { useGetProfile } from '../hooks/useGetProfile'
-import { Source, SourceDirectoryDetails } from '../types'
-import { SourceDetails } from './SourceDetails'
 
 export interface ProfileCardProps {
   profileId: string
-  verifySourceDirectory: (source: Source, path: string) => Promise<SourceDirectoryDetails>
 }
 
-export function ProfileCard({ profileId, verifySourceDirectory }: ProfileCardProps) {
+export function ProfileCard({ profileId }: ProfileCardProps) {
   const { data: profile, isPending } = useGetProfile(profileId)
   const { isPending: isDeleting, mutate: deleteProfile } = useDeleteProfile(profileId)
-  const [sourceDetails, setSourceDetails] = useState<null | SourceDirectoryDetails>(null)
 
-  useEffect(() => {
-    const fetchSourceDetails = async () => {
-      if (profile && profile.source && profile.sourceDirectory) {
-        const details = await verifySourceDirectory(profile.source, profile.sourceDirectory)
-        setSourceDetails(details)
-      }
-    }
-    fetchSourceDetails()
-  }, [profile, verifySourceDirectory])
+  const pending = isPending
 
-  if (isPending) {
-    return <Skeleton height="150px" />
+  if (pending) {
+    return <Skeleton height="100px" />
   }
 
   const { name, slug, source } = profile!
 
-  if (!slug || !source || !sourceDetails) {
+  if (!slug || !source) {
     return null
   }
 
@@ -44,9 +32,7 @@ export function ProfileCard({ profileId, verifySourceDirectory }: ProfileCardPro
           <Heading size="sm">
             <Link href={`#/profiles/${slug}`}>{name}</Link>
           </Heading>
-
           <Spacer />
-
           <IconButton
             aria-label="delete profile"
             loading={isDeleting}
@@ -59,7 +45,11 @@ export function ProfileCard({ profileId, verifySourceDirectory }: ProfileCardPro
         </Stack>
       </Card.Header>
       <Card.Body color="fg.muted" fontSize="sm">
-        <SourceDetails source={source} sourceDetails={sourceDetails} />
+        <SourceDetailsView
+          defaultOpen={false}
+          source={source}
+          sourceDirectory={profile?.sourceDirectory}
+        />
       </Card.Body>
     </Card.Root>
   )

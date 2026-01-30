@@ -1,19 +1,32 @@
-import { Button, ButtonGroup, Heading, Link, Stack, Steps, Strong, Text } from '@chakra-ui/react'
+import type { Source } from '@mdm/source/types'
+
+import {
+  Button,
+  ButtonGroup,
+  Heading,
+  IconButton,
+  Spacer,
+  Stack,
+  Steps,
+  Strong,
+  Text,
+} from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
 import { useGetConnectDetails } from '@mdm/server-connect'
 import { useCallback, useEffect, useState } from 'react'
 
 import { usePutProfile } from '../hooks/usePutProfile'
-import { Profile, Source, SourceDirectoryDetails } from '../types'
-import { NameForm } from './NameForm'
-import { PassphraseForm } from './PassphraseForm'
-import { SourceForm } from './SourceForm'
+import { Profile } from '../types'
+import { ProfileAbout } from './ProfileAbout'
+import { flowSteps } from './ProfileFlow.steps'
+import { isStepValid } from './ProfileFlow.util'
 
-interface ProfileFlowProps {
-  verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
+export interface ProfileFlowProps {
+  cancelFlow?: () => void
+  completeFlow?: (profileSlug: string) => void
 }
 
-export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
+export function ProfileFlow({ cancelFlow, completeFlow }: ProfileFlowProps) {
   const [profile, setProfile] = useState<Profile | undefined>(undefined)
   const [step, setStep] = useState(0)
   const { data: connectDetails } = useGetConnectDetails()
@@ -24,51 +37,40 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
   )
   const { mutate: saveProfile } = usePutProfile(profile?.slug, connectDetails?.serverRoot)
 
-  const isValid = () => {
-    if (step === 0) {
-      return profile && profile.name.length > 0
-    }
-    if (step === 1) {
-      return Boolean(profile?.source && profile?.sourceDirectory)
-    }
-    if (step === 2) {
-      return Boolean(profile?.encryptionProfile)
-    }
-    return true
-  }
+  const updateSource = useCallback((source: Source, sourceDirectory: string) => {
+    setProfile(
+      (prevProfile) =>
+        ({
+          ...prevProfile,
+          source,
+          sourceDirectory,
+        }) as Profile,
+    )
+  }, [])
 
-  const steps = [
-    {
-      content: <NameForm updateProfile={updateProfile} />,
-      icon: 'FolderPen',
-      title: 'name',
-    },
-    {
-      content: (
-        <SourceForm updateProfile={updateProfile} verifyDirectoryExists={verifyDirectoryExists} />
-      ),
-      icon: 'FolderOpen',
-      title: 'markdown',
-    },
-    {
-      content: <PassphraseForm profile={profile} updateProfile={updateProfile} />,
-      icon: 'Lock',
-      title: 'passphrase',
-    },
-  ]
-
+  const steps = flowSteps({
+    profile,
+    updateProfile,
+    updateSource,
+  })
   const allStepsComplete = step === steps.length
+
   useEffect(() => {
-    if (allStepsComplete) {
-      if (profile) {
-        saveProfile(profile)
-      }
+    if (allStepsComplete && profile) {
+      saveProfile(profile)
     }
   }, [allStepsComplete, profile, saveProfile])
 
   return (
-    <Stack gap={6}>
-      <Heading size="sm">add profile</Heading>
+    <Stack>
+      <Stack align="center" direction="row">
+        <Heading size="sm">add a profile</Heading>
+        <Spacer />
+        <IconButton aria-label="close profile flow" onClick={cancelFlow} size="xs" variant="ghost">
+          <Icon name="X" />
+        </IconButton>
+      </Stack>
+      {step === 0 && <ProfileAbout />}
       <Steps.Root count={steps.length} onStepChange={(e) => setStep(e.step)} size="sm" step={step}>
         <Steps.List>
           {steps.map((step, index) => (
@@ -89,24 +91,33 @@ export function ProfileFlow({ verifyDirectoryExists }: ProfileFlowProps) {
         </Steps.Content>
         <Steps.CompletedContent>
           <Stack>
-            <Text textStyle="sm">
+            <Text textAlign="center" textStyle="sm">
               profile <Strong>{profile?.name}</Strong> added successfully!
             </Text>
-            <Link href="/start" textStyle="sm">
-              view all your profiles on the dashboard
-            </Link>
+            <Button
+              onClick={() => {
+                if (profile?.slug) {
+                  completeFlow?.(profile.slug)
+                }
+              }}
+              type="button"
+            >
+              view profile
+            </Button>
           </Stack>
         </Steps.CompletedContent>
-        <ButtonGroup display="flex" w="full">
-          <Steps.PrevTrigger asChild>
-            <Button flex="1">prev</Button>
-          </Steps.PrevTrigger>
-          <Steps.NextTrigger asChild>
-            <Button disabled={!isValid() || allStepsComplete} flex="1">
-              next
-            </Button>
-          </Steps.NextTrigger>
-        </ButtonGroup>
+        {!allStepsComplete && (
+          <ButtonGroup display="flex" w="full">
+            <Steps.PrevTrigger asChild>
+              <Button flex="1">prev</Button>
+            </Steps.PrevTrigger>
+            <Steps.NextTrigger asChild>
+              <Button disabled={!isStepValid(step, profile) || allStepsComplete} flex="1">
+                next
+              </Button>
+            </Steps.NextTrigger>
+          </ButtonGroup>
+        )}
       </Steps.Root>
     </Stack>
   )

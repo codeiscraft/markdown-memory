@@ -5,10 +5,6 @@ import { useEffect } from 'react'
 import { useGetConnectDetails, useServerIdentity, useSetConnectDetails } from '../hooks'
 import { getColor, getIcon } from './ServerStatus.util'
 
-export interface ServerStatusProps {
-  profileSlug?: string
-}
-
 export function ServerStatus() {
   const { isPending: setPending, mutate: setConnectDetails } = useSetConnectDetails()
   const { data: connectDetails } = useGetConnectDetails()
@@ -33,7 +29,7 @@ export function ServerStatus() {
   return (
     <HoverCard.Root size="sm">
       <HoverCard.Trigger asChild>
-        <IconButton color={color} loading={isFetching} size="sm" variant="outline">
+        <IconButton color={color} loading={isFetching} size="xs" variant="ghost">
           <Icon name={icon} />
         </IconButton>
       </HoverCard.Trigger>

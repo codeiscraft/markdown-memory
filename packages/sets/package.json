@@ -1,0 +1,23 @@
+{
+  "name": "@mdm/sets",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "check-types": "tsc --noEmit",
+    "dev": "tsc --watch",
+    "lint": "eslint"
+  },
+  "exports": {
+    "./types": "./dist/types.js",
+    "./components": "./dist/components.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "@mdm/components": "*",
+    "@mdm/utils": "*"
+  },
+  "devDependencies": {
+    "@mdm/typescript-config": "*"
+  }
+}

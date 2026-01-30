@@ -1,16 +1,17 @@
 import { Box, Flex } from '@chakra-ui/react'
-import { ProfileList } from '@mdm/profile'
+import { ServerConnect } from '@mdm/server-connect'
 import { useNavigate } from 'react-router-dom'
 
-import { Header } from './Header'
+import { Header } from '../components/Header'
 
-export function Sync() {
+export function Connect() {
   const navigate = useNavigate()
+  const connectSuccess = () => navigate('/')
   return (
     <Flex direction="column" minH="100vh">
       <Header />
       <Box flex="1" p={4}>
-        <ProfileList createProfile={() => navigate('/new')} />
+        <ServerConnect connectSuccess={connectSuccess} />
       </Box>
     </Flex>
   )
