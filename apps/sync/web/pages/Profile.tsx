@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react'
+import { Box, Breadcrumb, Flex } from '@chakra-ui/react'
 import { ProfileView } from '@mdm/profile'
 import { useParams } from 'react-router-dom'
 
@@ -10,7 +10,22 @@ export function Profile() {
   return (
     <Flex direction="column" minH="100vh">
       <Header />
-      <ProfileView profileSlug={profileSlug!} />
+      <Box flex="1" p={4}>
+        <Breadcrumb.Root size="sm">
+          <Breadcrumb.List>
+            <Breadcrumb.Item>
+              <Breadcrumb.Link href="#" textStyle="strong">
+                profiles
+              </Breadcrumb.Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Separator />
+            <Breadcrumb.Item>
+              <Breadcrumb.CurrentLink>{profileSlug}</Breadcrumb.CurrentLink>
+            </Breadcrumb.Item>
+          </Breadcrumb.List>
+        </Breadcrumb.Root>
+        <ProfileView profileSlug={profileSlug!} />
+      </Box>
     </Flex>
   )
 }

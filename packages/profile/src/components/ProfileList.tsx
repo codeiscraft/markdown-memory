@@ -1,6 +1,4 @@
-import type { Source, SourceDetails } from '@mdm/source/types'
-
-import { Heading, IconButton, Stack } from '@chakra-ui/react'
+import { IconButton, Stack } from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
 import { CenteredSpinner } from '@mdm/components'
 
@@ -9,7 +7,6 @@ import { ProfileCard } from './ProfileCard'
 
 export interface ProfileListProps {
   createProfile: () => void
-  verifySourceDirectory: (source: Source, path: string) => Promise<SourceDetails>
 }
 
 export function ProfileList({ createProfile }: ProfileListProps) {
@@ -21,7 +18,6 @@ export function ProfileList({ createProfile }: ProfileListProps) {
 
   return (
     <Stack>
-      <Heading size="sm">profiles</Heading>
       {profiles?.ids.map((profileId: string) => (
         <ProfileCard key={profileId} profileId={profileId} />
       ))}
