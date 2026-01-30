@@ -11,8 +11,8 @@ import { Connect } from '../pages/Connect'
 import { Dashboard } from '../pages/Dashboard'
 import { Profile } from '../pages/Profile'
 import { ProfileNew } from '../pages/ProfileNew'
+import { SetNew } from '../pages/SetNew'
 import { AppGate } from './AppGate'
-import { SetNew } from './SetNew'
 
 const queryClient = new QueryClient()
 const enableDevTools = false

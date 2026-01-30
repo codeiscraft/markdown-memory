@@ -1,5 +1,6 @@
 import { Heading, Stack } from '@chakra-ui/react'
 import { CenteredSpinner } from '@mdm/components'
+import { SetList } from '@mdm/sets/components'
 import { SourceDetailsView } from '@mdm/source'
 
 import { useGetProfile } from '../hooks/useGetProfile'
@@ -19,6 +20,7 @@ export function ProfileView({ profileSlug }: { profileSlug: string }) {
     <Stack>
       <Heading size="sm">{name}</Heading>
       <SourceDetailsView source={profile?.source} sourceDirectory={profile?.sourceDirectory} />
+      <SetList defaultOpen={true} profileSlug={profileSlug} />
     </Stack>
   )
 }

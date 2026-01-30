@@ -1,5 +1,6 @@
 import { Card, Heading, IconButton, Link, Skeleton, Spacer, Stack } from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
+import { SetList } from '@mdm/sets/components'
 import { SourceDetailsView } from '@mdm/source'
 
 import { useDeleteProfile } from '../hooks/useDeleteProfile'
@@ -50,6 +51,7 @@ export function ProfileCard({ profileId }: ProfileCardProps) {
           source={source}
           sourceDirectory={profile?.sourceDirectory}
         />
+        <SetList defaultOpen={false} profileSlug={slug} />
       </Card.Body>
     </Card.Root>
   )
