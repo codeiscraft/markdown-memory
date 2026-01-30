@@ -1,12 +1,10 @@
 import {
-  Box,
   Button,
   ButtonGroup,
   Heading,
   IconButton,
   Spacer,
   Stack,
-  Steps,
   Steps,
   Strong,
   Text,
@@ -17,12 +15,11 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { usePutProfile } from '../hooks/usePutProfile'
 import { Profile, Source, SourceDirectoryDetails } from '../types'
-import { NameForm } from './NameForm'
-import { PassphraseForm } from './PassphraseForm'
 import { ProfileAbout } from './ProfileAbout'
-import { SourceForm } from './SourceForm'
+import { flowSteps } from './ProfileFlow.steps'
+import { isStepValid } from './ProfileFlow.util'
 
-interface ProfileFlowProps {
+export interface ProfileFlowProps {
   cancelFlow?: () => void
   completeFlow?: (profileSlug: string) => void
   verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
@@ -39,58 +36,29 @@ export function ProfileFlow({ cancelFlow, completeFlow, verifyDirectoryExists }:
   )
   const { mutate: saveProfile } = usePutProfile(profile?.slug, connectDetails?.serverRoot)
 
-  const isValid = () => {
-    if (step === 0) {
-      return profile && profile.name.length > 0
-    }
-    if (step === 1) {
-      return Boolean(profile?.source && profile?.sourceDirectory)
-    }
-    if (step === 2) {
-      return Boolean(profile?.encryptionProfile)
-    }
-    return true
-  }
-
-  const steps = [
-    {
-      content: <NameForm updateProfile={updateProfile} />,
-      icon: 'FolderPen',
-      title: 'name',
-    },
-    {
-      content: (
-        <SourceForm updateProfile={updateProfile} verifyDirectoryExists={verifyDirectoryExists} />
-      ),
-      icon: 'FolderOpen',
-      title: 'markdown',
-    },
-    {
-      content: <PassphraseForm profile={profile} updateProfile={updateProfile} />,
-      icon: 'Lock',
-      title: 'passphrase',
-    },
-  ]
-
+  const steps = flowSteps({
+    profile,
+    updateProfile,
+    verifyDirectoryExists,
+  })
   const allStepsComplete = step === steps.length
+
   useEffect(() => {
-    if (allStepsComplete) {
-      if (profile) {
-        saveProfile(profile)
-      }
+    if (allStepsComplete && profile) {
+      saveProfile(profile)
     }
   }, [allStepsComplete, profile, saveProfile])
 
   return (
     <Stack>
-      <Stack direction="row">
+      <Stack align="center" direction="row">
         <Heading size="sm">add a profile</Heading>
         <Spacer />
-        <IconButton aria-label="close profile flow" onClick={cancelFlow} variant="ghost">
-          <Icon name="X" size="lg" />
+        <IconButton aria-label="close profile flow" onClick={cancelFlow} size="xs" variant="ghost">
+          <Icon name="X" />
         </IconButton>
       </Stack>
-      <ProfileAbout />
+      {step === 0 && <ProfileAbout />}
       <Steps.Root count={steps.length} onStepChange={(e) => setStep(e.step)} size="sm" step={step}>
         <Steps.List>
           {steps.map((step, index) => (
@@ -132,7 +100,7 @@ export function ProfileFlow({ cancelFlow, completeFlow, verifyDirectoryExists }:
               <Button flex="1">prev</Button>
             </Steps.PrevTrigger>
             <Steps.NextTrigger asChild>
-              <Button disabled={!isValid() || allStepsComplete} flex="1">
+              <Button disabled={!isStepValid(step, profile) || allStepsComplete} flex="1">
                 next
               </Button>
             </Steps.NextTrigger>
