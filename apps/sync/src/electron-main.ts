@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import * as path from 'node:path'
 
-import { validateSourcePath } from './directory-validate'
+import { gatherSourceDetails } from './directory-validate'
 
 const icon = '../renderer/apple-touch-icon.png'
 
@@ -35,7 +35,7 @@ if (process.platform === 'darwin') {
 
 app.whenReady().then(() => createWindow())
 
-ipcMain.handle('directory-exists', validateSourcePath)
+ipcMain.handle('gather-source-details', gatherSourceDetails)
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

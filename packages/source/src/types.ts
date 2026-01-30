@@ -5,7 +5,7 @@ export type GatherSourceDetails = (source: Source, path: string) => Promise<Sour
 export type Source = 'bear' | 'file' | 'obsidian'
 
 export interface SourceDetails {
-  bearDetails?: BearSourceDetails | null
+  bearDetails?: BearSourceDetails
   isValid: boolean
   sourcePath: string
 }

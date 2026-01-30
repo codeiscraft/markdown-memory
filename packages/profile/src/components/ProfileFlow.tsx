@@ -1,4 +1,4 @@
-import type { Source, SourceDetails } from '@mdm/source/types'
+import type { Source } from '@mdm/source/types'
 
 import {
   Button,
@@ -24,10 +24,9 @@ import { isStepValid } from './ProfileFlow.util'
 export interface ProfileFlowProps {
   cancelFlow?: () => void
   completeFlow?: (profileSlug: string) => void
-  verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDetails>
 }
 
-export function ProfileFlow({ cancelFlow, completeFlow, verifyDirectoryExists }: ProfileFlowProps) {
+export function ProfileFlow({ cancelFlow, completeFlow }: ProfileFlowProps) {
   const [profile, setProfile] = useState<Profile | undefined>(undefined)
   const [step, setStep] = useState(0)
   const { data: connectDetails } = useGetConnectDetails()
@@ -38,10 +37,21 @@ export function ProfileFlow({ cancelFlow, completeFlow, verifyDirectoryExists }:
   )
   const { mutate: saveProfile } = usePutProfile(profile?.slug, connectDetails?.serverRoot)
 
+  const updateSource = useCallback((source: Source, sourceDirectory: string) => {
+    setProfile(
+      (prevProfile) =>
+        ({
+          ...prevProfile,
+          source,
+          sourceDirectory,
+        }) as Profile,
+    )
+  }, [])
+
   const steps = flowSteps({
     profile,
     updateProfile,
-    verifyDirectoryExists,
+    updateSource,
   })
   const allStepsComplete = step === steps.length
 

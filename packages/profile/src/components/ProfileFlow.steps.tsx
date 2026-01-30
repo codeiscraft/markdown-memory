@@ -1,6 +1,7 @@
-//import { SourceForm } from '@mdm/source'
+import type { Source } from '@mdm/source/types'
 
-import { Source, SourceDetails } from '../../../source/dist/types'
+import { SourceForm } from '@mdm/source'
+
 import { Profile } from '../types'
 import { NameForm } from './NameForm'
 import { PassphraseForm } from './PassphraseForm'
@@ -8,20 +9,20 @@ import { PassphraseForm } from './PassphraseForm'
 export interface StepsConfig {
   profile: Profile | undefined
   updateProfile: (nextProfile: Partial<Profile>) => void
-  verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDetails>
+  updateSource: (source: Source, sourceDirectory: string) => void
 }
 
-export const flowSteps = ({ profile, updateProfile }: StepsConfig) => [
+export const flowSteps = ({ profile, updateProfile, updateSource }: StepsConfig) => [
   {
     content: <NameForm updateProfile={updateProfile} />,
     icon: 'FolderPen',
     title: 'name',
   },
-  // {
-  //   content: <SourceForm update={updateProfile} verifyDirectoryExists={verifyDirectoryExists} />,
-  //   icon: 'FolderOpen',
-  //   title: 'markdown',
-  // },
+  {
+    content: <SourceForm update={updateSource} />,
+    icon: 'FolderOpen',
+    title: 'markdown',
+  },
   {
     content: <PassphraseForm profile={profile} updateProfile={updateProfile} />,
     icon: 'Lock',

@@ -1,15 +1,24 @@
-import { Stack, Strong } from '@chakra-ui/react'
+import { Box, Collapsible, Stack, Strong } from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
 import { BearSourceDir } from '@mdm/sync-bear/components'
 
 import { Source, SourceDetails } from '../types'
 
 export interface SourceDetailsProps {
-  source: Source
-  sourceDetails: SourceDetails
+  defaultOpen?: boolean
+  source?: Source
+  sourceDetails?: SourceDetails
 }
 
-export function SourceDetailsView({ source, sourceDetails }: SourceDetailsProps) {
+export function SourceDetailsView({
+  defaultOpen = true,
+  source,
+  sourceDetails,
+}: SourceDetailsProps) {
+  if (!source || !sourceDetails) {
+    return null
+  }
+
   if (!sourceDetails.isValid) {
     return (
       <Stack align="center" direction="row">
@@ -19,18 +28,26 @@ export function SourceDetailsView({ source, sourceDetails }: SourceDetailsProps)
     )
   }
 
-  if (source === 'bear' && sourceDetails.bearDetails) {
-    return (
-      <BearSourceDir
-        bearDetails={sourceDetails.bearDetails}
-        sourceDirectory={sourceDetails.sourcePath}
-      />
-    )
-  }
-
   return (
-    <div>
-      {source}:{sourceDetails?.sourcePath} - {sourceDetails?.isValid ? 'Valid' : 'Invalid'}
-    </div>
+    <Collapsible.Root defaultOpen={defaultOpen}>
+      <Collapsible.Trigger>
+        <Stack align="center" cursor="pointer" direction="row">
+          <Icon name="FolderCheck" size="sm" />
+          <Strong textStyle="sm">source details</Strong>
+        </Stack>
+      </Collapsible.Trigger>
+      <Collapsible.Content>
+        <Box borderRadius="md" borderWidth="1px" color="fg.muted" mt="2" p="4">
+          {source === 'bear' ? (
+            <BearSourceDir
+              bearDetails={sourceDetails.bearDetails}
+              sourceDirectory={sourceDetails.sourcePath}
+            />
+          ) : (
+            <pre>{JSON.stringify(sourceDetails, null, 2)}</pre>
+          )}
+        </Box>
+      </Collapsible.Content>
+    </Collapsible.Root>
   )
 }

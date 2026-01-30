@@ -1,43 +1,16 @@
-import type { Source, SourceDetails } from '@mdm/source/types'
-
-import {
-  Box,
-  Card,
-  Collapsible,
-  Heading,
-  IconButton,
-  Link,
-  Skeleton,
-  Spacer,
-  Stack,
-  Strong,
-} from '@chakra-ui/react'
+import { Card, Heading, IconButton, Link, Skeleton, Spacer, Stack } from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
-import { SourceDetailsView } from '@mdm/source'
-import { useEffect, useState } from 'react'
 
 import { useDeleteProfile } from '../hooks/useDeleteProfile'
 import { useGetProfile } from '../hooks/useGetProfile'
 
 export interface ProfileCardProps {
   profileId: string
-  verifySourceDirectory: (source: Source, path: string) => Promise<SourceDetails>
 }
 
-export function ProfileCard({ profileId, verifySourceDirectory }: ProfileCardProps) {
+export function ProfileCard({ profileId }: ProfileCardProps) {
   const { data: profile, isPending } = useGetProfile(profileId)
   const { isPending: isDeleting, mutate: deleteProfile } = useDeleteProfile(profileId)
-  const [sourceDetails, setSourceDetails] = useState<null | SourceDetails>(null)
-
-  useEffect(() => {
-    const fetchSourceDetails = async () => {
-      if (profile && profile.source && profile.sourceDirectory) {
-        const details = await verifySourceDirectory(profile.source, profile.sourceDirectory)
-        setSourceDetails(details)
-      }
-    }
-    fetchSourceDetails()
-  }, [profile, verifySourceDirectory])
 
   if (isPending) {
     return <Skeleton height="150px" />
@@ -45,7 +18,7 @@ export function ProfileCard({ profileId, verifySourceDirectory }: ProfileCardPro
 
   const { name, slug, source } = profile!
 
-  if (!slug || !source || !sourceDetails) {
+  if (!slug || !source) {
     return null
   }
 
@@ -68,21 +41,7 @@ export function ProfileCard({ profileId, verifySourceDirectory }: ProfileCardPro
           </IconButton>
         </Stack>
       </Card.Header>
-      <Card.Body color="fg.muted" fontSize="sm">
-        <Collapsible.Root>
-          <Collapsible.Trigger>
-            <Stack align="center" cursor="pointer" direction="row">
-              <Icon name="FolderCheck" size="sm" />
-              <Strong textStyle="sm">source details</Strong>
-            </Stack>
-          </Collapsible.Trigger>
-          <Collapsible.Content>
-            <Box borderRadius="md" borderWidth="1px" color="fg.muted" mt="2" p="4">
-              <SourceDetailsView source={source} sourceDetails={sourceDetails} />
-            </Box>
-          </Collapsible.Content>
-        </Collapsible.Root>
-      </Card.Body>
+      <Card.Body color="fg.muted" fontSize="sm"></Card.Body>
     </Card.Root>
   )
 }

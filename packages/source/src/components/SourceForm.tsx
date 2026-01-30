@@ -1,29 +1,22 @@
-import { Box, Field, Input, SegmentGroup, Stack } from '@chakra-ui/react'
-import { BEAR_ROOT, BEAR_SOURCE_LABEL } from '@mdm/sync-bear/constants'
+import { Field, Input, SegmentGroup, Stack } from '@chakra-ui/react'
+import { BEAR_ROOT } from '@mdm/sync-bear/constants'
 import { FormEvent, useEffect, useState } from 'react'
 
-import { sources } from '../sources'
-import { Source, SourceDetails } from '../types'
+import { useSourceDetails } from '../hooks/useSourceDetails'
+import { Source } from '../types'
+import { getDirLabel, sources } from '../utils'
 import { SourceDetailsView } from './SourceDetailsView'
 
 export interface SourceFormProps {
   update: (source: Source, sourceDirectory: string) => void
-  verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDetails>
 }
 
-const getDirLabel = (source: null | string | undefined) => {
-  if (source === 'bear') return BEAR_SOURCE_LABEL
-  if (source === 'obsidian') return 'obsidian vault path'
-  return 'source file path'
-}
-
-export function SourceForm({ update, verifyDirectoryExists }: SourceFormProps) {
-  const [source, setSource] = useState<null | Source>()
+export function SourceForm({ update }: SourceFormProps) {
+  const [source, setSource] = useState<Source | undefined>()
   const [directory, setDirectory] = useState('')
-  const [directoryDetails, setDirectoryDetails] = useState<null | SourceDetails>(null)
-  const [status, setStatus] = useState<'idle' | 'invalid' | 'valid' | 'verifying'>('idle')
+  const { data: sourceDetails, isPending } = useSourceDetails(source, directory)
 
-  const updateSource = (nextSource: null | Source) => {
+  const updateSource = (nextSource: Source | undefined) => {
     setSource(nextSource)
     if (nextSource === 'bear' && directory === '') {
       setDirectory(BEAR_ROOT)
@@ -31,30 +24,10 @@ export function SourceForm({ update, verifyDirectoryExists }: SourceFormProps) {
   }
 
   useEffect(() => {
-    if (!source || !directory) return
-
-    const verify = async () => {
-      try {
-        setStatus('verifying')
-        const details = await verifyDirectoryExists(source, directory)
-        setStatus('valid')
-        setDirectoryDetails(details)
-      } catch {
-        setStatus('invalid')
-        setDirectoryDetails(null)
-      }
-    }
-
-    const timeoutId = setTimeout(() => verify(), 500)
-
-    return () => clearTimeout(timeoutId)
-  }, [source, directory, verifyDirectoryExists])
-
-  useEffect(() => {
-    if (source && directory && directoryDetails && directoryDetails.isValid) {
+    if (source && directory && sourceDetails?.isValid) {
       update(source, directory)
     }
-  }, [directoryDetails, update, source, directory])
+  }, [source, directory, sourceDetails, update])
 
   const handleSubmit = (event: FormEvent) => event.preventDefault()
 
@@ -71,18 +44,14 @@ export function SourceForm({ update, verifyDirectoryExists }: SourceFormProps) {
           <SegmentGroup.Items items={sources} />
         </SegmentGroup.Root>
       </Field.Root>
-      <Field.Root invalid={directoryDetails?.isValid === false} required>
+      <Field.Root required>
         <Field.Label>{getDirLabel(source)}</Field.Label>
         <Input
-          disabled={status === 'verifying'}
+          disabled={isPending}
           onChange={(e) => setDirectory(e.target.value)}
           value={directory}
         />
-        {source && directoryDetails && (
-          <Box border="1px solid" borderColor="gray.200" borderRadius="md" gap={4} p={4} w="full">
-            <SourceDetailsView source={source} sourceDetails={directoryDetails} />
-          </Box>
-        )}
+        <SourceDetailsView source={source} sourceDetails={sourceDetails} />
       </Field.Root>
     </Stack>
   )

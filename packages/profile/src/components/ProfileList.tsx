@@ -5,6 +5,7 @@ import { Icon } from '@mdm/components'
 import { CenteredSpinner } from '@mdm/components'
 
 import { useGetProfiles } from '../hooks'
+import { ProfileCard } from './ProfileCard'
 ///import { ProfileCard } from './ProfileCard'
 
 export interface ProfileListProps {
@@ -22,13 +23,9 @@ export function ProfileList({ createProfile }: ProfileListProps) {
   return (
     <Stack>
       <Heading size="sm">profiles</Heading>
-      {/* {profiles?.ids.map((profileId: string) => (
-        <ProfileCard
-          key={profileId}
-          profileId={profileId}
-          verifySourceDirectory={verifySourceDirectory}
-        />
-      ))} */}
+      {profiles?.ids.map((profileId: string) => (
+        <ProfileCard key={profileId} profileId={profileId} />
+      ))}
       <IconButton aria-label="Add Profile" onClick={createProfile} size="sm" variant="subtle">
         <Icon name="Plus" />
       </IconButton>
