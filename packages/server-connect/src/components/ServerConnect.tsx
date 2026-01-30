@@ -1,4 +1,14 @@
-import { Button, Card, Field, Heading, Input, Link, Stack, Strong } from '@chakra-ui/react'
+import {
+  Button,
+  Card,
+  Field,
+  Heading,
+  Input,
+  InputGroup,
+  Link,
+  Stack,
+  Strong,
+} from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 import { useGetConnectDetails } from '../hooks/useGetConnectDetails'
@@ -36,14 +46,17 @@ export function ServerConnect({ connectSuccess }: ServerConnectProps) {
           <Field.Root invalid={serverRoot !== undefined && !isValid} required>
             <Field.Label>server address</Field.Label>
             <Stack direction="row" gap={1} width="100%">
-              <Input
-                autoFocus
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setServerRoot(e.target.value)}
-                placeholder="enter the address for your markdown memory server"
-                size="sm"
-                value={serverRoot}
-              />
-              <ServerStatus />
+              <InputGroup endElement={<ServerStatus />}>
+                <Input
+                  autoFocus
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setServerRoot(e.target.value)
+                  }
+                  placeholder="enter the address for your markdown memory server"
+                  size="sm"
+                  value={serverRoot}
+                />
+              </InputGroup>
             </Stack>
           </Field.Root>
         </Card.Body>

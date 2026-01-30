@@ -1,5 +1,6 @@
-import { Flex, Heading } from '@chakra-ui/react'
-const HEADER_HEIGHT = '2rem'
+import { Flex, Heading, Spacer } from '@chakra-ui/react'
+import { ServerStatus } from '@mdm/server-connect'
+const HEADER_HEIGHT = '2.5rem'
 
 export function Header() {
   return (
@@ -14,6 +15,8 @@ export function Header() {
       <Heading color="white" size="sm">
         markdown memory | sync
       </Heading>
+      <Spacer />
+      <ServerStatus />
     </Flex>
   )
 }

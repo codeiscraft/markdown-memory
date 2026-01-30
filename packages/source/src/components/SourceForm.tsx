@@ -51,7 +51,7 @@ export function SourceForm({ update }: SourceFormProps) {
           onChange={(e) => setDirectory(e.target.value)}
           value={directory}
         />
-        <SourceDetailsView source={source} sourceDetails={sourceDetails} />
+        <SourceDetailsView source={source} sourceDirectory={directory} />
       </Field.Root>
     </Stack>
   )

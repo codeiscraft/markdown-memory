@@ -1,22 +1,25 @@
-import { Box, Collapsible, Stack, Strong } from '@chakra-ui/react'
+import { Box, Collapsible, Skeleton, Stack, Strong } from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
 import { BearSourceDir } from '@mdm/sync-bear/components'
 
-import { Source, SourceDetails } from '../types'
+import { useSourceDetails } from '../hooks/useSourceDetails'
+import { Source } from '../types'
 
 export interface SourceDetailsProps {
   defaultOpen?: boolean
   source?: Source
-  sourceDetails?: SourceDetails
+  sourceDirectory?: string
 }
 
 export function SourceDetailsView({
   defaultOpen = true,
   source,
-  sourceDetails,
+  sourceDirectory,
 }: SourceDetailsProps) {
-  if (!source || !sourceDetails) {
-    return null
+  const { data: sourceDetails, isPending } = useSourceDetails(source, sourceDirectory)
+
+  if (!source || !sourceDetails || isPending) {
+    return defaultOpen ? <Skeleton height="200px" /> : <Skeleton height="30px" />
   }
 
   if (!sourceDetails.isValid) {

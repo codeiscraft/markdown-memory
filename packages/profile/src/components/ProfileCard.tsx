@@ -1,6 +1,6 @@
 import { Card, Heading, IconButton, Link, Skeleton, Spacer, Stack } from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
-import { SourceDetailsView, useSourceDetails } from '@mdm/source'
+import { SourceDetailsView } from '@mdm/source'
 
 import { useDeleteProfile } from '../hooks/useDeleteProfile'
 import { useGetProfile } from '../hooks/useGetProfile'
@@ -12,12 +12,8 @@ export interface ProfileCardProps {
 export function ProfileCard({ profileId }: ProfileCardProps) {
   const { data: profile, isPending } = useGetProfile(profileId)
   const { isPending: isDeleting, mutate: deleteProfile } = useDeleteProfile(profileId)
-  const { data: sourceDetails, isPending: sourceDetailsPending } = useSourceDetails(
-    profile?.source,
-    profile?.sourceDirectory,
-  )
 
-  const pending = isPending || sourceDetailsPending
+  const pending = isPending
 
   if (pending) {
     return <Skeleton height="100px" />
@@ -49,7 +45,11 @@ export function ProfileCard({ profileId }: ProfileCardProps) {
         </Stack>
       </Card.Header>
       <Card.Body color="fg.muted" fontSize="sm">
-        <SourceDetailsView defaultOpen={false} source={source} sourceDetails={sourceDetails} />
+        <SourceDetailsView
+          defaultOpen={false}
+          source={source}
+          sourceDirectory={profile?.sourceDirectory}
+        />
       </Card.Body>
     </Card.Root>
   )
