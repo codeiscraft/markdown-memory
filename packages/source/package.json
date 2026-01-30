@@ -1,0 +1,26 @@
+{
+  "name": "@mdm/source",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "check-types": "tsc --noEmit",
+    "dev": "tsc --watch",
+    "lint": "eslint"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./types": "./dist/types.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "@mdm/utils": "*",
+    "@tanstack/react-query": "5.90.20",
+    "react": "19.2.3"
+  },
+  "devDependencies": {
+    "@mdm/typescript-config": "*",
+    "@types/react": "19.2.9"
+  }
+}

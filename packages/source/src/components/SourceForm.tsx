@@ -3,12 +3,12 @@ import { BEAR_ROOT, BEAR_SOURCE_LABEL } from '@mdm/sync-bear/constants'
 import { FormEvent, useEffect, useState } from 'react'
 
 import { sources } from '../sources'
-import { Profile, Source, SourceDirectoryDetails } from '../types'
-import { SourceDetails } from './SourceDetails'
+import { Source, SourceDetails } from '../types'
+import { SourceDetailsView } from './SourceDetailsView'
 
 export interface SourceFormProps {
-  updateProfile: (profile: Partial<Profile>) => void
-  verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
+  update: (source: Source, sourceDirectory: string) => void
+  verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDetails>
 }
 
 const getDirLabel = (source: null | string | undefined) => {
@@ -17,10 +17,10 @@ const getDirLabel = (source: null | string | undefined) => {
   return 'source file path'
 }
 
-export function SourceForm({ updateProfile, verifyDirectoryExists }: SourceFormProps) {
+export function SourceForm({ update, verifyDirectoryExists }: SourceFormProps) {
   const [source, setSource] = useState<null | Source>()
   const [directory, setDirectory] = useState('')
-  const [directoryDetails, setDirectoryDetails] = useState<null | SourceDirectoryDetails>(null)
+  const [directoryDetails, setDirectoryDetails] = useState<null | SourceDetails>(null)
   const [status, setStatus] = useState<'idle' | 'invalid' | 'valid' | 'verifying'>('idle')
 
   const updateSource = (nextSource: null | Source) => {
@@ -52,9 +52,9 @@ export function SourceForm({ updateProfile, verifyDirectoryExists }: SourceFormP
 
   useEffect(() => {
     if (source && directory && directoryDetails && directoryDetails.isValid) {
-      updateProfile({ source, sourceDirectory: directory })
+      update(source, directory)
     }
-  }, [directoryDetails, updateProfile, source, directory])
+  }, [directoryDetails, update, source, directory])
 
   const handleSubmit = (event: FormEvent) => event.preventDefault()
 
@@ -80,7 +80,7 @@ export function SourceForm({ updateProfile, verifyDirectoryExists }: SourceFormP
         />
         {source && directoryDetails && (
           <Box border="1px solid" borderColor="gray.200" borderRadius="md" gap={4} p={4} w="full">
-            <SourceDetails source={source} sourceDetails={directoryDetails} />
+            <SourceDetailsView source={source} sourceDetails={directoryDetails} />
           </Box>
         )}
       </Field.Root>

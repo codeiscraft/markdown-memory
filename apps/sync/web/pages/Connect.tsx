@@ -2,7 +2,7 @@ import { Box, Flex } from '@chakra-ui/react'
 import { ServerConnect } from '@mdm/server-connect'
 import { useNavigate } from 'react-router-dom'
 
-import { Header } from './Header'
+import { Header } from '../components/Header'
 
 export function Connect() {
   const navigate = useNavigate()

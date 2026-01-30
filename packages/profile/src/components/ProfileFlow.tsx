@@ -1,3 +1,5 @@
+import type { Source, SourceDetails } from '@mdm/source/types'
+
 import {
   Button,
   ButtonGroup,
@@ -14,7 +16,7 @@ import { useGetConnectDetails } from '@mdm/server-connect'
 import { useCallback, useEffect, useState } from 'react'
 
 import { usePutProfile } from '../hooks/usePutProfile'
-import { Profile, Source, SourceDirectoryDetails } from '../types'
+import { Profile } from '../types'
 import { ProfileAbout } from './ProfileAbout'
 import { flowSteps } from './ProfileFlow.steps'
 import { isStepValid } from './ProfileFlow.util'
@@ -22,7 +24,7 @@ import { isStepValid } from './ProfileFlow.util'
 export interface ProfileFlowProps {
   cancelFlow?: () => void
   completeFlow?: (profileSlug: string) => void
-  verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDirectoryDetails>
+  verifyDirectoryExists: (source: Source, path: string) => Promise<SourceDetails>
 }
 
 export function ProfileFlow({ cancelFlow, completeFlow, verifyDirectoryExists }: ProfileFlowProps) {

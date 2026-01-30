@@ -3,7 +3,7 @@ import { ProfileFlow, Source } from '@mdm/profile'
 import { useNavigate } from 'react-router-dom'
 
 import { getElectronApi } from '../../src/electron'
-import { Header } from './Header'
+import { Header } from '../components/Header'
 
 export function ProfileNew() {
   const navigate = useNavigate()

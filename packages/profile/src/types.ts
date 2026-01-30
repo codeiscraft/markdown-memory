@@ -1,4 +1,5 @@
-import { BearSourceDetails } from '@mdm/sync-bear/types'
+import type { Source } from '@mdm/source/types'
+
 import { EncryptionProfile } from '@mdm/utils'
 
 export interface Profile {
@@ -7,12 +8,4 @@ export interface Profile {
   slug: string
   source?: Source
   sourceDirectory?: string
-}
-
-export type Source = 'bear' | 'file' | 'obsidian'
-
-export interface SourceDirectoryDetails {
-  bearDetails?: BearSourceDetails | null
-  isValid: boolean
-  sourcePath: string
 }

@@ -2,14 +2,14 @@ import { Stack, Strong } from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
 import { BearSourceDir } from '@mdm/sync-bear/components'
 
-import { Source, SourceDirectoryDetails } from '../types'
+import { Source, SourceDetails } from '../types'
 
 export interface SourceDetailsProps {
   source: Source
-  sourceDetails: SourceDirectoryDetails
+  sourceDetails: SourceDetails
 }
 
-export function SourceDetails({ source, sourceDetails }: SourceDetailsProps) {
+export function SourceDetailsView({ source, sourceDetails }: SourceDetailsProps) {
   if (!sourceDetails.isValid) {
     return (
       <Stack align="center" direction="row">

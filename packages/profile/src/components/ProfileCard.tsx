@@ -1,3 +1,5 @@
+import type { Source, SourceDetails } from '@mdm/source/types'
+
 import {
   Box,
   Card,
@@ -11,22 +13,21 @@ import {
   Strong,
 } from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
+import { SourceDetailsView } from '@mdm/source'
 import { useEffect, useState } from 'react'
 
 import { useDeleteProfile } from '../hooks/useDeleteProfile'
 import { useGetProfile } from '../hooks/useGetProfile'
-import { Source, SourceDirectoryDetails } from '../types'
-import { SourceDetails } from './SourceDetails'
 
 export interface ProfileCardProps {
   profileId: string
-  verifySourceDirectory: (source: Source, path: string) => Promise<SourceDirectoryDetails>
+  verifySourceDirectory: (source: Source, path: string) => Promise<SourceDetails>
 }
 
 export function ProfileCard({ profileId, verifySourceDirectory }: ProfileCardProps) {
   const { data: profile, isPending } = useGetProfile(profileId)
   const { isPending: isDeleting, mutate: deleteProfile } = useDeleteProfile(profileId)
-  const [sourceDetails, setSourceDetails] = useState<null | SourceDirectoryDetails>(null)
+  const [sourceDetails, setSourceDetails] = useState<null | SourceDetails>(null)
 
   useEffect(() => {
     const fetchSourceDetails = async () => {
@@ -77,7 +78,7 @@ export function ProfileCard({ profileId, verifySourceDirectory }: ProfileCardPro
           </Collapsible.Trigger>
           <Collapsible.Content>
             <Box borderRadius="md" borderWidth="1px" color="fg.muted" mt="2" p="4">
-              <SourceDetails source={source} sourceDetails={sourceDetails} />
+              <SourceDetailsView source={source} sourceDetails={sourceDetails} />
             </Box>
           </Collapsible.Content>
         </Collapsible.Root>

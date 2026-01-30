@@ -2,9 +2,9 @@ import { Flex } from '@chakra-ui/react'
 import { ProfileView } from '@mdm/profile'
 import { useParams } from 'react-router-dom'
 
-import { Header } from './Header'
+import { Header } from '../components/Header'
 
-export function ProfileView() {
+export function Profile() {
   const { profileSlug } = useParams<{ profileSlug: string }>()
 
   return (
