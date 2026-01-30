@@ -11,7 +11,7 @@ export function Profile() {
     <Flex direction="column" minH="100vh">
       <Header />
       <Box flex="1" p={4}>
-        <Breadcrumb.Root size="sm">
+        <Breadcrumb.Root mb={4} size="sm">
           <Breadcrumb.List>
             <Breadcrumb.Item>
               <Breadcrumb.Link href="#" textStyle="strong">

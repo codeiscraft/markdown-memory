@@ -15,7 +15,7 @@ import { AppGate } from './AppGate'
 import { SetNew } from './SetNew'
 
 const queryClient = new QueryClient()
-const enableDevTools = true
+const enableDevTools = false
 
 function App() {
   return (
