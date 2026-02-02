@@ -1,5 +1,5 @@
 import { Field, Input, Stack, Strong, Text } from '@chakra-ui/react'
-import { Icon } from '@mdm/components'
+import { Icon, IconSelect } from '@mdm/components'
 import { useGetConnectDetails } from '@mdm/server-connect'
 import { toSlug } from '@mdm/utils'
 import { ChangeEvent, useEffect, useState } from 'react'
@@ -84,13 +84,7 @@ export function SetNameForm({ initialSet = {}, updateSet }: SetNameFormProps) {
         />
       </Field.Root>
       <Field.Root required>
-        <Field.Label>icon</Field.Label>
-        <Input
-          onChange={(event) => setIcon(event.target.value)}
-          placeholder="select an icon for this set"
-          value={icon}
-        />
-        <Field.HelperText>{icon && <Icon name={icon} />}</Field.HelperText>
+        <IconSelect onChange={(nextIcon) => setIcon(nextIcon)} value={icon} />
       </Field.Root>
     </Stack>
   )
