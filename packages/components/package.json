@@ -1,6 +1,6 @@
 {
   "name": "@mdm/components",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
@@ -15,7 +15,7 @@
     "./mocks": "./src/mocks.cjs"
   },
   "dependencies": {
-    "react": "19.2.3"
+    "react": "19.2.4"
   },
   "devDependencies": {
     "@mdm/testing-support": "*",
@@ -24,7 +24,7 @@
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
     "@types/jest": "30.0.0",
-    "@types/react": "19.2.9",
+    "@types/react": "19.2.10",
     "@types/react-dom": "19.2.3"
   }
 }
