@@ -36,6 +36,7 @@
     "@mdm/testing-support": "*",
     "@mdm/utils": "*",
     "@mdm/source": "*",
+    "@mdm/sets": "*",
     "@tanstack/react-query": "5.90.20",
     "@tanstack/react-query-devtools": "5.91.3",
     "lucide-react": "0.563.0",

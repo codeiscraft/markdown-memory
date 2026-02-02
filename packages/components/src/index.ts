@@ -1,4 +1,5 @@
 export * from './CenteredSpinner/CenteredSpinner'
 export * from './Icon/Icon'
 export * from './Icon/Icon.types'
+export * from './IconSelect/IconSelect'
 export * from './ui/PasswordInput'

@@ -10,9 +10,9 @@ export type DateMatchOptions = 'createDate' | 'modifiedDate' | 'textMatch'
 export interface NoteSet {
   description?: string
   filters: NoteSetFilters
+  icon: string
   name: string
   slug: string
-  ttlSeconds?: number
 }
 
 export interface NoteSetFilters {
