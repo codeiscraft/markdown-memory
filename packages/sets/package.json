@@ -15,6 +15,7 @@
   "type": "module",
   "dependencies": {
     "@mdm/components": "*",
+    "@mdm/server-connect": "*",
     "@mdm/utils": "*"
   },
   "devDependencies": {

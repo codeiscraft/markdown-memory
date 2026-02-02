@@ -46,12 +46,14 @@ export function ProfileCard({ profileId }: ProfileCardProps) {
         </Stack>
       </Card.Header>
       <Card.Body color="fg.muted" fontSize="sm">
-        <SourceDetailsView
-          defaultOpen={false}
-          source={source}
-          sourceDirectory={profile?.sourceDirectory}
-        />
-        <SetList defaultOpen={false} profileSlug={slug} />
+        <Stack>
+          <SourceDetailsView
+            defaultOpen={false}
+            source={source}
+            sourceDirectory={profile?.sourceDirectory}
+          />
+          <SetList defaultOpen={false} profileSlug={slug} />
+        </Stack>
       </Card.Body>
     </Card.Root>
   )

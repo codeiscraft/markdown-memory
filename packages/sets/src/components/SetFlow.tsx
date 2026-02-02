@@ -1,7 +1,8 @@
 import { Button, ButtonGroup, Heading, IconButton, Spacer, Stack, Steps } from '@chakra-ui/react'
 import { Icon } from '@mdm/components'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
+import { NoteSet } from '../types'
 import { flowSteps } from './SetFlow.steps'
 import { isStepValid } from './SetFlow.util'
 
@@ -11,14 +12,23 @@ export interface SetFlowProps {
 }
 
 export function SetFlow({ cancelFlow }: SetFlowProps) {
+  const [set, setSet] = useState<NoteSet | undefined>(undefined)
   const [step, setStep] = useState(0)
-  const steps = flowSteps()
+
+  const updateSet = useCallback((nextSet: Partial<NoteSet>) => {
+    console.log('UPDATE SET', nextSet)
+    setSet((prevSet) => ({ ...prevSet, ...nextSet }) as NoteSet)
+  }, [])
+
+  console.log('SET FLOW RENDER', set)
+
+  const steps = flowSteps({ initialSet: set || {}, updateSet })
   const allStepsComplete = step === steps.length
 
   return (
     <Stack>
       <Stack align="center" direction="row">
-        <Heading size="sm">add a profile</Heading>
+        <Heading size="sm">add a set</Heading>
         <Spacer />
         <IconButton aria-label="close profile flow" onClick={cancelFlow} size="xs" variant="ghost">
           <Icon name="X" />
@@ -66,7 +76,7 @@ export function SetFlow({ cancelFlow }: SetFlowProps) {
               <Button flex="1">prev</Button>
             </Steps.PrevTrigger>
             <Steps.NextTrigger asChild>
-              <Button disabled={!isStepValid(step) || allStepsComplete} flex="1">
+              <Button disabled={!isStepValid(step, set) || allStepsComplete} flex="1">
                 next
               </Button>
             </Steps.NextTrigger>
