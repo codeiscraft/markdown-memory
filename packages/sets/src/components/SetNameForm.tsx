@@ -1,5 +1,5 @@
 import { Field, Input, Stack, Strong, Text } from '@chakra-ui/react'
-import { Icon, IconSelect } from '@mdm/components'
+import { IconSelect } from '@mdm/components'
 import { useGetConnectDetails } from '@mdm/server-connect'
 import { toSlug } from '@mdm/utils'
 import { ChangeEvent, useEffect, useState } from 'react'
@@ -23,7 +23,7 @@ export function SetNameForm({ initialSet = {}, updateSet }: SetNameFormProps) {
   const [slug, setSlug] = useState(initialSlug)
   const [description, setDescription] = useState(initialDescription)
   const [slugDefault, setDefaultSlug] = useState('')
-  const [icon, setIcon] = useState(initialIcon)
+  const [icon, setIcon] = useState<string | undefined>(initialIcon)
 
   const { data: connectDetails } = useGetConnectDetails()
   const { profileSlug } = useParams<{ profileSlug: string }>()
