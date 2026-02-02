@@ -15,6 +15,8 @@
   },
   "type": "module",
   "dependencies": {
+    "@mdm/components": "*",
+    "@mdm/sync-bear": "*",
     "@mdm/utils": "*",
     "@tanstack/react-query": "5.90.20",
     "react": "19.2.4"
