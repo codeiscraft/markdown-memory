@@ -18,11 +18,11 @@
     "@mdm/components": "*",
     "@mdm/sync-bear": "*",
     "@mdm/utils": "*",
-    "@tanstack/react-query": "5.90.20",
+    "@tanstack/react-query": "5.90.21",
     "react": "19.2.4"
   },
   "devDependencies": {
     "@mdm/typescript-config": "*",
-    "@types/react": "19.2.10"
+    "@types/react": "19.2.14"
   }
 }
